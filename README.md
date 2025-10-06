@@ -126,26 +126,6 @@ To run the JavaFX interface:
 mvn javafx:run
 ```
 
-Alternatively, if your JAR has a defined `Main-Class`:
-```bash
-java -jar target/pos-app-1.0.0.jar
-```
-
----
-
-#### 4. Understanding Maven vs. DAO Execution
-Maven handles **building, compiling, testing, and launching** your project.  
-It does **not** directly run any of your DAO (Data Access Object) logic.  
-
-Your DAOs execute **within the application** when called by JavaFX controllers or service classes.
-
-Example:
-```java
-ProductDAO dao = new ProductDAO();
-List<Product> products = dao.listAll();  // Executes a SQL query via JDBC
-tableView.getItems().setAll(products);
-```
-
 ---
 
 #### 5. Project Structure
