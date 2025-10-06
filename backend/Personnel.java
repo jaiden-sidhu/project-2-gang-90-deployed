@@ -31,8 +31,8 @@ public class Personnel
         final int PERSONNEL_COUNT = 25;
         final Path OUTPUT = Path.of("personnel.csv");
 
-        List<String> firstName = Arrays.asList("John", "Jane", "Alex", "Emily", "Chris", "Michael", "Jaiden", "Kevin", "Daniel", "Brendan");
-        List<String> lastName = Arrays.asList("Smith", "Johnson", "Williams", "Ramirez", "Sidhu", "Chen", "Zhang", "Larson");
+        List<String> first_name = Arrays.asList("John", "Jane", "Alex", "Emily", "Chris", "Michael", "Jaiden", "Kevin", "Daniel", "Brendan");
+        List<String> last_name = Arrays.asList("Smith", "Johnson", "Williams", "Ramirez", "Sidhu", "Chen", "Zhang", "Larson");
 
         Random rand = new Random(Seed);
         DecimalFormat money = new DecimalFormat("0.00");
@@ -44,15 +44,15 @@ public class Personnel
 
             for (int i = 1; i <= PERSONNEL_COUNT; i++) 
             {
-                String name = firstName.get(rand.nextInt(firstName.size())) + " " + lastName.get(rand.nextInt(lastName.size()));
+                String name = first_name.get(rand.nextInt(first_name.size())) + " " + last_name.get(rand.nextInt(last_name.size()));
                 String role = rand.nextBoolean() ? "cashier" : "manager";
                 float salary = role.equals("cashier") ? rand.nextInt(15, 20) : rand.nextInt(25, 30);
 
                 Personnel p = new Personnel(i, name, role, salary);
 
-                String csvName = csvEscape(p.Name);
+                String csv_name = csvEscape(p.Name);
 
-                String line = p.ID + "," + csvName + "," + p.Role + "," + money.format(p.Salary);
+                String line = p.ID + "," + csv_name + "," + p.Role + "," + money.format(p.Salary);
                 w.write(line);
                 w.newLine();
             }
