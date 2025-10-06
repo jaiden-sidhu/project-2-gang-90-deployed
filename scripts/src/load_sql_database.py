@@ -2,6 +2,7 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 from pathlib import Path
 import traceback
+import time
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
@@ -28,6 +29,7 @@ DB_PORT = "5432"
 DB_NAME = "gang_90_db"
 
 def load_csv_to_postgres():
+    start_time = time.time()
     try:
         if not TRANSACTIONS_FILE_PATH.exists():
             raise FileNotFoundError(f"Transactions file not found: {TRANSACTIONS_FILE_PATH}")
@@ -144,13 +146,14 @@ def load_csv_to_postgres():
 
         print(f"Loaded {len(final_df)} rows into '{TRANSACTION_DETAILS_TABLE_NAME}'.")
         print("Loading complete.")
+        print(f"Execution time: {time.time() - start_time:.2f} seconds")
 
         return len(transactions_df), len(final_df)
-
+         
     except Exception:
         print("Error:")
         traceback.print_exc()
         return None
-
+    
 if __name__ == "__main__":
     load_csv_to_postgres()
