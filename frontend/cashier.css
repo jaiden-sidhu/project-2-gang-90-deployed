@@ -1,0 +1,150 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.top-bar {
+    background-color: #3a3a3a;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+}
+
+.top-bar h1 {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.time {
+    font-size: 1rem;
+}
+
+.main-container {
+    display: flex;
+    height: calc(100vh - 48px);
+    background-color: #e0e0e0;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #d3d3d3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+.menu-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.menu-item {
+    margin: 10px 0;
+    color: #555;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    text-decoration: underline;
+}
+
+.drink-menu {
+    overflow-y:auto;
+    width: 100%;
+}
+
+.drink-category-header {
+    padding: 20px;
+    margin-bottom: -20px;
+    font-size: 1rem;
+}
+.drink-category {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.drink-button {
+    width: 120px;
+    height: 120px;
+    background-color: #d3d3d3;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.drink-button.selected {
+    background-color: #b3b3b3;
+    border: 3px solid #ccc;
+}
+
+.drink-button:hover {
+    background-color: #c5c5c5;
+}
+
+.order-panel {
+    width: 250px;
+    background-color: #d3d3d3;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    right: 0;
+    height: 92.5%;
+}
+
+.order-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.order-item {
+    background-color: #b3b3b3;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.order-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+}
+
+.order-options {
+    font-size: 0.9rem;
+    margin-top: 5px;
+    color: #222;
+}
+
+.order-summary {
+    margin-top: auto;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+}
+
+.charge-btn {
+    width: 100%;
+    background-color: #b3b3b3;
+    border: none;
+    padding: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.charge-btn:hover {
+    background-color: #a5a5a5;
+}
