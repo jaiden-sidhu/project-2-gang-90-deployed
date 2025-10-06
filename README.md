@@ -75,8 +75,11 @@ This section covers how to build and run the Java portion of the POS system, whi
   ```bash
   java -version
   ```
-  Make sure it outputs `aarch64` (Apple Silicon) instead of `x86_64` (Intel).
 - **Maven 3.8+**
+  Check your version for Maven:
+  ```bash
+  mvn -v
+  ```
 
 ---
 
