@@ -163,56 +163,10 @@ pos-app/
 
 ---
 
-#### 6. Troubleshooting
-
-**Apple Silicon (M1/M2/M3) JavaFX Issues**
-- Use JavaFX **22.0.2** or later for ARM64 compatibility.
-- Clear stale caches:
-  ```bash
-  rm -rf ~/.openjfx/cache
-  ```
-- Verify your JDK is ARM-based (not running under Rosetta).
-
-**“Package not visible” module errors**
-If you encounter module access issues, update your `src/main/java/module-info.java`:
-```java
-module edu.tamu.project2.csce331 {
-    requires java.sql;
-    requires com.zaxxer.hikari;
-    requires javafx.controls;
-    requires javafx.fxml;
-
-    opens edu.tamu.project2.csce331 to javafx.fxml;
-    exports edu.tamu.project2.csce331;
-}
-```
-
-**Suppressing native access warnings**
-In your `pom.xml`, inside the JavaFX plugin, add:
-```xml
-<jvmArgs>
-    <jvmArg>--enable-native-access=javafx.graphics</jvmArg>
-</jvmArgs>
-```
-
----
-
-#### 7. Git Hygiene
-Add a `.gitignore` file to prevent committing build artifacts and IDE files:
-```
-target/
-*.class
-*.log
-.mvn/wrapper/maven-wrapper.jar
-.idea/
-.vscode/
-```
-
----
 
 #### Summary
 Maven compiles, builds, and launches the JavaFX application.  
-Your DAOs handle all database logic **at runtime**—they are invoked by controllers or backend services, not directly by Maven.  
+The DAOs handle all database logic **at runtime**—they are invoked by controllers or backend services, not directly by Maven.  
 This structure keeps the project modular, testable, and production-ready.
 
 
