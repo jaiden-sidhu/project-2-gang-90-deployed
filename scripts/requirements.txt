@@ -1,6 +1,16 @@
+greenlet==3.2.4
 numpy==2.3.3
 pandas==2.3.3
+psycopg2==2.9.10
 python-dateutil==2.9.0.post0
 pytz==2025.2
+PyYAML==6.0.3
 six==1.17.0
+SQLAlchemy==1.4.0
 tzdata==2025.2
+<<<<<<< HEAD
+pyyaml==6.0.3
+sqlalchemy==2.0.43
+=======
+
+>>>>>>> 04322a8869461500263f9fdf4a4761c2c3c9cec8

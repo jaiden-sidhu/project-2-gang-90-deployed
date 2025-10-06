@@ -1,0 +1,16 @@
+# Number of transactions to randomly generate
+num_transactions: 1000000
+max_amount: 1000000
+
+# Format: YYYY-MM-DD
+start: 2024-01-01
+end: 2025-01-01
+
+# Output CSV file path
+path: "scripts/data/transactions.csv"
+details_path: "scripts/data/transaction_details.csv"
+
+# List of possible names
+first_names: ["Oliver", "James", "Abigail", "Mia", "Chloe", "Amelia", "Liam", "Noah", "Daniel", "Lucas", "Lily", "Sophia", "Elijah", "Matthew", "Harper", "Benjamin", "Olivia", "Emily", "Carter", "Emma", "Michael", "Scarlett", "Grace", "Ella", "Charlotte", "William", "Ava", "Isabella", "Joseph", "David", "Henry", "Samuel", "Mia", "Evelyn", "Alexander", "James", "William", "Abigail", "Olivia", "Elijah", "Benjamin", "Sophia", "Lucas", "Amelia", "Chloe", "Emily", "Emma", "Noah", "Daniel", "Grace", "Lily"]
+
+last_names: ["Clark", "Miller", "Sanchez", "Smith", "Young", "Johnson", "Gonzalez", "Anderson", "Robinson", "Perez", "King", "Lee", "Jackson", "Lewis", "Allen", "Taylor", "Wilson", "Ramirez", "Lopez", "Hernandez", "Walker", "Moore", "Garcia", "Brown", "Williams", "White", "Thompson", "Martin", "Wright", "Robinson", "Taylor", "Martinez", "Harris", "Davis", "Smith", "Johnson", "Thompson", "Moore", "King", "Perez", "Walker", "Rodriguez", "Allen", "Lopez", "Clark", "White", "Taylor", "Hernandez", "Brown", "Lewis"]
