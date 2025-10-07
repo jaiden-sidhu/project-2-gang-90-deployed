@@ -22,9 +22,14 @@ public class router {
          Connection conn = null;
          try{
 
-            //open connection
+            // open connection
 
-            conn = DriverManager.getConnection(database_url, database_user, database_password);    
+            conn = DriverManager.getConnection(database_url, database_user, database_password);
+            
+            // 
+            
+
+
          } catch(Exception e){
             e.printStackTrace();
             System.err.println(e.getClass().getName()+": "+e.getMessage());
@@ -99,9 +104,50 @@ public class router {
 
 
     // add employee
+    public ResultSet add_employee(int employee_id, String name, String role, double pay){
+        
+        // i am considering doing a rollback but idk if it will be worth it
+        // This prepare satment is used to prevent sql injections in postgress
+        String sql_string = 
+               String.format("""
+               PREPARE insert_empoylee (integer, Varchar(255), varchar(255),NUMERIC(10, 2)) AS
+               INSERT INTO personnel (employee_id, name, role, pay) VALUES($1,$2, $3, $4);
+
+               EXECUTE insert_empoylee (%d, %s,%s, %f);
+ 
+               """, employee_id, name, role, pay);
+        
+        
+               
+        //may return null if error
+        return connect_exicute(sql_string);
+
+    }
 
 
-    // select transaction 
+
+
+        // select all transactions grab 50 pass in a offset
+    public ResultSet select_transaction(int offset){
+        
+        // i am considering doing a rollback but idk if it will be worth it
+        // This prepare satment is used to prevent sql injections in postgress
+        String sql_string = 
+               String.format("""
+               PREPARE select_transaction (integer) AS
+               SELECT * FROM transactions
+               LIMIT 50 OFFSET $1;
+
+               EXECUTE select_transaction (%d);
+               """, offset);
+        
+        
+               
+        //may return null if error
+        return connect_exicute(sql_string);
+
+    }
+
 
     // select transation details
 
@@ -110,7 +156,7 @@ public class router {
 
     //select by order Id
 
-    // select all transactions grab 50 pass in a offset
+
 
     // transation details click on transaction display the details pass in transaction id
 
