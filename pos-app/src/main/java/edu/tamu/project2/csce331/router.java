@@ -1,329 +1,293 @@
 package edu.tamu.project2.csce331;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class router {
-    final String database_name = "gang_90_db";
-    final String database_user = "gang_90";
-    final String database_password = "gang_90";
-    final String database_url = String.format("jdbc:postgresql://csce-315-db.engr.tamu.edu/%s", database_name);
-    public router(){
+  final String database_name = "gang_90_db";
+  final String database_user = "gang_90";
+  final String database_password = "gang_90";
+  final String database_url =
+      String.format("jdbc:postgresql://csce-315-db.engr.tamu.edu/%s", database_name);
+
+  public router() {}
+
+  private ResultSet connect_exicute(String sql_string) {
+
+    // Building the connection
+
+    Connection conn = null;
+    try {
+
+      // open connection
+
+      conn = DriverManager.getConnection(database_url, database_user, database_password);
+
+      //
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.err.println(e.getClass().getName() + ": " + e.getMessage());
+      System.exit(0);
+      return null;
+
+      // how will this exit effect the program
 
     }
 
+    Statement make_statment = null;
+    try {
 
-    private ResultSet connect_exicute(String sql_string){
-        
+      // prepare sql to take a connection
 
-        //Building the connection
+      make_statment = conn.createStatement();
+    } catch (Exception e) {
 
-         Connection conn = null;
-         try{
+      e.printStackTrace();
+      System.err.println(e.getClass().getName() + ": " + e.getMessage());
+      System.exit(0);
+      return null;
+    }
+    ResultSet result = null;
+    try {
 
-            // open connection
+      // exicute sql statment
 
-            conn = DriverManager.getConnection(database_url, database_user, database_password);
-            
-            // 
-            
-
-
-         } catch(Exception e){
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
-            System.exit(0);
-            return null;
-
-            // how will this exit effect the program
-
-         }
-
-         Statement make_statment = null;
-         try {
-
-            //prepare sql to take a connection
-
-            make_statment = conn.createStatement();
-         } catch (Exception e) {
-            
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
-            System.exit(0);
-            return null;
-         }
-         ResultSet result =null;
-         try {
-
-            // exicute sql statment
-
-            result = make_statment.executeQuery(sql_string);
-         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
-            System.exit(0);
-            return null;
-         }
-
-         try {
-
-            // close connection
-
-            conn.close();
-            return result;
-         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
-            System.exit(0);
-            return null;
-         }
-
+      result = make_statment.executeQuery(sql_string);
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.err.println(e.getClass().getName() + ": " + e.getMessage());
+      System.exit(0);
+      return null;
     }
 
+    try {
 
-    public ResultSet get_managers(){
-        
-        
-        String sql_string = "SELECT * FROM personel WHERE role = 'manager';";        
-        //may return null if error
-        return connect_exicute(sql_string);
+      // close connection
 
+      conn.close();
+      return result;
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.err.println(e.getClass().getName() + ": " + e.getMessage());
+      System.exit(0);
+      return null;
     }
+  }
 
-    public ResultSet get_item_id(){
-        
-        
-        String sql_string = "SELECT item_id, item_name FROM menu;" ;       
-        //may return null if error
-        return connect_exicute(sql_string);
+  public ResultSet get_managers() {
 
-    }
+    String sql_string = "SELECT * FROM personel WHERE role = 'manager';";
+    // may return null if error
+    return connect_exicute(sql_string);
+  }
 
+  public ResultSet get_item_id() {
 
+    String sql_string = "SELECT item_id, item_name FROM menu;";
+    // may return null if error
+    return connect_exicute(sql_string);
+  }
 
+  // add employee
+  public ResultSet add_employee(int employee_id, String name, String role, double pay) {
 
-    // add employee
-   public ResultSet add_employee(int employee_id, String name, String role, double pay){
-      
-      // i am considering doing a rollback but idk if it will be worth it
-      // This prepare satment is used to prevent sql injections in postgress
-      String sql_string = 
-            String.format("""
+    // i am considering doing a rollback but idk if it will be worth it
+    // This prepare satment is used to prevent sql injections in postgress
+    String sql_string =
+        String.format(
+            """
             PREPARE insert_empoylee (integer, Varchar(255), varchar(255),NUMERIC(10, 2)) AS
             INSERT INTO personnel (employee_id, name, role, pay) VALUES($1,$2, $3, $4);
 
             EXECUTE insert_empoylee (%d, '%s','%s', %f);
 
-            """, employee_id, name, role, pay);
-      
-      
-            
-      //may return null if error
-      return connect_exicute(sql_string);
+            """,
+            employee_id, name, role, pay);
 
-   }
+    // may return null if error
+    return connect_exicute(sql_string);
+  }
 
+  // select all transactions grab 50 pass in a offset
+  public ResultSet select_transaction(int offset) {
 
-
-
-        // select all transactions grab 50 pass in a offset
-   public ResultSet select_transaction(int offset){
-      
-      // i am considering doing a rollback but idk if it will be worth it
-      // This prepare satment is used to prevent sql injections in postgress
-      // consider sending these in seperate querys and only making one Prepare statment
-      String sql_string = 
-            String.format("""
+    // i am considering doing a rollback but idk if it will be worth it
+    // This prepare satment is used to prevent sql injections in postgress
+    // consider sending these in seperate querys and only making one Prepare statment
+    String sql_string =
+        String.format(
+            """
             PREPARE select_transaction (integer) AS
             SELECT * FROM transactions
             LIMIT 50 OFFSET $1;
 
             EXECUTE select_transaction (%d);
-            """, offset);
-      
-      
-            
-      //may return null if error
-      return connect_exicute(sql_string);
+            """,
+            offset);
 
-   }
+    // may return null if error
+    return connect_exicute(sql_string);
+  }
 
+  // select transation details given transaction id
 
-    // select transation details given transaction id
-
-   public ResultSet select_transaction_details_id(int id){
-      String sql_string = 
-            String.format("""
+  public ResultSet select_transaction_details_id(int id) {
+    String sql_string =
+        String.format(
+            """
             PREPARE select_transaction_details_id (integer) AS
             SELECT * FROM transactions_details
             WHERE  detail_id = $1;
-            
+
 
             EXECUTE select_transaction_details_id (%d);
-            """, id);
+            """,
+            id);
 
+    return connect_exicute(sql_string);
+  }
 
-      return connect_exicute(sql_string);
-   }
+  // select by time
 
-
-
-
-    //select by time
-
-   public ResultSet select_transaction_time(String time){
-   String sql_string = 
-            String.format("""
+  public ResultSet select_transaction_time(String time) {
+    String sql_string =
+        String.format(
+            """
             PREPARE select_transaction_time (integer) AS
             SELECT * FROM transactions
             WHERE  transaction_time = $1;
-            
+
 
             EXECUTE select_transaction_time (%s);
-            """, time);
+            """,
+            time);
 
+    return connect_exicute(sql_string);
+  }
 
-   return connect_exicute(sql_string);
-   }
+  // select by order Id
 
-    //select by order Id
-
-   public ResultSet select_transaction_id(int id){
-   String sql_string = 
-            String.format("""
+  public ResultSet select_transaction_id(int id) {
+    String sql_string =
+        String.format(
+            """
             PREPARE select_transaction_id (integer) AS
             SELECT * FROM transactions
             WHERE  transaction_id = $1;
-            
+
 
             EXECUTE select_transaction_time (%d);
-            """, id);
+            """,
+            id);
 
+    return connect_exicute(sql_string);
+  }
 
-   return connect_exicute(sql_string);
-   }
+  // transation details click on transaction display the details pass in transaction id
 
+  // get menu items
 
+  public ResultSet select_menu() {
+    String sql_string =
+        String.format(
+            """
+            SELECT * FROM menu;
+            """);
 
-    // transation details click on transaction display the details pass in transaction id
+    return connect_exicute(sql_string);
+  }
 
-   
+  // inset transations
+  public ResultSet add_transaction(
+      String customer_name, String transaction_time, int employee_id, double total_price) {
 
-
-    // get menu items 
-
-   public ResultSet select_menu(){
-      String sql_string = 
-               String.format("""
-               SELECT * FROM menu;
-               """);
-
-
-      return connect_exicute(sql_string);
-   }
-    // inset transations
-   public ResultSet add_transaction(String customer_name, String transaction_time, int employee_id, double total_price){
-      
-      // i am considering doing a rollback but idk if it will be worth it
-      // This prepare satment is used to prevent sql injections in postgress
-      String sql_string = 
-            String.format("""
+    // i am considering doing a rollback but idk if it will be worth it
+    // This prepare satment is used to prevent sql injections in postgress
+    String sql_string =
+        String.format(
+            """
             PREPARE insert_empoylee ( Varchar(255), TIMESTAMP, integer,NUMERIC(10, 2)) AS
             INSERT INTO personnel (customer_name, transaction_time, employee_id, total_price) VALUES($1,$2, $3, $4);
 
             EXECUTE insert_empoylee ('%s', %s,%d, %f);
 
-            """, customer_name, transaction_time, employee_id, total_price);
-   
-      
-            
-      //may return null if error
-      return connect_exicute(sql_string);
+            """,
+            customer_name, transaction_time, employee_id, total_price);
 
-   }
-   
-   
+    // may return null if error
+    return connect_exicute(sql_string);
+  }
 
-    // insert transation details
+  // insert transation details
 
-   public ResultSet add_transaction_details(String customer_name, String transaction_time, int employee_id, double total_price){
-      
-      // i am considering doing a rollback but idk if it will be worth it
-      // This prepare satment is used to prevent sql injections in postgress
-      String sql_string = 
-            String.format("""
+  public ResultSet add_transaction_details(
+      String customer_name, String transaction_time, int employee_id, double total_price) {
+
+    // i am considering doing a rollback but idk if it will be worth it
+    // This prepare satment is used to prevent sql injections in postgress
+    String sql_string =
+        String.format(
+            """
             PREPARE insert_empoylee ( Varchar(255), TIMESTAMP, integer,NUMERIC(10, 2)) AS
             INSERT INTO personnel (customer_name, transaction_time, employee_id, total_price) VALUES($1,$2, $3, $4);
 
             EXECUTE insert_empoylee ('%s', %s,%d, %f);
 
-            """, customer_name, transaction_time, employee_id, total_price);
-   
-      
-            
-      //may return null if error
-      return connect_exicute(sql_string);
+            """,
+            customer_name, transaction_time, employee_id, total_price);
 
-   }
+    // may return null if error
+    return connect_exicute(sql_string);
+  }
 
-    // update inventory quntitys
+  // update inventory quntitys
 
-   public ResultSet refill_inventory(String ingredient_name, int quantity){
-      
-      // i am considering doing a rollback but idk if it will be worth it
-      // This prepare satment is used to prevent sql injections in postgress
-      String sql_string = 
-            String.format("""
+  public ResultSet refill_inventory(String ingredient_name, int quantity) {
+
+    // i am considering doing a rollback but idk if it will be worth it
+    // This prepare satment is used to prevent sql injections in postgress
+    String sql_string =
+        String.format(
+            """
             PREPARE update_inventory ( Varchar(255), integer) AS
             UPDATE ingredintes SET quantity = quantity + $2
             WHERE ingredients = $1;
 
             EXECUTE update_inventory ('%s', %d);
 
-            """, ingredient_name, quantity);
-   
-      
-            
-      //may return null if error
-      return connect_exicute(sql_string);
+            """,
+            ingredient_name, quantity);
 
-   }
+    // may return null if error
+    return connect_exicute(sql_string);
+  }
 
-   // decrement inventory qauntitys
+  // decrement inventory qauntitys
 
-   public ResultSet deacrese_inventory(String ingredient_name, int quantity){
-      
-      // i am considering doing a rollback but idk if it will be worth it
-      // This prepare satment is used to prevent sql injections in postgress
-      String sql_string = 
-            String.format("""
+  public ResultSet deacrese_inventory(String ingredient_name, int quantity) {
+
+    // i am considering doing a rollback but idk if it will be worth it
+    // This prepare satment is used to prevent sql injections in postgress
+    String sql_string =
+        String.format(
+            """
             PREPARE deacrese_inventory ( Varchar(255), integer) AS
             UPDATE ingredintes SET quantity = quantity - $2
             WHERE ingredients = $1;
 
             EXECUTE deacrese_inventory ('%s', %d);
 
-            """, ingredient_name, quantity);
-   
-      
-            
-      //may return null if error
-      return connect_exicute(sql_string);
+            """,
+            ingredient_name, quantity);
 
-   }
-    // insert inventory
+    // may return null if error
+    return connect_exicute(sql_string);
+  }
+  // insert inventory
 
-    // 
-
-
-     
-
-    
-
-
-
-
-
+  //
 
 }

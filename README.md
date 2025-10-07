@@ -146,10 +146,56 @@ pos-app/
 
 ---
 
+### Testing
+
+This project includes **JUnit 5** tests to validate database connectivity and schema. Tests live under:
+
+```
+pos-app/src/test/java/edu/tamu/project2/csce331/
+```
+
+**Prerequisites**
+- PostgreSQL is running and reachable.
+- `pos-app/src/main/resources/application.properties` contains valid credentials.
+- The required tables exist in your database (see below to configure which tables are checked).
+
+**Run all tests**
+```bash
+cd pos-app
+mvn test
+```
+If everything is configured, you should see:
+```
+BUILD SUCCESS
+```
+
+**Run a single test class**
+```bash
+mvn -q -Dtest=edu.tamu.project2.csce331.DatabaseTest test
+```
+
+**What the tests do**
+- `connection_and_select1_works()` – opens a connection via **HikariCP** and verifies `SELECT 1` returns `1`.
+- `transactions_table_exists_and_accessible()` – queries up to 10 rows from `transactions` and prints them (handles empty tables gracefully).
+- `all_expected_tables_exist()` – checks a configurable list of table names against `information_schema.tables` and fails if any are missing.
+
+**Configure which tables are required**
+Edit the array inside `DatabaseTest#all_expected_tables_exist()`:
+```java
+// pos-app/src/test/java/edu/tamu/project2/csce331/DatabaseTest.java
+String[] expectedTables = new String[] {
+    "transactions"
+    // , "users", "products", "orders"  // add more as needed
+};
+```
+
+**Notes**
+- JUnit 5 and the Maven Surefire plugin are already configured in `pos-app/pom.xml`.
+- Tests use try-with-resources to automatically return connections to the Hikari pool and close JDBC resources.
+
+---
 
 #### Summary
 Maven compiles, builds, and launches the JavaFX application.  
 The DAOs handle all database logic **at runtime**—they are invoked by controllers or backend services, not directly by Maven.  
 This structure keeps the project modular, testable, and production-ready.
-
-

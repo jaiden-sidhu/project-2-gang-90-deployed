@@ -65,48 +65,53 @@ public class DatabaseTest {
       }
     }
   }
+
   // Helper: check if a table exists in the current schema
   private boolean tableExists(Connection conn, String table) throws SQLException {
-      final String sql = "SELECT EXISTS (\n" +
-              "  SELECT 1 FROM information_schema.tables\n" +
-              "  WHERE table_schema = current_schema() AND table_name = ?\n" +
-              ")";
-      try (PreparedStatement ps = conn.prepareStatement(sql)) {
-          ps.setString(1, table);
-          try (ResultSet rs = ps.executeQuery()) {
-              rs.next();
-              return rs.getBoolean(1);
-          }
+    final String sql =
+        "SELECT EXISTS (\n"
+            + "  SELECT 1 FROM information_schema.tables\n"
+            + "  WHERE table_schema = current_schema() AND table_name = ?\n"
+            + ")";
+    // Prepare statement and execute to check whether a specific table exists
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setString(1, table);
+      try (ResultSet rs = ps.executeQuery()) {
+        rs.next();
+        return rs.getBoolean(1);
       }
+    }
   }
 
   @Test
   void all_expected_tables_exist() throws Exception {
-      // TODO: Add all your table names here
-      String[] expectedTables = new String[] {
+    String[] expectedTables =
+        new String[] {
           "ingredients",
           "ingredients_map",
           "menu",
           "personnel",
           "transaction_details",
           "transactions"
-      };
+        };
 
-      try (Connection conn = Database.getConnection()) {
-          String currentSchema;
-          try (PreparedStatement s = conn.prepareStatement("SELECT current_schema()")) {
-              try (ResultSet rs = s.executeQuery()) {
-                  rs.next();
-                  currentSchema = rs.getString(1);
-              }
-          }
-
-          System.out.println("\nChecking required tables in schema '" + currentSchema + "':");
-          for (String table : expectedTables) {
-              boolean exists = tableExists(conn, table);
-              System.out.println(" - " + table + ": " + (exists ? "FOUND" : "MISSING"));
-              assertTrue(exists, "Missing required table: " + table);
-          }
+    // Connect to current schema
+    try (Connection conn = Database.getConnection()) {
+      String currentSchema;
+      try (PreparedStatement s = conn.prepareStatement("SELECT current_schema()")) {
+        try (ResultSet rs = s.executeQuery()) {
+          rs.next();
+          currentSchema = rs.getString(1);
+        }
       }
+
+      // Check each expected table
+      System.out.println("\nChecking required tables in schema '" + currentSchema + "':");
+      for (String table : expectedTables) {
+        boolean exists = tableExists(conn, table);
+        System.out.println(" - " + table + ": " + (exists ? "FOUND" : "MISSING"));
+        assertTrue(exists, "Missing required table: " + table);
+      }
+    }
   }
 }
