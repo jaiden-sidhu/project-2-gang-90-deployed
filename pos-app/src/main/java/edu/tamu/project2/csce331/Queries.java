@@ -170,7 +170,7 @@ public class Queries {
     int offset = page * pageSize;
     String sql = "SELECT * FROM transactions ORDER BY transaction_time DESC LIMIT ? OFFSET ?;";
     try (Connection conn = Database.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
       stmt.setInt(1, pageSize);
       stmt.setInt(2, offset);
       try (ResultSet rs = stmt.executeQuery()) {
@@ -181,7 +181,9 @@ public class Queries {
           java.sql.Timestamp transaction_time = rs.getTimestamp("transaction_time");
           int employee_id = rs.getInt("employee_id");
           double total_price = rs.getDouble("total_price");
-          transactions.add(new Transaction(transaction_id, customer_name, transaction_time, employee_id, total_price));
+          transactions.add(
+              new Transaction(
+                  transaction_id, customer_name, transaction_time, employee_id, total_price));
         }
         return transactions;
       }
@@ -191,8 +193,8 @@ public class Queries {
   public int count_transactions() throws SQLException {
     String sql = "SELECT COUNT(*) AS cnt FROM transactions;";
     try (Connection conn = Database.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql);
-         ResultSet rs = stmt.executeQuery()) {
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery()) {
       if (rs.next()) {
         return rs.getInt("cnt");
       }
@@ -252,20 +254,65 @@ public class Queries {
     }
   }
 
-  public void add_transaction(
-      String customer_name, Timestamp transaction_time, int employee_id, double total_price)
+  private int add_transaction(
+      String customer_name,
+      Timestamp transaction_time,
+      int employee_id,
+      double total_price,
+      Connection conn)
       throws SQLException {
     String sql =
         "INSERT INTO transactions (customer_name, transaction_time, employee_id, total_price)"
-            + " VALUES (?, ?, ?, ?);";
+            + " VALUES (?, ?, ?, ?)";
 
-    try (Connection conn = Database.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setString(1, customer_name);
-      stmt.setTimestamp(2, transaction_time);
-      stmt.setInt(3, employee_id);
-      stmt.setDouble(4, total_price);
-      stmt.executeUpdate();
+    try (PreparedStatement ps =
+        conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+      ps.setString(1, customer_name);
+      ps.setTimestamp(2, transaction_time);
+      ps.setInt(3, employee_id);
+      ps.setDouble(4, total_price);
+      ps.executeUpdate();
+
+      try (ResultSet keys = ps.getGeneratedKeys()) {
+        if (keys.next()) {
+          int transaction_id = keys.getInt(1);
+          return transaction_id;
+        } else {
+          throw new SQLException("Creating transaction failed: no ID obtained.");
+        }
+      }
+    }
+  }
+
+  public void add_transaction_and_details(Transaction transaction, ArrayList<Item> items)
+      throws SQLException {
+    try (Connection conn = Database.getConnection()) {
+      try {
+        conn.setAutoCommit(false);
+        // Generate a new transaction and store its ID
+        int transaction_id =
+            add_transaction(
+                transaction.customer_name,
+                transaction.transaction_time,
+                transaction.employee_id,
+                transaction.total_price,
+                conn);
+
+        // Insert each item into transaction_details and add to batch
+        String sql = "INSERT INTO transaction_details (transaction_id, item_id) VALUES (?, ?);";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+          for (Item item : items) {
+            ps.setInt(1, transaction_id);
+            ps.setInt(2, item.get_id());
+            ps.addBatch();
+          }
+          ps.executeBatch();
+        }
+        conn.commit();
+      } catch (SQLException e) {
+        conn.rollback();
+        throw new SQLException("Failed to add transaction: " + e.getMessage());
+      }
     }
   }
 
@@ -322,7 +369,8 @@ public class Queries {
       }
     }
   }
-    public void decrease_inventory(int ingredient_id, int quantity) throws SQLException {
+
+  public void decrease_inventory(int ingredient_id, int quantity) throws SQLException {
     if (quantity < 0) {
       throw new IllegalArgumentException("Quantity cannot be negative.");
     }
@@ -340,4 +388,93 @@ public class Queries {
     }
   }
 
+  public void delete_employee(int id) throws SQLException {
+    String sql = "DELETE FROM personnel WHERE employee_id = ?;";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1, id);
+      int rowsAffected = stmt.executeUpdate();
+      if (rowsAffected == 0) {
+        throw new SQLException("Employee not found with ID: " + id);
+      }
+    }
+  }
+
+  public void added_menu_item(Item added_item) throws SQLException {
+    String sql = "INSERT INTO menu (item_name, item_popularity, price) VALUES (?, ?, ?, ?);";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, added_item.get_name());
+      stmt.setInt(2, added_item.get_popularity());
+      stmt.setDouble(3, added_item.get_price());
+      stmt.executeUpdate();
+    }
+  }
+
+  public void add_ingredent_map(int item_id, ArrayList<Integer> ingrednent_id_list)
+      throws SQLException {
+    String sql = "INSERT INTO ingredients_map (ingredients_id, item_id) VALUES (?, ?);";
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      for (int i = 0; i < ingrednent_id_list.size(); i++) {
+        stmt.setInt(1, item_id);
+        stmt.setInt(2, ingrednent_id_list.get(i));
+        stmt.executeUpdate();
+      }
+    }
+  }
+
+  public void delete_item(int id) throws SQLException {
+    String sql = "DELETE FROM menu ingredients_map WHERE item_id = ?";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1, id);
+      stmt.executeUpdate();
+    }
+  }
+
+  // need to alter menu prices
+  public void update_menu_price(int id, double price) throws SQLException {
+    String sql = "UPDATE  menu SET price = ? WHERE item_id = ?";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setDouble(1, price);
+      stmt.setInt(2, id);
+      stmt.executeUpdate();
+    }
+  }
+
+  // need to alter items on menu
+
+  public void update_menu_items(Item update_item) throws SQLException {
+    String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, update_item.get_name());
+      stmt.setInt(2, update_item.get_popularity());
+      stmt.setDouble(3, update_item.get_popularity());
+      stmt.setInt(4, update_item.get_id());
+      stmt.executeUpdate();
+    }
+  }
+
+  // need to view ingredints
+
+  public void get_ingredints(Ingredient update_item) throws SQLException {
+    String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, update_item.get_name());
+      stmt.setInt(2, update_item.get_popularity());
+      stmt.setDouble(3, update_item.get_popularity());
+      stmt.setInt(4, update_item.get_id());
+      stmt.executeUpdate();
+    }
+  }
 }
