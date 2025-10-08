@@ -434,7 +434,72 @@ public class Router {
 
   }
 
-  
+
+  //need to alter menu prices
+  public void update_menu_price(int id, double price)
+    throws SQLException {
+    String sql = "UPDATE  menu SET price = ? WHERE item_id = ?";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setDouble(1,price);
+      stmt.setInt(2,id);
+      stmt.executeUpdate();
+    }
+
+
+
+
+  }
+
+  //need to alter items on menu
+
+  public void update_menu_items(Item update_item)
+    throws SQLException {
+    String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
+
+    try (Connection conn = Database.getConnection(); 
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1,update_item.get_name());
+      stmt.setInt(2,update_item.get_popularity());
+      stmt.setDouble(3,update_item.get_popularity());
+      stmt.setInt(4,update_item.get_id());
+      stmt.executeUpdate();
+    }
+
+
+
+
+  }
+
+
+  //need to view ingredints
+
+  public void get_ingredints(Ingerdient update_item)
+    throws SQLException {
+    String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
+
+    try (Connection conn = Database.getConnection(); 
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1,update_item.get_name());
+      stmt.setInt(2,update_item.get_popularity());
+      stmt.setDouble(3,update_item.get_popularity());
+      stmt.setInt(4,update_item.get_id());
+      stmt.executeUpdate();
+    }
+
+
+
+
+  }
+
+  // need to alter ingredits
+
+  // need to add ingredints
+
+  // need to delete ingredints
+
+
 
 
 
