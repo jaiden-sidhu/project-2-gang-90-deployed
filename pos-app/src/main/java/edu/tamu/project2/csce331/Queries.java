@@ -188,8 +188,7 @@ public class Queries {
     }
   }
 
-  // Pass in a string time format "YYYY-MM-DD HH:MM:SS"
-  public ArrayList<Transaction> select_transaction_time(Timestamp time) throws SQLException {
+  public ArrayList<Transaction> get_transactions(Timestamp time) throws SQLException {
     String sql = "SELECT * FROM transactions WHERE  transaction_time = ?;";
 
     try (Connection conn = Database.getConnection();
@@ -216,7 +215,7 @@ public class Queries {
     }
   }
 
-  public void add_transaction_details(
+  public void add_transaction(
       String customer_name, Timestamp transaction_time, int employee_id, double total_price)
       throws SQLException {
     String sql =
@@ -230,6 +229,42 @@ public class Queries {
       stmt.setInt(3, employee_id);
       stmt.setDouble(4, total_price);
       stmt.executeUpdate();
+    }
+  }
+
+  private ArrayList<Integer> get_ingredients_for_item(int item_id, Connection conn)
+      throws SQLException {
+    String sql = "SELECT ingredient_id FROM ingredients_map WHERE item_id = ?;";
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1, item_id);
+      try (ResultSet rs = stmt.executeQuery()) {
+        ArrayList<Integer> ingredients = new ArrayList<>();
+        while (rs.next()) {
+          ingredients.add(rs.getInt("ingredient_id"));
+        }
+        return ingredients;
+      }
+    }
+  }
+
+  public ArrayList<Item> get_menu() throws SQLException {
+    String sql = "SELECT * FROM menu;";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery()) {
+      ArrayList<Item> menu = new ArrayList<>();
+
+      while (rs.next()) {
+        int id = rs.getInt("item_id");
+        String name = rs.getString("item_name");
+        int popularity = rs.getInt("popularity");
+        double price = rs.getDouble("price");
+        // Fetch ingredients for the item
+        ArrayList<Integer> ingredients = get_ingredients_for_item(id, conn);
+        menu.add(new Item(id, name, popularity, price, ingredients));
+      }
+      return menu;
     }
   }
 
@@ -250,4 +285,24 @@ public class Queries {
       }
     }
   }
+
+  public void decrease_inventory(int ingredient_id, int quantity) throws SQLException {
+    if (quantity < 0) {
+      throw new IllegalArgumentException("Quantity cannot be negative.");
+    }
+
+    String sql = "UPDATE ingredients SET quantity = quantity - ? WHERE ingredient_id = ?;";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1, quantity);
+      stmt.setInt(2, ingredient_id);
+      int rowsAffected = stmt.executeUpdate();
+      if (rowsAffected == 0) {
+        throw new SQLException("Ingredient not found with ID: " + ingredient_id);
+      }
+    }
+  }
+
+  
 }
