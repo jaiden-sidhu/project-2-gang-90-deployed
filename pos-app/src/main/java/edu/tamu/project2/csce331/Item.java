@@ -57,7 +57,7 @@ public class Item {
     return price;
   }
 
-  public ArrayList<String> get_ingredients() {
+  public ArrayList<Integer> get_ingredients() {
     return ingredients;
   }
 
@@ -98,14 +98,14 @@ public class Item {
     }
   }
 
-  public void add_ingredient(String ingredient) throws IllegalArgumentException {
-    if (ingredient == null || ingredient.isEmpty()) {
-      throw new IllegalArgumentException("Ingredient cannot be null or empty.");
+  public void add_ingredient(int ingredient_id) throws IllegalArgumentException {
+    if (ingredient_id < 0) {
+      throw new IllegalArgumentException("Ingredient ID cannot be negative.");
     }
-    this.ingredients.add(ingredient);
+    this.ingredients.add(ingredient_id);
   }
 
-  public void add_ingredients(ArrayList<String> new_ingredients) throws IllegalArgumentException {
+  public void add_ingredients(ArrayList<Integer> new_ingredients) throws IllegalArgumentException {
     if (new_ingredients == null) {
       throw new IllegalArgumentException("New ingredients cannot be null.");
     }
