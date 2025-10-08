@@ -1,5 +1,6 @@
 package edu.tamu.project2.csce331;
-
+import edu.tamu.project2.csce331.TransactionDetails;
+import edu.tamu.project2.csce331.Transaction;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -142,8 +143,8 @@ public class Router {
         String.format(
             """
             PREPARE select_transaction_details_id (integer) AS
-            SELECT * FROM transactions_details
-            WHERE  detail_id = $1;
+            SELECT * FROM transaction_details
+            WHERE  transaction_id = $1;
 
 
             EXECUTE select_transaction_details_id (%d);
@@ -212,10 +213,10 @@ public class Router {
     String sql_string =
         String.format(
             """
-            PREPARE insert_empoylee ( Varchar(255), TIMESTAMP, integer,NUMERIC(10, 2)) AS
-            INSERT INTO personnel (customer_name, transaction_time, employee_id, total_price) VALUES($1,$2, $3, $4);
+            PREPARE add_transaction ( Varchar(255), TIMESTAMP, integer,NUMERIC(10, 2)) AS
+            INSERT INTO transaction (customer_name, transaction_time, employee_id, total_price) VALUES($1,$2, $3, $4);
 
-            EXECUTE insert_empoylee ('%s', %s,%d, %f);
+            EXECUTE add_transaction ('%s', %s,%d, %f);
 
             """,
             customer_name, transaction_time, employee_id, total_price);
@@ -234,10 +235,10 @@ public class Router {
     String sql_string =
         String.format(
             """
-            PREPARE insert_empoylee ( Varchar(255), TIMESTAMP, integer,NUMERIC(10, 2)) AS
-            INSERT INTO personnel (customer_name, transaction_time, employee_id, total_price) VALUES($1,$2, $3, $4);
+            PREPARE add_transaction_details ( Varchar(255), TIMESTAMP, integer,NUMERIC(10, 2)) AS
+            INSERT INTO transaction_details (customer_name, transaction_time, employee_id, total_price) VALUES($1,$2, $3, $4);
 
-            EXECUTE insert_empoylee ('%s', %s,%d, %f);
+            EXECUTE add_transaction_details ('%s', %s,%d, %f);
 
             """,
             customer_name, transaction_time, employee_id, total_price);
@@ -291,6 +292,58 @@ public class Router {
   }
   // insert inventory
 
-  //
+  // insert transaction details and transactions
+  public ResultSet add_transaction_and_details(Transaction transaction, TransactionDetails[] details_list){
+    int transaction_id = handle_transaction(transaction);
+    ResultSet result =  handle_details(transaction_id, details_list);
+
+
+    return connect_exicute(null);
+  }
+
+
+  private int handle_transaction(Transaction transaction){
+    String sql_string =
+        String.format(
+            """
+            PREPARE add_transaction ( Varchar(255), TIMESTAMP, integer,NUMERIC(10, 2)) AS
+            INSERT INTO transactions (customer_name, transaction_time, employee_id, total_price) VALUES($1,$2, $3, $4) RETURNING transaction_id;
+
+            EXECUTE add_transaction ('%s', '%s',%d, %f);
+
+            """,
+            transaction.customer_name, transaction.transaction_time, transaction.employee_id, transaction.total_price);
+
+    // may return null if error
+    int result = 0;
+    try{
+      result = connect_exicute(sql_string).getInt("transation_id");
+    } catch (Exception e) {
+      System.out.println("error: "+e);
+    }
+    return result;
+  }
+
+  private ResultSet handle_details(int id, TransactionDetails[] details_list){
+    String sql_string = 
+        """
+        PREPARE add_details (Integer, Integer) AS
+        INSERT INTO transaction_details (transaction_id, item_id) VALUES ($1,$2);
+
+
+        """;;
+    for(int i = 0; i < details_list.length;i++){
+      
+      sql_string += 
+        String.format(
+          """
+          EXECUTE add_details (%d, %d);
+
+          """,id,details_list[i].item_id);
+    }
+
+    return connect_exicute(sql_string);
+  }
+
 
 }
