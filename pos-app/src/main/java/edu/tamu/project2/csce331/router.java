@@ -450,12 +450,14 @@ public class Router {
       stmt.setDouble(1,price);
       stmt.setInt(2,id);
       stmt.executeUpdate();
+      
     }
 
 
 
 
   }
+
 
   //need to alter items on menu
 
@@ -480,17 +482,24 @@ public class Router {
 
   //need to view ingredints
 
-  public void get_ingredints(Ingerdient update_item)
+  public ArrayList<Ingerdient> get_ingredints()
     throws SQLException {
-    String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
+    String sql = "SELECT * FROM ingredients";
 
     try (Connection conn = Database.getConnection(); 
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setString(1,update_item.get_name());
-      stmt.setInt(2,update_item.get_popularity());
-      stmt.setDouble(3,update_item.get_popularity());
-      stmt.setInt(4,update_item.get_id());
-      stmt.executeUpdate();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery()) {
+      ArrayList<Ingerdient> ingredints_list = new ArrayList<>();
+
+      while (rs.next()) {
+        int ingredient_id = rs.getInt("ingredient_id");
+        String ingredient_name = rs.getString("ingredient_name");
+        int quantity = rs.getInt("quantity");
+        String category = rs.getString("category");
+        // Fetch ingredients for the item
+        ingredints_list.add(new Ingerdient(ingredient_name,  quantity,category, ingredient_id));
+      }
+      return ingredints_list;
     }
 
 
@@ -500,8 +509,27 @@ public class Router {
 
   // need to alter ingredits
 
-  // need to add ingredints
 
+
+
+  // need to add ingredints
+  public void update_ingredints(Ingerdient update_ingrediants)
+    throws SQLException {
+    String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
+
+    try (Connection conn = Database.getConnection(); 
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1,update_ingrediants.get_ingredient_name());
+      stmt.setInt(2,update_ingrediants.get_quantity());
+      stmt.setString(3,update_ingrediants.get_category());
+      stmt.setInt(4,update_ingrediants.get_ingredient_id());
+      stmt.executeUpdate();
+    }
+
+
+
+
+  }
   // need to delete ingredints
 
 
