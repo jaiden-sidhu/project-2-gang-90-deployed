@@ -3,8 +3,11 @@ import edu.tamu.project2.csce331.TransactionDetails;
 import edu.tamu.project2.csce331.Transaction;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class Router {
   final String database_name = "gang_90_db";
@@ -381,6 +384,49 @@ public class Router {
 
 
 
+  public void delete_employee(int employee_id)
+      throws SQLException {
+    String sql = "DELETE FROM personnel WHERE employee_id = ?;";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1, employee_id);
+      stmt.executeUpdate();
+    }
+  }
+
+  public void added_menu_item(Item added_item)
+      throws SQLException {
+    String sql = "INSERT INTO menu (item_name, item_popularity, price) VALUES (?, ?, ?, ?);";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1,added_item.get_name());
+      stmt.setInt(2, added_item.get_popularity());
+      stmt.setDouble(3, added_item.get_price());
+      stmt.executeUpdate();
+    }
+  }
+
+  public void add_ingredent_map(int item_id, ArrayList<Integer> ingrednent_id_list)
+     throws SQLException {
+    String sql = "INSERT INTO ingredients_map (ingredients_id, item_id) VALUES (?, ?);";
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+        for(int i = 0; i < ingrednent_id_list.size(); i++){
+          stmt.setInt(1,item_id);
+          stmt.setInt(2, ingrednent_id_list.get(i));
+          stmt.executeUpdate();
+        }
+      
+    }
+  }
 
 
-}
+
+
+  }
+
+
+
+
