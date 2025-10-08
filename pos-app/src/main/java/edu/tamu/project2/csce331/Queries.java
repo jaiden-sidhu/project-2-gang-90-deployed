@@ -436,7 +436,6 @@ public class Queries {
     }
   }
 
-  // need to alter menu prices
   public void update_menu_price(int id, double price) throws SQLException {
     String sql = "UPDATE  menu SET price = ? WHERE item_id = ?";
 
@@ -447,8 +446,6 @@ public class Queries {
       stmt.executeUpdate();
     }
   }
-
-  // need to alter items on menu
 
   public void update_menu_items(Item update_item) throws SQLException {
     String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
@@ -462,8 +459,6 @@ public class Queries {
       stmt.executeUpdate();
     }
   }
-
-  // need to view ingredints
 
   public void get_ingredints(Ingredient update_item) throws SQLException {
     String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
