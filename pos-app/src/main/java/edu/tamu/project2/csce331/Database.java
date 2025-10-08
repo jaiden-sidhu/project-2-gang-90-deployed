@@ -11,13 +11,17 @@ public class Database {
   private static HikariDataSource data_source;
 
   static {
-    try (InputStream input =
-        Database.class
-            .getClassLoader()
-            .getResourceAsStream("edu/tamu/project2/csce331/application.properties")) {
+    try {
+      InputStream input = Database.class.getClassLoader().getResourceAsStream("edu/tamu/project2/csce331/application.properties");
+      if (input == null) {
+        input = Database.class.getClassLoader().getResourceAsStream("application.properties");
+      }
+      if (input == null) {
+        input = Database.class.getResourceAsStream("/edu/tamu/project2/csce331/application.properties");
+      }
 
       if (input == null) {
-        throw new RuntimeException("Cannot find application.properties in resources.");
+        throw new RuntimeException("Cannot find application.properties in resources (tried edu/tamu/project2/csce331/, /edu/tamu/project2/csce331/, and root classpath).");
       }
 
       Properties props = new Properties();
@@ -38,6 +42,7 @@ public class Database {
 
       data_source = new HikariDataSource(config);
       System.out.println("HikariCP connection pool initialized successfully.");
+      System.out.println("Loaded application.properties successfully from classpath.");
 
     } catch (Exception e) {
       throw new RuntimeException("Failed to initialize HikariCP connection pool", e);
