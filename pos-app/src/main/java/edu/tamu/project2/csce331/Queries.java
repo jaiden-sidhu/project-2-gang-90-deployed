@@ -154,4 +154,42 @@ public class Queries {
       }
     }
   }
+
+  public void add_transaction_details(
+      String customer_name, Timestamp transaction_time, int employee_id, double total_price)
+      throws SQLException {
+    String sql =
+        "INSERT INTO transactions (customer_name, transaction_time, employee_id, total_price)"
+            + " VALUES (?, ?, ?, ?);";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, customer_name);
+      stmt.setTimestamp(2, transaction_time);
+      stmt.setInt(3, employee_id);
+      stmt.setDouble(4, total_price);
+      stmt.executeUpdate();
+    }
+  }
+
+  public void refill_inventory(String ingredient_name, int quantity) throws SQLException {
+    if (quantity < 0) {
+      throw new IllegalArgumentException("Quantity cannot be negative.");
+    }
+
+    String sql =
+        "UPDATE ingredients SET quantity = quantity + ? WHERE ingredient_name = ?;";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1, quantity);
+      stmt.setString(2, ingredient_name);
+      int rowsAffected = stmt.executeUpdate();
+      if (rowsAffected == 0) {
+        throw new SQLException("Ingredient not found: " + ingredient_name);
+      }
+    }
+  }
+
+  private void 
 }

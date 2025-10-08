@@ -7,10 +7,10 @@ public class Item {
   private String name;
   private int popularity;
   private double price;
-  private ArrayList<String> ingredients;
+  private ArrayList<Integer> ingredients;
 
   // Constructor
-  public Item(int id, String name, int popularity, double price, ArrayList<String> ingredients)
+  public Item(int id, String name, int popularity, double price, ArrayList<Integer> ingredients)
       throws IllegalArgumentException {
     // Quick luh checks
     if (id < 0) {
@@ -90,7 +90,7 @@ public class Item {
     }
   }
 
-  public void set_ingredients(ArrayList<String> ingredients) throws IllegalArgumentException {
+  public void set_ingredients(ArrayList<Integer> ingredients) throws IllegalArgumentException {
     if (ingredients != null) {
       this.ingredients = ingredients;
     } else {
