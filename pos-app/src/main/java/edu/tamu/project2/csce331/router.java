@@ -8,14 +8,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class router {
+public class Router {
   final String database_name = "gang_90_db";
   final String database_user = "gang_90";
   final String database_password = "gang_90";
   final String database_url =
       String.format("jdbc:postgresql://csce-315-db.engr.tamu.edu/%s", database_name);
 
-  public router() {}
+  public Router() {}
 
   private ResultSet connect_exicute(String sql_string) {
 

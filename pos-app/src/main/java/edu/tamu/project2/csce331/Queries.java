@@ -518,7 +518,10 @@ public class Queries {
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setInt(1, id);
+      stmt.setString(1, update_item.get_name());
+      stmt.setInt(2, update_item.get_popularity());
+      stmt.setDouble(3, update_item.get_popularity());
+      stmt.setInt(4, update_item.get_id());
       stmt.executeUpdate();
     }
   }
