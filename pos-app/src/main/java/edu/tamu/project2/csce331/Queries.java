@@ -401,7 +401,7 @@ public class Queries {
     }
   }
 
-  public void added_menu_item(Item added_item) throws SQLException {
+  public void add_menu_item(Item added_item) throws SQLException {
     String sql = "INSERT INTO menu (item_name, item_popularity, price) VALUES (?, ?, ?, ?);";
 
     try (Connection conn = Database.getConnection();
