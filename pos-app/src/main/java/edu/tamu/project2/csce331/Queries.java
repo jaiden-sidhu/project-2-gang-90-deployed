@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import javafx.beans.property.IntegerProperty;
+
 public class Queries {
 
   public ArrayList<Employee> get_managers() throws SQLException {
@@ -401,7 +403,7 @@ public class Queries {
     }
   }
 
-  public void add_menu_item(Item added_item) throws SQLException {
+  public int add_menu_item(Item added_item) throws SQLException {
     String sql = "INSERT INTO menu (item_name, item_popularity, price) VALUES (?, ?, ?, ?);";
 
     try (Connection conn = Database.getConnection();
@@ -410,8 +412,16 @@ public class Queries {
       stmt.setInt(2, added_item.get_popularity());
       stmt.setDouble(3, added_item.get_price());
       stmt.executeUpdate();
+      try (ResultSet keys = stmt.getGeneratedKeys()) {
+        if (keys.next()) {
+          int transaction_id = keys.getInt(1);
+          return transaction_id;
+        } else {
+          throw new SQLException("Creating transaction failed: no ID obtained.");
+        }
     }
   }
+}
 
   public void add_ingredient_map(int item_id, ArrayList<Integer> ingredient_id_list)
       throws SQLException {
