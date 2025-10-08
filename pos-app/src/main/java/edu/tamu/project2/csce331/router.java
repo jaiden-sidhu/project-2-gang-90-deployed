@@ -8,14 +8,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class Router {
+public class router {
   final String database_name = "gang_90_db";
   final String database_user = "gang_90";
   final String database_password = "gang_90";
   final String database_url =
       String.format("jdbc:postgresql://csce-315-db.engr.tamu.edu/%s", database_name);
 
-  public Router() {}
+  public router() {}
 
   private ResultSet connect_exicute(String sql_string) {
 
@@ -466,14 +466,14 @@ public class Router {
 
   //need to view ingredints
 
-  public ArrayList<Ingerdient> get_ingredints()
+  public ArrayList<Ingredient> get_ingredients()
     throws SQLException {
     String sql = "SELECT * FROM ingredients";
 
     try (Connection conn = Database.getConnection(); 
         PreparedStatement stmt = conn.prepareStatement(sql);
         ResultSet rs = stmt.executeQuery()) {
-      ArrayList<Ingerdient> ingredints_list = new ArrayList<>();
+      ArrayList<Ingredient> ingredints_list = new ArrayList<>();
 
       while (rs.next()) {
         int ingredient_id = rs.getInt("ingredient_id");
@@ -481,22 +481,35 @@ public class Router {
         int quantity = rs.getInt("quantity");
         String category = rs.getString("category");
         // Fetch ingredients for the item
-        ingredints_list.add(new Ingerdient(ingredient_name,  quantity,category, ingredient_id));
+        ingredints_list.add(new Ingredient(ingredient_name,  quantity,category, ingredient_id));
       }
       return ingredints_list;
 
     }
   }
 
-  // need to alter ingredits
-
-
-
-
-  // need to add ingredints
-  public void update_ingredints(Ingerdient update_ingrediants)
+  // need to add ingredits
+  public void add_ingredients(Ingredient update_ingrediants)
     throws SQLException {
-    String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
+    String sql = "INSERST INTO  menu (ingredient_name, quantity, category, ingredient_id) VALUE ($1,$2,$3,$4)";
+
+    try (Connection conn = Database.getConnection(); 
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1,update_ingrediants.get_ingredient_name());
+      stmt.setInt(2,update_ingrediants.get_quantity());
+      stmt.setString(3,update_ingrediants.get_category());
+      stmt.setInt(4,update_ingrediants.get_ingredient_id());
+      stmt.executeUpdate();
+    }
+
+  }
+
+
+
+  // need to alter ingredints
+  public void update_ingredients(Ingredient update_ingrediants)
+    throws SQLException {
+    String sql = "UPDATE  ingredients SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
 
     try (Connection conn = Database.getConnection(); 
         PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -512,5 +525,17 @@ public class Router {
 
   }
   // need to delete ingredints
+
+  public void delete_ingredients(int id)
+    throws SQLException {
+    String sql = "DELETE FROM ingredients WHERE ingredient_id = $1";
+
+    try (Connection conn = Database.getConnection(); 
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1,id);
+      stmt.executeUpdate();
+    }
+
+  }
 
 }
