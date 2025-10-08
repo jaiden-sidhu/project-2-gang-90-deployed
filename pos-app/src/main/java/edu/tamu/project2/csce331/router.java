@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class router {
+public class Router {
   final String database_name = "gang_90_db";
   final String database_user = "gang_90";
   final String database_password = "gang_90";
@@ -15,7 +15,7 @@ public class router {
 
   
 
-  public router() {}
+  public Router() {}
 
   private ResultSet connect_exicute(String sql_string) {
 
