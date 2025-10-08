@@ -401,7 +401,7 @@ public class Queries {
     }
   }
 
-  public void added_menu_item(Item added_item) throws SQLException {
+  public void add_menu_item(Item added_item) throws SQLException {
     String sql = "INSERT INTO menu (item_name, item_popularity, price) VALUES (?, ?, ?, ?);";
 
     try (Connection conn = Database.getConnection();
@@ -513,15 +513,13 @@ public class Queries {
 
   // need to delete ingredints
 
-  public void delete_ingredients(int id) throws SQLException {
+  public void delete_ingredients(int id)
+    throws SQLException {
     String sql = "DELETE FROM ingredients WHERE ingredient_id = $1";
 
-    try (Connection conn = Database.getConnection();
+    try (Connection conn = Database.getConnection(); 
         PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setString(1, update_item.get_name());
-      stmt.setInt(2, update_item.get_popularity());
-      stmt.setDouble(3, update_item.get_popularity());
-      stmt.setInt(4, update_item.get_id());
+      stmt.setInt(1,id);
       stmt.executeUpdate();
     }
   }
