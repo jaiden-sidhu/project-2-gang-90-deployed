@@ -46,10 +46,10 @@ SELECT role, AVG(pay) AS average_salary
 FROM personnel
 GROUP BY role;
 
---show menu items that cost less than $4.99
+--show menu items that cost less than $5.99
 SELECT item_name, price
 FROM menu
-WHERE price < 4.99;
+WHERE price < 5.99;
 
 --Top 5 most popular menu items
 SELECT item_name, item_popularity
