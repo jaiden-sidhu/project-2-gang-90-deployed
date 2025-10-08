@@ -11,6 +11,9 @@ public class router {
   final String database_password = "gang_90";
   final String database_url =
       String.format("jdbc:postgresql://csce-315-db.engr.tamu.edu/%s", database_name);
+  
+
+  
 
   public router() {}
 
