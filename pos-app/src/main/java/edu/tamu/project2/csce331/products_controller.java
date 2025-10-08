@@ -1,11 +1,16 @@
 package edu.tamu.project2.csce331;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import edu.tamu.project2.csce331.Item;
 import edu.tamu.project2.csce331.Queries;
 
@@ -150,13 +155,41 @@ public class products_controller
     @FXML
     public void go_sales() 
     { 
-        System.out.println("Go to sales page"); 
+        try 
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("project-2-gang-90\\pos-app\\src\\main\\resources\\edu\\tamu\\project2\\csce331\\transactions_history.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) name_field.getScene().getWindow();
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - Products");
+            stage.show();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
     }
 
     @FXML
-    public void go_settings() 
+    public void go_settings() // DOES NOT GO TO SETTINGS RN
     { 
-        System.out.println("Go to settings page"); 
+        try 
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("project-2-gang-90\\pos-app\\src\\main\\resources\\edu\\tamu\\project2\\csce331\\cashier_menu.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) name_field.getScene().getWindow();
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - Products");
+            stage.show();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
     }
 
     private void populate_form(Product p) 
