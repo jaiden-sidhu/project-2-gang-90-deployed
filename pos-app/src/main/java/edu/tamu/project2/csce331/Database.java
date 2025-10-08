@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class Database {
-  private static HikariDataSource dataSource;
+  private static HikariDataSource data_source;
 
   static {
     try (InputStream input =
@@ -36,7 +36,7 @@ public class Database {
       config.setConnectionTimeout(
           Long.parseLong(props.getProperty("db.hikari.connection-timeout", "10000")));
 
-      dataSource = new HikariDataSource(config);
+      data_source = new HikariDataSource(config);
       System.out.println("HikariCP connection pool initialized successfully.");
 
     } catch (Exception e) {
@@ -45,6 +45,6 @@ public class Database {
   }
 
   public static Connection getConnection() throws SQLException {
-    return dataSource.getConnection();
+    return data_source.getConnection();
   }
 }

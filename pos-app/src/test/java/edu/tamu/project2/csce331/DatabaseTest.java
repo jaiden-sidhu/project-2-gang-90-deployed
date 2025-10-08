@@ -37,30 +37,30 @@ public class DatabaseTest {
         ResultSetMetaData meta = rs.getMetaData();
         assertNotNull(meta, "ResultSetMetaData should not be null (table likely exists)");
 
-        int columnCount = meta.getColumnCount();
+        int column_count = meta.getColumnCount();
         System.out.println("\n'transactions' table exists.");
         System.out.println("Displaying up to 10 rows:\n");
 
         // Print column headers
-        for (int i = 1; i <= columnCount; i++) {
+        for (int i = 1; i <= column_count; i++) {
           System.out.print(meta.getColumnName(i) + "\t");
         }
         System.out.println();
 
         // Try to print the rows, track if any found
-        int rowCount = 0;
+        int row_count = 0;
         while (rs.next()) {
-          rowCount++;
-          for (int i = 1; i <= columnCount; i++) {
+          row_count++;
+          for (int i = 1; i <= column_count; i++) {
             System.out.print(rs.getString(i) + "\t");
           }
           System.out.println();
         }
 
-        if (rowCount == 0) {
+        if (row_count == 0) {
           System.out.println("(No rows found in the transactions table)");
         } else {
-          System.out.println("\nDisplayed " + rowCount + " row(s).");
+          System.out.println("\nDisplayed " + row_count + " row(s).");
         }
       }
     }
@@ -85,7 +85,7 @@ public class DatabaseTest {
 
   @Test
   void all_expected_tables_exist() throws Exception {
-    String[] expectedTables =
+    String[] expected_tables =
         new String[] {
           "ingredients",
           "ingredients_map",
@@ -97,17 +97,17 @@ public class DatabaseTest {
 
     // Connect to current schema
     try (Connection conn = Database.getConnection()) {
-      String currentSchema;
+      String current_schema;
       try (PreparedStatement s = conn.prepareStatement("SELECT current_schema()")) {
         try (ResultSet rs = s.executeQuery()) {
           rs.next();
-          currentSchema = rs.getString(1);
+          current_schema = rs.getString(1);
         }
       }
 
       // Check each expected table
-      System.out.println("\nChecking required tables in schema '" + currentSchema + "':");
-      for (String table : expectedTables) {
+      System.out.println("\nChecking required tables in schema '" + current_schema + "':");
+      for (String table : expected_tables) {
         boolean exists = tableExists(conn, table);
         System.out.println(" - " + table + ": " + (exists ? "FOUND" : "MISSING"));
         assertTrue(exists, "Missing required table: " + table);
