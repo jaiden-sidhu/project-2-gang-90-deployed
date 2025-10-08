@@ -1,6 +1,4 @@
 package edu.tamu.project2.csce331;
-import edu.tamu.project2.csce331.TransactionDetails;
-import edu.tamu.project2.csce331.Transaction;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -422,11 +420,25 @@ public class Router {
     }
   }
 
+  public void delete_item(int id)
+      throws SQLException {
+    String sql = "DELETE FROM menu ingredients_map WHERE item_id = ?";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1,id);
+      stmt.executeUpdate();
+    }
 
 
 
   }
 
+  
 
+
+
+
+}
 
 
