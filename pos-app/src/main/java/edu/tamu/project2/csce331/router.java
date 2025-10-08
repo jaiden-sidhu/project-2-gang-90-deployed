@@ -88,12 +88,45 @@ public class Router {
     return connect_exicute(sql_string);
   }
 
+  public ResultSet get_empolyee() {
+
+    String sql_string = "SELECT * FROM personel;";
+    // may return null if error
+    return connect_exicute(sql_string);
+  }
+
+
   public ResultSet get_item_id() {
 
     String sql_string = "SELECT item_id, item_name FROM menu;";
     // may return null if error
     return connect_exicute(sql_string);
   }
+
+
+  public ResultSet update_employee(int employee_id, String name, String role, double pay) {
+
+    // i am considering doing a rollback but idk if it will be worth it
+    // This prepare satment is used to prevent sql injections in postgress
+    String sql_string =
+        String.format(
+            """
+            PREPARE update_empoylee (integer, Varchar(255), varchar(255),NUMERIC(10, 2)) AS
+            UPDATE personnel SET  name = $2 role = $3 pay = $4 
+            WHERE employee_id = $1;
+
+            EXECUTE update_empoylee (%d, '%s','%s', %f);
+
+            """,
+            employee_id, name, role, pay);
+
+    // may return null if error
+    return connect_exicute(sql_string);
+  }
+
+
+
+
 
   // add employee
   public ResultSet add_employee(int employee_id, String name, String role, double pay) {
@@ -344,6 +377,10 @@ public class Router {
 
     return connect_exicute(sql_string);
   }
+
+
+
+
 
 
 }
