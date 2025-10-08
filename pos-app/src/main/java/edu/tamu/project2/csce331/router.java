@@ -82,6 +82,7 @@ public class Router {
     }
   }
 
+  // DONE
   public ResultSet get_managers() {
 
     String sql_string = "SELECT * FROM personel WHERE role = 'manager';";
@@ -89,6 +90,7 @@ public class Router {
     return connect_exicute(sql_string);
   }
 
+  // DONE
   public ResultSet get_empolyee() {
 
     String sql_string = "SELECT * FROM personel;";
@@ -96,7 +98,7 @@ public class Router {
     return connect_exicute(sql_string);
   }
 
-
+  // DONE
   public ResultSet get_item_id() {
 
     String sql_string = "SELECT item_id, item_name FROM menu;";
@@ -104,7 +106,7 @@ public class Router {
     return connect_exicute(sql_string);
   }
 
-
+  // DONE
   public ResultSet update_employee(int employee_id, String name, String role, double pay) {
 
     // i am considering doing a rollback but idk if it will be worth it
@@ -130,6 +132,7 @@ public class Router {
 
 
   // add employee
+  // DONE
   public ResultSet add_employee(int employee_id, String name, String role, double pay) {
 
     // i am considering doing a rollback but idk if it will be worth it

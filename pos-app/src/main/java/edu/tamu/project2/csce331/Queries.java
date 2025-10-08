@@ -28,6 +28,25 @@ public class Queries {
     }
   }
 
+  public ArrayList<Employee> get_employee() throws SQLException {
+    String sql = "SELECT * FROM personnel;";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery()) {
+      ArrayList<Employee> employees = new ArrayList<>();
+
+      while (rs.next()) {
+        int id = rs.getInt("employee_id");
+        String name = rs.getString("name");
+        String role = rs.getString("role");
+        double pay = rs.getDouble("pay");
+        employees.add(new Employee(id, name, role, pay));
+      }
+      return employees;
+    }
+  }
+
   public int get_item_id(String item) throws SQLException {
     String sql = "SELECT item_id, item_name FROM menu WHERE item_name = ?;";
 
@@ -44,6 +63,62 @@ public class Queries {
     }
   }
 
+  public void update_employee(int id, String name, String role, double pay) throws SQLException {
+    String sql = "UPDATE personnel SET name = ?, role = ?, pay = ? WHERE employee_id = ?;";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, name);
+      stmt.setString(2, role);
+      stmt.setDouble(3, pay);
+      stmt.setInt(4, id);
+      int rowsAffected = stmt.executeUpdate();
+      if (rowsAffected == 0) {
+        throw new SQLException("Employee not found with ID: " + id);
+      }
+    }
+  }
+
+  public void update_employee_role(int id, String role) throws SQLException {
+    String sql = "UPDATE personnel SET role = ? WHERE employee_id = ?;";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, role);
+      stmt.setInt(2, id);
+      int rowsAffected = stmt.executeUpdate();
+      if (rowsAffected == 0) {
+        throw new SQLException("Employee not found with ID: " + id);
+      }
+    }
+  }
+
+  public void update_employee_pay(int id, double pay) throws SQLException {
+    String sql = "UPDATE personnel SET pay = ? WHERE employee_id = ?;";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setDouble(1, pay);
+      stmt.setInt(2, id);
+      int rowsAffected = stmt.executeUpdate();
+      if (rowsAffected == 0) {
+        throw new SQLException("Employee not found with ID: " + id);
+      }
+    }
+  }
+
+  public void add_employee(String name, String role, double pay) throws SQLException {
+    String sql = "INSERT INTO personnel (name, role, pay) VALUES (?, ?, ?);";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, name);
+      stmt.setString(2, role);
+      stmt.setDouble(3, pay);
+      stmt.executeUpdate();
+    }
+  }
+
   public int get_ingredient_id(String ingredient) throws SQLException {
     String sql = "SELECT item_id, item_name FROM ingredients WHERE ingredient_name = ?;";
 
@@ -57,20 +132,6 @@ public class Queries {
           throw new SQLException("Item not found: " + ingredient);
         }
       }
-    }
-  }
-
-  public void add_employee(int employee_id, String name, String role, double pay)
-      throws SQLException {
-    String sql = "INSERT INTO personnel (employee_id, name, role, pay) VALUES (?, ?, ?, ?);";
-
-    try (Connection conn = Database.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setInt(1, employee_id);
-      stmt.setString(2, name);
-      stmt.setString(3, role);
-      stmt.setDouble(4, pay);
-      stmt.executeUpdate();
     }
   }
 
@@ -177,8 +238,7 @@ public class Queries {
       throw new IllegalArgumentException("Quantity cannot be negative.");
     }
 
-    String sql =
-        "UPDATE ingredients SET quantity = quantity + ? WHERE ingredient_name = ?;";
+    String sql = "UPDATE ingredients SET quantity = quantity + ? WHERE ingredient_name = ?;";
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -190,6 +250,4 @@ public class Queries {
       }
     }
   }
-
-  private void 
 }
