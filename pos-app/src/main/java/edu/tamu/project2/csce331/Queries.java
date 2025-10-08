@@ -163,6 +163,43 @@ public class Queries {
     }
   }
 
+  public ArrayList<Transaction> get_transactions(int page, int pageSize) throws SQLException {
+    if (page < 0 || pageSize <= 0) {
+      throw new IllegalArgumentException("Page must be >= 0 and pageSize > 0");
+    }
+    int offset = page * pageSize;
+    String sql = "SELECT * FROM transactions ORDER BY transaction_time DESC LIMIT ? OFFSET ?;";
+    try (Connection conn = Database.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1, pageSize);
+      stmt.setInt(2, offset);
+      try (ResultSet rs = stmt.executeQuery()) {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        while (rs.next()) {
+          int transaction_id = rs.getInt("transaction_id");
+          String customer_name = rs.getString("customer_name");
+          java.sql.Timestamp transaction_time = rs.getTimestamp("transaction_time");
+          int employee_id = rs.getInt("employee_id");
+          double total_price = rs.getDouble("total_price");
+          transactions.add(new Transaction(transaction_id, customer_name, transaction_time, employee_id, total_price));
+        }
+        return transactions;
+      }
+    }
+  }
+
+  public int count_transactions() throws SQLException {
+    String sql = "SELECT COUNT(*) AS cnt FROM transactions;";
+    try (Connection conn = Database.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+      if (rs.next()) {
+        return rs.getInt("cnt");
+      }
+      return 0;
+    }
+  }
+
   public Transaction get_transaction(int transaction_id) throws SQLException {
     if (transaction_id < 0) {
       throw new IllegalArgumentException("Transaction ID cannot be negative.");
@@ -330,8 +367,7 @@ public class Queries {
       }
     }
   }
-
-  public void decrease_inventory(int ingredient_id, int quantity) throws SQLException {
+    public void decrease_inventory(int ingredient_id, int quantity) throws SQLException {
     if (quantity < 0) {
       throw new IllegalArgumentException("Quantity cannot be negative.");
     }
@@ -349,3 +385,4 @@ public class Queries {
     }
   }
 }
+
