@@ -1,3 +1,5 @@
+package edu.tamu.project2.csce331;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -40,10 +42,7 @@ public class CashierController {
 
     private String[] drinkNames;
     private double[] drinkPrices;
-
-    private final String DB_URL = "jdbc:postgresql://csce-315-db.engr.tamu.edu:5432/gang_90_db";
-    private final String DB_USER = "gang_90";
-    private final String DB_PASS = "gang_90";
+    // Database connections and queries are provided by Database and Queries classes
 
     @FXML
     public void initialize() {
@@ -54,20 +53,14 @@ public class CashierController {
     private void loadMenuFromDB() {
         List<String> namesList = new ArrayList<>();
         List<Double> pricesList = new ArrayList<>();
-
-        String query = "SELECT item_name, price FROM menu ORDER BY id";
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-
-            while (rs.next()) {
-                String name = rs.getString("item_name");
-                double price = rs.getDouble("price");
-
-                namesList.add(toTitleCase(name));
-                pricesList.add(price);
+        // Use Queries.get_menu() to load menu items (uses Database.getConnection internally)
+        try {
+            edu.tamu.project2.csce331.Queries queries = new edu.tamu.project2.csce331.Queries();
+            java.util.ArrayList<edu.tamu.project2.csce331.Item> menu = queries.get_menu();
+            for (edu.tamu.project2.csce331.Item it : menu) {
+                namesList.add(toTitleCase(it.get_name()));
+                pricesList.add(it.get_price());
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -92,6 +85,8 @@ public class CashierController {
     }
 
     private void populateDrinkGrid() {
+        if (drinkNames == null || drinkNames.length == 0) return;
+
         int col = 0, row = 0;
         for (int i = 0; i < drinkNames.length; i++) {
             String name = drinkNames[i];
@@ -177,67 +172,50 @@ public class CashierController {
     private void confirmCharge() {
         String name = customerNameField.getText().trim();
         if (name.isEmpty()) return;
-
-        Connection conn = null;
-        PreparedStatement insertTransactionStmt = null;
-        PreparedStatement insertDetailStmt = null;
-        PreparedStatement updatePopularityStmt = null;
-        ResultSet generatedKeys = null;
-
         try {
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-            conn.setAutoCommit(false);
+            edu.tamu.project2.csce331.Queries queries = new edu.tamu.project2.csce331.Queries();
 
-            // 1) Insert into transactions
-            String insertTransactionSQL = "INSERT INTO transactions (name, timestamp, employee_id, total_price) VALUES (?, ?, ?, ?) RETURNING id";
-            insertTransactionStmt = conn.prepareStatement(insertTransactionSQL);
-            insertTransactionStmt.setString(1, name);
-            insertTransactionStmt.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-            insertTransactionStmt.setInt(3, 1);
-            insertTransactionStmt.setDouble(4, subtotal);
-
-            generatedKeys = insertTransactionStmt.executeQuery();
-
-            int transactionId = -1;
-            if (generatedKeys.next()) {
-                transactionId = generatedKeys.getInt(1);
-            } else {
-                throw new SQLException("Failed to retrieve transaction ID.");
+            java.util.ArrayList<edu.tamu.project2.csce331.Item> menu = queries.get_menu();
+            java.util.Map<String, edu.tamu.project2.csce331.Item> menuByName = new java.util.HashMap<>();
+            for (edu.tamu.project2.csce331.Item it : menu) {
+                menuByName.put(toTitleCase(it.get_name()), it);
             }
 
-            // 2) Insert into transaction_details and update menu popularity
-            String insertDetailSQL = "INSERT INTO transaction_details (transaction_id, item_id) VALUES (?, ?)";
-            String updatePopularitySQL = "UPDATE menu SET item_popularity = item_popularity + 1 WHERE id = ?";
-
-            insertDetailStmt = conn.prepareStatement(insertDetailSQL);
-            updatePopularityStmt = conn.prepareStatement(updatePopularitySQL);
-
+            java.util.ArrayList<edu.tamu.project2.csce331.Item> itemsForTransaction = new java.util.ArrayList<>();
             for (int i = 0; i < orderItems.getChildren().size(); i++) {
+                if (!(orderItems.getChildren().get(i) instanceof VBox)) continue;
                 VBox itemBox = (VBox) orderItems.getChildren().get(i);
                 Label nameLabel = (Label) itemBox.getChildren().get(0);
                 String itemText = nameLabel.getText();
                 String drinkName = itemText.split(" - ")[0];
 
-                int itemId = -1;
-                for (int j = 0; j < drinkNames.length; j++) {
-                    if (drinkNames[j].equals(drinkName)) {
-                        itemId = j + 1;
-                        break;
+                edu.tamu.project2.csce331.Item menuItem = menuByName.get(drinkName);
+                if (menuItem == null) {
+                    try {
+                        int id = queries.get_item_id(drinkName);
+                        for (edu.tamu.project2.csce331.Item it : menu) {
+                            if (it.get_id() == id) {
+                                menuItem = it;
+                                break;
+                            }
+                        }
+                    } catch (SQLException e) {
+                        // item not found, skip
                     }
                 }
-                if (itemId == -1) continue;
-
-                insertDetailStmt.setInt(1, transactionId);
-                insertDetailStmt.setInt(2, itemId);
-                insertDetailStmt.executeUpdate();
-
-                updatePopularityStmt.setInt(1, itemId);
-                updatePopularityStmt.executeUpdate();
+                if (menuItem != null) itemsForTransaction.add(menuItem);
             }
 
-            conn.commit();
+        edu.tamu.project2.csce331.Transaction tx = new edu.tamu.project2.csce331.Transaction(
+                    0,
+                    name,
+                    Timestamp.valueOf(LocalDateTime.now()),
+                    1,
+                    subtotal
+            );
 
-            // 3) Reset order
+            queries.add_transaction_and_details(tx, itemsForTransaction);
+
             orderItems.getChildren().clear();
             orderItems.getChildren().add(new Label("No items yet."));
             subtotal = 0;
@@ -252,23 +230,6 @@ public class CashierController {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        } finally {
-            try {
-                if (generatedKeys != null) generatedKeys.close();
-                if (insertTransactionStmt != null) insertTransactionStmt.close();
-                if (insertDetailStmt != null) insertDetailStmt.close();
-                if (updatePopularityStmt != null) updatePopularityStmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 }
