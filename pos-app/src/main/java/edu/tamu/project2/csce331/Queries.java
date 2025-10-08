@@ -460,16 +460,16 @@ public class Queries {
     }
   }
 
-  public void get_ingredints(Ingredient update_item) throws SQLException {
-    String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
+  // public void get_ingredints(Ingredient update_item) throws SQLException {
+  //   String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
 
-    try (Connection conn = Database.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setString(1, update_item.get_name());
-      stmt.setInt(2, update_item.get_popularity());
-      stmt.setDouble(3, update_item.get_popularity());
-      stmt.setInt(4, update_item.get_id());
-      stmt.executeUpdate();
-    }
-  }
+  //   try (Connection conn = Database.getConnection();
+  //       PreparedStatement stmt = conn.prepareStatement(sql)) {
+  //     stmt.setString(1, update_item.get_name());
+  //     stmt.setInt(2, update_item.get_popularity());
+  //     stmt.setDouble(3, update_item.get_popularity());
+  //     stmt.setInt(4, update_item.get_id());
+  //     stmt.executeUpdate();
+  //   }
+  // }
 }
