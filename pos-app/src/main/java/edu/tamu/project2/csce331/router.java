@@ -449,7 +449,7 @@ public class router {
 
 
   // need to alter items on menu
-
+  // DONE 
   public void update_menu_items(Item update_item) throws SQLException {
     String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
 
