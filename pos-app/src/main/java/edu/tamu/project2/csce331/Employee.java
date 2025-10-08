@@ -30,24 +30,24 @@ public class Employee {
   }
 
   // Getters
-  public int getId() {
+  public int get_id() {
     return id;
   }
 
-  public String getName() {
+  public String get_name() {
     return name;
   }
 
-  public String getRole() {
+  public String get_role() {
     return role;
   }
 
-  public double getPay() {
+  public double get_pay() {
     return pay;
   }
 
   // Setters
-  public void setId(int id) throws IllegalArgumentException {
+  public void set_id(int id) throws IllegalArgumentException {
     if (id >= 0) {
       this.id = id;
     } else {
@@ -55,11 +55,11 @@ public class Employee {
     }
   }
 
-  public void setName(String name) {
+  public void set_name(String name) {
     this.name = name;
   }
 
-  public void setRole(String role) throws IllegalArgumentException {
+  public void set_role(String role) throws IllegalArgumentException {
     if (VALID_ROLES.contains(role)) {
       this.role = role;
     } else {
@@ -68,7 +68,7 @@ public class Employee {
     }
   }
 
-  public void setPay(double pay) throws IllegalArgumentException {
+  public void set_pay(double pay) throws IllegalArgumentException {
     if (pay >= 0) {
       this.pay = pay;
     } else {

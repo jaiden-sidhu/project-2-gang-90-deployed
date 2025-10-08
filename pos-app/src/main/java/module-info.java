@@ -10,6 +10,7 @@ module edu.tamu.project2.csce331 {
   requires javafx.controls;
   requires javafx.fxml;
 
+
   opens edu.tamu.project2.csce331 to
       javafx.fxml;
 

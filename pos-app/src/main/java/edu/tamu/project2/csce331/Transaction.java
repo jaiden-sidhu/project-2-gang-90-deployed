@@ -1,6 +1,6 @@
 package edu.tamu.project2.csce331;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 public class Transaction {
     public int transaction_id;
