@@ -342,7 +342,7 @@ public class Queries {
       while (rs.next()) {
         int id = rs.getInt("item_id");
         String name = rs.getString("item_name");
-        int popularity = rs.getInt("popularity");
+        int popularity = rs.getInt("item_popularity");
         double price = rs.getDouble("price");
         // Fetch ingredients for the item
         ArrayList<Integer> ingredients = get_ingredients_for_item(id, conn);

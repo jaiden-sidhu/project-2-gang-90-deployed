@@ -110,6 +110,7 @@ public class CashierController {
         currentDrinkName = name;
         currentDrinkPrice = price;
         currentModifications.clear();
+        resetModificationButtons();
         modificationsPopup.setVisible(true);
     }
 
@@ -118,15 +119,57 @@ public class CashierController {
         Button btn = (Button) event.getSource();
         String mod = btn.getText();
 
-        // avoid duplicates
-        currentModifications.removeIf(m -> m.equals(mod));
-        currentModifications.add(mod);
+        javafx.scene.Node parent = btn.getParent();
+        String category = "";
+        if (parent instanceof HBox) {
+            HBox h = (HBox) parent;
+            if (!h.getChildren().isEmpty() && h.getChildren().get(0) instanceof Label) {
+                category = ((Label) h.getChildren().get(0)).getText().trim();
+            }
+        }
+
+        String key = category + ":" + mod;
+
+        String existing = null;
+        for (String s : currentModifications) {
+            if (s.startsWith(category + ":")) {
+                existing = s;
+                break;
+            }
+        }
+
+        if (existing != null && existing.equals(key)) {
+            currentModifications.remove(existing);
+            if (parent instanceof HBox) {
+                for (javafx.scene.Node c : ((HBox) parent).getChildren()) {
+                    if (c instanceof Button) ((Button) c).setStyle("");
+                }
+            }
+        }
+        else {
+            if (existing != null) currentModifications.remove(existing);
+            currentModifications.add(key);
+
+            if (parent instanceof HBox) {
+                for (javafx.scene.Node c : ((HBox) parent).getChildren()) {
+                    if (c instanceof Button) {
+                        Button b = (Button) c;
+                        if (b == btn) {
+                            b.setStyle("-fx-background-color: #444; -fx-text-fill: white;");
+                        } else {
+                            b.setStyle("");
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @FXML
     private void confirmModifications() {
         addDrinkToOrder(currentDrinkName, currentDrinkPrice, new ArrayList<>(currentModifications));
         modificationsPopup.setVisible(false);
+        resetModificationButtons();
     }
 
     private void addDrinkToOrder(String name, double price, List<String> mods) {
@@ -142,10 +185,50 @@ public class CashierController {
 
         orderItems.getChildren().add(itemBox);
 
-        subtotal += price;
+        recalcTotal();
+    }
+
+    private void recalcTotal() {
+        double sum = 0.0;
+        for (javafx.scene.Node n : orderItems.getChildren()) {
+            if (!(n instanceof VBox)) continue;
+            VBox itemBox = (VBox) n;
+            if (itemBox.getChildren().isEmpty()) continue;
+            javafx.scene.Node first = itemBox.getChildren().get(0);
+            if (!(first instanceof Label)) continue;
+            String text = ((Label) first).getText();
+            int dollar = text.lastIndexOf('$');
+            if (dollar >= 0 && dollar + 1 < text.length()) {
+                String num = text.substring(dollar + 1).replaceAll("[^0-9.\\-]", "");
+                try {
+                    sum += Double.parseDouble(num);
+                } catch (NumberFormatException ignored) {
+                }
+            }
+        }
+        this.subtotal = sum;
         subtotalLabel.setText("$" + df.format(subtotal));
         totalLabel.setText("$" + df.format(subtotal));
         chargeButton.setText("Charge $" + df.format(subtotal));
+    }
+
+    private void resetModificationButtons() {
+        if (modificationsPopup == null) return;
+        for (javafx.scene.Node child : modificationsPopup.getChildren()) {
+            if (child instanceof VBox) {
+                VBox v = (VBox) child;
+                for (javafx.scene.Node row : v.getChildren()) {
+                    if (row instanceof HBox) {
+                        HBox h = (HBox) row;
+                        for (javafx.scene.Node c : h.getChildren()) {
+                            if (c instanceof Button) ((Button) c).setStyle("");
+                        }
+                    } else if (row instanceof Button) {
+                        ((Button) row).setStyle("");
+                    }
+                }
+            }
+        }
     }
 
     @FXML
