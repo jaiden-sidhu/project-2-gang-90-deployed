@@ -215,20 +215,65 @@ public class Queries {
     }
   }
 
-  public void add_transaction(
-      String customer_name, Timestamp transaction_time, int employee_id, double total_price)
+  private int add_transaction(
+      String customer_name,
+      Timestamp transaction_time,
+      int employee_id,
+      double total_price,
+      Connection conn)
       throws SQLException {
     String sql =
         "INSERT INTO transactions (customer_name, transaction_time, employee_id, total_price)"
-            + " VALUES (?, ?, ?, ?);";
+            + " VALUES (?, ?, ?, ?)";
 
-    try (Connection conn = Database.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setString(1, customer_name);
-      stmt.setTimestamp(2, transaction_time);
-      stmt.setInt(3, employee_id);
-      stmt.setDouble(4, total_price);
-      stmt.executeUpdate();
+    try (PreparedStatement ps =
+        conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+      ps.setString(1, customer_name);
+      ps.setTimestamp(2, transaction_time);
+      ps.setInt(3, employee_id);
+      ps.setDouble(4, total_price);
+      ps.executeUpdate();
+
+      try (ResultSet keys = ps.getGeneratedKeys()) {
+        if (keys.next()) {
+          int transaction_id = keys.getInt(1);
+          return transaction_id;
+        } else {
+          throw new SQLException("Creating transaction failed: no ID obtained.");
+        }
+      }
+    }
+  }
+
+  public void add_transaction_and_details(Transaction transaction, ArrayList<Item> items)
+      throws SQLException {
+    try (Connection conn = Database.getConnection()) {
+      try {
+        conn.setAutoCommit(false);
+        // Generate a new transaction and store its ID
+        int transaction_id =
+            add_transaction(
+                transaction.customer_name,
+                transaction.transaction_time,
+                transaction.employee_id,
+                transaction.total_price,
+                conn);
+
+        // Insert each item into transaction_details and add to batch
+        String sql = "INSERT INTO transaction_details (transaction_id, item_id) VALUES (?, ?);";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+          for (Item item : items) {
+            ps.setInt(1, transaction_id);
+            ps.setInt(2, item.get_id());
+            ps.addBatch();
+          }
+          ps.executeBatch();
+        }
+        conn.commit();
+      } catch (SQLException e) {
+        conn.rollback();
+        throw new SQLException("Failed to add transaction: " + e.getMessage());
+      }
     }
   }
 
@@ -303,6 +348,4 @@ public class Queries {
       }
     }
   }
-
-  
 }
