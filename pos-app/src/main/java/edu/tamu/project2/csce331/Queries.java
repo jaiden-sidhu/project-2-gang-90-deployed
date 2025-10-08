@@ -413,14 +413,14 @@ public class Queries {
     }
   }
 
-  public void add_ingredent_map(int item_id, ArrayList<Integer> ingrednent_id_list)
+  public void add_ingredient_map(int item_id, ArrayList<Integer> ingredient_id_list)
       throws SQLException {
     String sql = "INSERT INTO ingredients_map (ingredients_id, item_id) VALUES (?, ?);";
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
-      for (int i = 0; i < ingrednent_id_list.size(); i++) {
+      for (int i = 0; i < ingredient_id_list.size(); i++) {
         stmt.setInt(1, item_id);
-        stmt.setInt(2, ingrednent_id_list.get(i));
+        stmt.setInt(2, ingredient_id_list.get(i));
         stmt.executeUpdate();
       }
     }
@@ -460,16 +460,69 @@ public class Queries {
     }
   }
 
-  // public void get_ingredints(Ingredient update_item) throws SQLException {
-  //   String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
+  public ArrayList<Ingredient> get_ingredients() throws SQLException {
+    String sql = "SELECT * FROM ingredients";
 
-  //   try (Connection conn = Database.getConnection();
-  //       PreparedStatement stmt = conn.prepareStatement(sql)) {
-  //     stmt.setString(1, update_item.get_name());
-  //     stmt.setInt(2, update_item.get_popularity());
-  //     stmt.setDouble(3, update_item.get_popularity());
-  //     stmt.setInt(4, update_item.get_id());
-  //     stmt.executeUpdate();
-  //   }
-  // }
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery()) {
+      ArrayList<Ingredient> ingredients_list = new ArrayList<>();
+
+      while (rs.next()) {
+        int ingredient_id = rs.getInt("ingredient_id");
+        String ingredient_name = rs.getString("ingredient_name");
+        int quantity = rs.getInt("quantity");
+        String category = rs.getString("category");
+        // Fetch ingredients for the item
+        ingredients_list.add(new Ingredient(ingredient_name, quantity, category, ingredient_id));
+      }
+      return ingredients_list;
+    }
+  }
+
+  // need to add ingredits
+  public void add_ingredients(Ingredient update_ingredients) throws SQLException {
+    String sql =
+        "INSERST INTO  menu (ingredient_name, quantity, category, ingredient_id) VALUE"
+            + " ($1,$2,$3,$4)";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, update_ingredients.get_ingredient_name());
+      stmt.setInt(2, update_ingredients.get_quantity());
+      stmt.setString(3, update_ingredients.get_category());
+      stmt.setInt(4, update_ingredients.get_ingredient_id());
+      stmt.executeUpdate();
+    }
+  }
+
+  // need to alter ingredints
+  public void update_ingredients(Ingredient update_ingredients) throws SQLException {
+    String sql =
+        "UPDATE  ingredients SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, update_ingredients.get_ingredient_name());
+      stmt.setInt(2, update_ingredients.get_quantity());
+      stmt.setString(3, update_ingredients.get_category());
+      stmt.setInt(4, update_ingredients.get_ingredient_id());
+      stmt.executeUpdate();
+    }
+  }
+
+  // need to delete ingredints
+
+  public void delete_ingredients(int id) throws SQLException {
+    String sql = "DELETE FROM ingredients WHERE ingredient_id = $1";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, update_item.get_name());
+      stmt.setInt(2, update_item.get_popularity());
+      stmt.setDouble(3, update_item.get_popularity());
+      stmt.setInt(4, update_item.get_id());
+      stmt.executeUpdate();
+    }
+  }
 }
