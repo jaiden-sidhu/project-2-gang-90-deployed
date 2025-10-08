@@ -327,6 +327,7 @@ public class Router {
   // insert inventory
 
   // insert transaction details and transactions
+  // DONE as add_transaction_and_details()
   public ResultSet add_transaction_and_details(
       Transaction transaction, TransactionDetails[] details_list) {
     int transaction_id = handle_transaction(transaction);
@@ -335,6 +336,7 @@ public class Router {
     return connect_exicute(null);
   }
 
+  // DONE as add_transaction_and_details()
   private int handle_transaction(Transaction transaction) {
     String sql_string =
         String.format(
@@ -360,6 +362,7 @@ public class Router {
     return result;
   }
 
+  //DONE as add_transaction_and_details()
   private ResultSet handle_details(int id, TransactionDetails[] details_list) {
     String sql_string =
         """
@@ -383,6 +386,7 @@ public class Router {
     return connect_exicute(sql_string);
   }
 
+  // DONE as delete_employee()
   public void delete_employee(int employee_id) throws SQLException {
     String sql = "DELETE FROM personnel WHERE employee_id = ?;";
 
@@ -392,6 +396,7 @@ public class Router {
       stmt.executeUpdate();
     }
   }
+
 
   public void added_menu_item(Item added_item) throws SQLException {
     String sql = "INSERT INTO menu (item_name, item_popularity, price) VALUES (?, ?, ?, ?);";
