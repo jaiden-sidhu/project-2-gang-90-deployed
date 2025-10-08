@@ -1,4 +1,5 @@
 package edu.tamu.project2.csce331;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,9 +14,6 @@ public class Router {
   final String database_password = "gang_90";
   final String database_url =
       String.format("jdbc:postgresql://csce-315-db.engr.tamu.edu/%s", database_name);
-  
-
-  
 
   public Router() {}
 
@@ -115,7 +113,7 @@ public class Router {
         String.format(
             """
             PREPARE update_empoylee (integer, Varchar(255), varchar(255),NUMERIC(10, 2)) AS
-            UPDATE personnel SET  name = $2 role = $3 pay = $4 
+            UPDATE personnel SET  name = $2 role = $3 pay = $4
             WHERE employee_id = $1;
 
             EXECUTE update_empoylee (%d, '%s','%s', %f);
@@ -126,10 +124,6 @@ public class Router {
     // may return null if error
     return connect_exicute(sql_string);
   }
-
-
-
-
 
   // add employee
   // DONE
@@ -287,7 +281,7 @@ public class Router {
   }
 
   // update inventory quntitys
-  // DONE as refill_inventory() 
+  // DONE as refill_inventory()
   public ResultSet refill_inventory(String ingredient_name, int quantity) {
 
     // i am considering doing a rollback but idk if it will be worth it
@@ -329,19 +323,19 @@ public class Router {
     // may return null if error
     return connect_exicute(sql_string);
   }
+
   // insert inventory
 
   // insert transaction details and transactions
-  public ResultSet add_transaction_and_details(Transaction transaction, TransactionDetails[] details_list){
+  public ResultSet add_transaction_and_details(
+      Transaction transaction, TransactionDetails[] details_list) {
     int transaction_id = handle_transaction(transaction);
-    ResultSet result =  handle_details(transaction_id, details_list);
-
+    ResultSet result = handle_details(transaction_id, details_list);
 
     return connect_exicute(null);
   }
 
-
-  private int handle_transaction(Transaction transaction){
+  private int handle_transaction(Transaction transaction) {
     String sql_string =
         String.format(
             """
@@ -351,44 +345,45 @@ public class Router {
             EXECUTE add_transaction ('%s', '%s',%d, %f);
 
             """,
-            transaction.customer_name, transaction.transaction_time, transaction.employee_id, transaction.total_price);
+            transaction.customer_name,
+            transaction.transaction_time,
+            transaction.employee_id,
+            transaction.total_price);
 
     // may return null if error
     int result = 0;
-    try{
+    try {
       result = connect_exicute(sql_string).getInt("transation_id");
     } catch (Exception e) {
-      System.out.println("error: "+e);
+      System.out.println("error: " + e);
     }
     return result;
   }
 
-  private ResultSet handle_details(int id, TransactionDetails[] details_list){
-    String sql_string = 
+  private ResultSet handle_details(int id, TransactionDetails[] details_list) {
+    String sql_string =
         """
         PREPARE add_details (Integer, Integer) AS
         INSERT INTO transaction_details (transaction_id, item_id) VALUES ($1,$2);
 
 
-        """;;
-    for(int i = 0; i < details_list.length;i++){
-      
-      sql_string += 
-        String.format(
-          """
-          EXECUTE add_details (%d, %d);
+        """;
+    ;
+    for (int i = 0; i < details_list.length; i++) {
 
-          """,id,details_list[i].item_id);
+      sql_string +=
+          String.format(
+              """
+              EXECUTE add_details (%d, %d);
+
+              """,
+              id, details_list[i].item_id);
     }
 
     return connect_exicute(sql_string);
   }
 
-
-
-
-  public void delete_employee(int employee_id)
-      throws SQLException {
+  public void delete_employee(int employee_id) throws SQLException {
     String sql = "DELETE FROM personnel WHERE employee_id = ?;";
 
     try (Connection conn = Database.getConnection();
@@ -398,13 +393,12 @@ public class Router {
     }
   }
 
-  public void added_menu_item(Item added_item)
-      throws SQLException {
+  public void added_menu_item(Item added_item) throws SQLException {
     String sql = "INSERT INTO menu (item_name, item_popularity, price) VALUES (?, ?, ?, ?);";
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setString(1,added_item.get_name());
+      stmt.setString(1, added_item.get_name());
       stmt.setInt(2, added_item.get_popularity());
       stmt.setDouble(3, added_item.get_price());
       stmt.executeUpdate();
@@ -412,71 +406,56 @@ public class Router {
   }
 
   public void add_ingredent_map(int item_id, ArrayList<Integer> ingrednent_id_list)
-     throws SQLException {
+      throws SQLException {
     String sql = "INSERT INTO ingredients_map (ingredients_id, item_id) VALUES (?, ?);";
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
-        for(int i = 0; i < ingrednent_id_list.size(); i++){
-          stmt.setInt(1,item_id);
-          stmt.setInt(2, ingrednent_id_list.get(i));
-          stmt.executeUpdate();
-        }
-      
+      for (int i = 0; i < ingrednent_id_list.size(); i++) {
+        stmt.setInt(1, item_id);
+        stmt.setInt(2, ingrednent_id_list.get(i));
+        stmt.executeUpdate();
+      }
     }
   }
 
-  public void delete_item(int id)
-      throws SQLException {
+  public void delete_item(int id) throws SQLException {
     String sql = "DELETE FROM menu ingredients_map WHERE item_id = ?";
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setInt(1,id);
+      stmt.setInt(1, id);
       stmt.executeUpdate();
     }
-
-
-
   }
 
-
-  //need to alter menu prices
-  public void update_menu_price(int id, double price)
-    throws SQLException {
+  // need to alter menu prices
+  public void update_menu_price(int id, double price) throws SQLException {
     String sql = "UPDATE  menu SET price = ? WHERE item_id = ?";
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setDouble(1,price);
-      stmt.setInt(2,id);
+      stmt.setDouble(1, price);
+      stmt.setInt(2, id);
       stmt.executeUpdate();
       
     }
-
-
-
-
   }
 
 
-  //need to alter items on menu
 
-  public void update_menu_items(Item update_item)
-    throws SQLException {
+  // need to alter items on menu
+
+  public void update_menu_items(Item update_item) throws SQLException {
     String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
 
-    try (Connection conn = Database.getConnection(); 
+    try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setString(1,update_item.get_name());
-      stmt.setInt(2,update_item.get_popularity());
-      stmt.setDouble(3,update_item.get_popularity());
-      stmt.setInt(4,update_item.get_id());
+      stmt.setString(1, update_item.get_name());
+      stmt.setInt(2, update_item.get_popularity());
+      stmt.setDouble(3, update_item.get_popularity());
+      stmt.setInt(4, update_item.get_id());
       stmt.executeUpdate();
     }
-
-
-
-
   }
 
 
@@ -500,11 +479,8 @@ public class Router {
         ingredints_list.add(new Ingerdient(ingredient_name,  quantity,category, ingredient_id));
       }
       return ingredints_list;
+
     }
-
-
-
-
   }
 
   // need to alter ingredits
@@ -532,11 +508,4 @@ public class Router {
   }
   // need to delete ingredints
 
-
-
-
-
-
 }
-
-

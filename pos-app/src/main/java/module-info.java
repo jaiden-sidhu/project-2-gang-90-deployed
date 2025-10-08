@@ -1,6 +1,6 @@
 module edu.tamu.project2.csce331 {
   // JDBC + HikariCP
-  requires java.sql;
+  requires transitive java.sql;
   requires com.zaxxer.hikari;
 
   // // PostgreSQL driver:
