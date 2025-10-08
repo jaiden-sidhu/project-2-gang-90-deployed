@@ -82,6 +82,7 @@ public class Router {
     }
   }
 
+  // DONE
   public ResultSet get_managers() {
 
     String sql_string = "SELECT * FROM personel WHERE role = 'manager';";
@@ -89,6 +90,7 @@ public class Router {
     return connect_exicute(sql_string);
   }
 
+  // DONE
   public ResultSet get_empolyee() {
 
     String sql_string = "SELECT * FROM personel;";
@@ -96,7 +98,7 @@ public class Router {
     return connect_exicute(sql_string);
   }
 
-
+  // DONE
   public ResultSet get_item_id() {
 
     String sql_string = "SELECT item_id, item_name FROM menu;";
@@ -104,7 +106,7 @@ public class Router {
     return connect_exicute(sql_string);
   }
 
-
+  // DONE
   public ResultSet update_employee(int employee_id, String name, String role, double pay) {
 
     // i am considering doing a rollback but idk if it will be worth it
@@ -130,6 +132,7 @@ public class Router {
 
 
   // add employee
+  // DONE
   public ResultSet add_employee(int employee_id, String name, String role, double pay) {
 
     // i am considering doing a rollback but idk if it will be worth it
@@ -149,6 +152,7 @@ public class Router {
     return connect_exicute(sql_string);
   }
 
+  // DONE as get_transactions()
   // select all transactions grab 50 pass in a offset
   public ResultSet select_transaction(int offset) {
 
@@ -171,7 +175,7 @@ public class Router {
   }
 
   // select transation details given transaction id
-
+  // DONE as get_transaction();
   public ResultSet select_transaction_details_id(int id) {
     String sql_string =
         String.format(
@@ -189,7 +193,7 @@ public class Router {
   }
 
   // select by time
-
+  // DONE as get_transactions();
   public ResultSet select_transaction_time(String time) {
     String sql_string =
         String.format(
@@ -207,7 +211,7 @@ public class Router {
   }
 
   // select by order Id
-
+  // DONE, as its the exact same as select_transaction_details_id()
   public ResultSet select_transaction_id(int id) {
     String sql_string =
         String.format(
@@ -227,7 +231,7 @@ public class Router {
   // transation details click on transaction display the details pass in transaction id
 
   // get menu items
-
+  // DONE as get_menu()
   public ResultSet select_menu() {
     String sql_string =
         String.format(
@@ -239,6 +243,7 @@ public class Router {
   }
 
   // inset transations
+  // DONE as add_transaction()
   public ResultSet add_transaction(
       String customer_name, String transaction_time, int employee_id, double total_price) {
 
@@ -260,7 +265,7 @@ public class Router {
   }
 
   // insert transation details
-
+  // DONE as add_transaction()
   public ResultSet add_transaction_details(
       String customer_name, String transaction_time, int employee_id, double total_price) {
 
@@ -282,7 +287,7 @@ public class Router {
   }
 
   // update inventory quntitys
-
+  // DONE as refill_inventory() 
   public ResultSet refill_inventory(String ingredient_name, int quantity) {
 
     // i am considering doing a rollback but idk if it will be worth it
@@ -304,7 +309,7 @@ public class Router {
   }
 
   // decrement inventory qauntitys
-
+  // DONE as decrease_inventory()
   public ResultSet deacrese_inventory(String ingredient_name, int quantity) {
 
     // i am considering doing a rollback but idk if it will be worth it
