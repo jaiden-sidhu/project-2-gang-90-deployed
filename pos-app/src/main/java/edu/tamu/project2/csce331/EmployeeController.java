@@ -12,6 +12,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -34,10 +38,10 @@ public class EmployeeController {
 
     @FXML
     public void initialize() {
-        col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
-        col_employee.setCellValueFactory(new PropertyValueFactory<>("name"));
-        col_role.setCellValueFactory(new PropertyValueFactory<>("role"));
-        col_pay.setCellValueFactory(new PropertyValueFactory<>("pay"));
+        col_id.setCellValueFactory(cd -> new SimpleIntegerProperty(cd.getValue().get_id()).asObject());
+        col_employee.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().get_name()));
+        col_role.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().get_role()));
+        col_pay.setCellValueFactory(cd -> new SimpleDoubleProperty(cd.getValue().get_pay()).asObject());
 
         TableColumn<Employee, Void> col_delete = new TableColumn<>("Delete");
         col_delete.setCellFactory(param -> new javafx.scene.control.TableCell<>() {
@@ -62,6 +66,7 @@ public class EmployeeController {
                 }
             }
         });
+        employee_table.getColumns().add(col_delete);
 
         try {
             java.util.List<Employee> list = queries.get_employee();
@@ -92,6 +97,7 @@ public class EmployeeController {
             ObservableList<Employee> data = FXCollections.observableArrayList(list);
             employee_table.setItems(data);
             status_label.setText(String.format("Showing %d of %d total", data.size(), totalCount));
+
         } catch (Exception e) {
             status_label.setText("Failed to load page: " + e.getMessage());
         }
