@@ -34,8 +34,8 @@ public class EmployeeController {
 
     @FXML
     public void initialize() {
-        col_employee.setCellValueFactory(new PropertyValueFactory<>("name"));
         col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        col_employee.setCellValueFactory(new PropertyValueFactory<>("name"));
         col_role.setCellValueFactory(new PropertyValueFactory<>("role"));
         col_pay.setCellValueFactory(new PropertyValueFactory<>("pay"));
 
@@ -96,8 +96,6 @@ public class EmployeeController {
             status_label.setText("Failed to load page: " + e.getMessage());
         }
     }
-
-
 
     @FXML
     private void add_employee_button(){

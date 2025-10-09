@@ -34,8 +34,8 @@
             <children>
                <TableView fx:id="employee_table" layoutX="6.0" layoutY="6.0" prefHeight="360.0" prefWidth="599.0">
                   <columns>
-                  <TableColumn fx:id="col_employee" prefWidth="200.0" text="Employee Name" />
                   <TableColumn fx:id="col_id" prefWidth="80.0" text="ID" />
+                  <TableColumn fx:id="col_employee" prefWidth="200.0" text="Employee Name" />
                   <TableColumn fx:id="col_role" prefWidth="130.0" text="Role" />
                   <TableColumn fx:id="col_pay" prefWidth="90.0" text="Pay" />
                   <TableColumn fx:id="col_delete" prefWidth="100.0" text="Delete" />
