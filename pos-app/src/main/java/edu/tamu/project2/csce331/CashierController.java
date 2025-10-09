@@ -367,7 +367,7 @@ public class CashierController {
             Stage stage = (Stage) totalLabel.getScene().getWindow();
 
             stage.setScene(new Scene(root));
-            stage.setTitle("Cashier - Menu");
+            stage.setTitle("Manager - Employee");
             stage.show();
         } 
         catch (IOException e) 
