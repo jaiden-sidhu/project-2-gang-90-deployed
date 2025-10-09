@@ -26,19 +26,19 @@ public class CashierController {
     @FXML
     private Button charge_button;
     @FXML
-    private VBox orderItems;
+    private VBox order_Items;
     @FXML
-    private AnchorPane modificationsPopup;
+    private AnchorPane modifications_popup;
     @FXML
-    private AnchorPane chargePopup;
+    private AnchorPane charge_popup;
     @FXML
-    private TextField customerNameField;
+    private TextField customer_name_field;
     @FXML
-    private GridPane drinkGrid;
+    private GridPane drink_grid;
 
     private DecimalFormat df = new DecimalFormat("#0.00");
 
-    private String currentDrinkName;
+    private String current_drink_name;
     private double currentDrinkPrice;
     private List<String> currentModifications = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public class CashierController {
     @FXML
     public void initialize() {
         loadMenuFromDB();
-        populateDrinkGrid();
+        populatedrink_grid();
     }
 
     private void loadMenuFromDB() {
@@ -87,7 +87,7 @@ public class CashierController {
         return result.toString().trim();
     }
 
-    private void populateDrinkGrid() {
+    private void populatedrink_grid() {
         if (drinkNames == null || drinkNames.length == 0) return;
 
         int col = 0, row = 0;
@@ -100,7 +100,7 @@ public class CashierController {
             btn.setWrapText(true);
             btn.setOnAction(e -> handleDrinkSelection(name, price));
 
-            drinkGrid.add(btn, col, row);
+            drink_grid.add(btn, col, row);
             col++;
             if (col == 5) {
                 col = 0;
@@ -110,11 +110,11 @@ public class CashierController {
     }
 
     private void handleDrinkSelection(String name, double price) {
-        currentDrinkName = name;
+        current_drink_name = name;
         currentDrinkPrice = price;
         currentModifications.clear();
         resetModificationButtons();
-        modificationsPopup.setVisible(true);
+        modifications_popup.setVisible(true);
     }
 
     @FXML
@@ -170,14 +170,14 @@ public class CashierController {
 
     @FXML
     private void confirmModifications() {
-        addDrinkToOrder(currentDrinkName, currentDrinkPrice, new ArrayList<>(currentModifications));
-        modificationsPopup.setVisible(false);
+        addDrinkToOrder(current_drink_name, currentDrinkPrice, new ArrayList<>(currentModifications));
+        modifications_popup.setVisible(false);
         resetModificationButtons();
     }
 
     private void addDrinkToOrder(String name, double price, List<String> mods) {
-        if (orderItems.getChildren().size() == 1 && orderItems.getChildren().get(0) instanceof Label) {
-            orderItems.getChildren().clear();
+        if (order_Items.getChildren().size() == 1 && order_Items.getChildren().get(0) instanceof Label) {
+            order_Items.getChildren().clear();
         }
 
         VBox itemBox = new VBox(5);
@@ -186,14 +186,14 @@ public class CashierController {
         modsLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #555;");
         itemBox.getChildren().addAll(nameLabel, modsLabel);
 
-        orderItems.getChildren().add(itemBox);
+        order_Items.getChildren().add(itemBox);
 
         recalcTotal();
     }
 
     private void recalcTotal() {
         double sum = 0.0;
-        for (javafx.scene.Node n : orderItems.getChildren()) {
+        for (javafx.scene.Node n : order_Items.getChildren()) {
             if (!(n instanceof VBox)) continue;
             VBox itemBox = (VBox) n;
             if (itemBox.getChildren().isEmpty()) continue;
@@ -216,8 +216,8 @@ public class CashierController {
     }
 
     private void resetModificationButtons() {
-        if (modificationsPopup == null) return;
-        for (javafx.scene.Node child : modificationsPopup.getChildren()) {
+        if (modifications_popup == null) return;
+        for (javafx.scene.Node child : modifications_popup.getChildren()) {
             if (child instanceof VBox) {
                 VBox v = (VBox) child;
                 for (javafx.scene.Node row : v.getChildren()) {
@@ -236,27 +236,27 @@ public class CashierController {
 
     @FXML
     private void openPopup() {
-        modificationsPopup.setVisible(true);
+        modifications_popup.setVisible(true);
     }
 
     @FXML
     private void closePopup() {
-        modificationsPopup.setVisible(false);
+        modifications_popup.setVisible(false);
     }
 
     @FXML
-    private void openChargePopup() {
-        chargePopup.setVisible(true);
+    private void opencharge_popup() {
+        charge_popup.setVisible(true);
     }
 
     @FXML
-    private void closeChargePopup() {
-        chargePopup.setVisible(false);
+    private void closecharge_popup() {
+        charge_popup.setVisible(false);
     }
 
     @FXML
     private void confirmCharge() {
-        String name = customerNameField.getText().trim();
+        String name = customer_name_field.getText().trim();
         if (name.isEmpty()) return;
         try {
             edu.tamu.project2.csce331.Queries queries = new edu.tamu.project2.csce331.Queries();
@@ -268,9 +268,9 @@ public class CashierController {
             }
 
             java.util.ArrayList<edu.tamu.project2.csce331.Item> itemsForTransaction = new java.util.ArrayList<>();
-            for (int i = 0; i < orderItems.getChildren().size(); i++) {
-                if (!(orderItems.getChildren().get(i) instanceof VBox)) continue;
-                VBox itemBox = (VBox) orderItems.getChildren().get(i);
+            for (int i = 0; i < order_Items.getChildren().size(); i++) {
+                if (!(order_Items.getChildren().get(i) instanceof VBox)) continue;
+                VBox itemBox = (VBox) order_Items.getChildren().get(i);
                 Label nameLabel = (Label) itemBox.getChildren().get(0);
                 String itemText = nameLabel.getText();
                 String drinkName = itemText.split(" - ")[0];
@@ -302,15 +302,15 @@ public class CashierController {
 
             queries.add_transaction_and_details(tx, itemsForTransaction);
 
-            orderItems.getChildren().clear();
-            orderItems.getChildren().add(new Label("No items yet."));
+            order_Items.getChildren().clear();
+            order_Items.getChildren().add(new Label("No items yet."));
             subtotal = 0;
             subtotal_label.setText("$0.00");
             total_label.setText("$0.00");
             charge_button.setText("Charge $0.00");
 
-            customerNameField.clear();
-            chargePopup.setVisible(false);
+            customer_name_field.clear();
+            charge_popup.setVisible(false);
 
             System.out.println("Charged order for " + name);
 
