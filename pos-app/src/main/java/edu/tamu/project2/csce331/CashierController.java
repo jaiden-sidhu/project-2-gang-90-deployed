@@ -42,7 +42,6 @@ public class CashierController {
 
     private String[] drinkNames;
     private double[] drinkPrices;
-    // Database connections and queries are provided by Database and Queries classes
 
     @FXML
     public void initialize() {
@@ -207,9 +206,9 @@ public class CashierController {
             }
         }
         this.subtotal = sum;
-        subtotalLabel.setText("$" + df.format(subtotal));
-        totalLabel.setText("$" + df.format(subtotal));
-        chargeButton.setText("Charge $" + df.format(subtotal));
+        // subtotalLabel.setText("$" + df.format(subtotal));
+        // totalLabel.setText("$" + df.format(subtotal));
+        // chargeButton.setText("Charge $" + df.format(subtotal));
     }
 
     private void resetModificationButtons() {

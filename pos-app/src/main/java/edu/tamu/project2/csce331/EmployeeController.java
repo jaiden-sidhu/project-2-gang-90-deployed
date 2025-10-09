@@ -10,6 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 import java.sql.Timestamp;
@@ -27,6 +28,7 @@ public class EmployeeController {
     @FXML private TableColumn<Employee, Double> col_pay;
     @FXML private Pagination pagination;
     @FXML private Text status_label;
+    @FXML private AnchorPane addPopup;
 
     private final Queries queries = new Queries();
     private static final int PAGE_SIZE = 20; // fits better visually than 50; adjustable
@@ -39,7 +41,33 @@ public class EmployeeController {
         col_id.setCellValueFactory(new PropertyValueFactory<>("employee_id"));
         col_role.setCellValueFactory(new PropertyValueFactory<>("role"));
         col_pay.setCellValueFactory(new PropertyValueFactory<>("total_price"));
-        
+
+        // Add Delete button to each row
+        TableColumn<Employee, Void> col_delete = new TableColumn<>("Delete");
+        col_delete.setCellFactory(param -> new javafx.scene.control.TableCell<>() {
+            private final javafx.scene.control.Button btn = new javafx.scene.control.Button("Delete");
+
+            {
+                btn.setOnAction(event -> {
+                    Employee employee = getTableView().getItems().get(getIndex());
+                    id_feild.setText(String.valueOf(employee.get_id()));
+                    delete_employee_button();
+                    load_page();
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btn);
+                }
+            }
+        });
+
+        employee_table.getColumns().add(col_delete);
 
         try {
             totalCount = queries.count_transactions();
@@ -56,7 +84,7 @@ public class EmployeeController {
             }
             return;
         }
-        
+
         load_page();
     }
 
@@ -84,9 +112,6 @@ public class EmployeeController {
         } catch (Exception e) {
         }
         
-
-
-
     }
 
     @FXML
@@ -96,5 +121,15 @@ public class EmployeeController {
             queries.delete_employee(id);
         } catch (Exception e) {
         }
+    }
+
+    @FXML
+    private void openPopup() {
+        addPopup.setVisible(true);
+    }
+
+    @FXML
+    private void closePopup() {
+        addPopup.setVisible(false);
     }
 }
