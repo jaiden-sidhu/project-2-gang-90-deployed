@@ -20,7 +20,7 @@ public class EmployeeController {
     @FXML private TextField pay_field;
     @FXML private TextField role_field;
     @FXML private TextField id_field;
-    @FXML private TextField status_label;
+    @FXML private Text status_label;
     @FXML private TableView<Employee> employee_table;
     @FXML private TableColumn<Employee, String> col_role;
     @FXML private TableColumn<Employee, Integer> col_id;
