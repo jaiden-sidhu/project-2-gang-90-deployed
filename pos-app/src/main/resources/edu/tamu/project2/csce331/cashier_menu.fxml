@@ -81,17 +81,17 @@
                       <children>
                         <Label text="Subtotal:" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <!-- <Label fx:id="subtotalLabel" text="$0.00"/> -->
+                        <!-- <Label fx:id="subtotal_label" text="$0.00"/> -->
                       </children>
                     </HBox>
                     <HBox>
                       <children>
                         <Label text="Total:" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <!-- <Label fx:id="totalLabel" text="$0.00"/> -->
+                        <!-- <Label fx:id="total_label" text="$0.00"/> -->
                       </children>
                     </HBox>
-                    <Button fx:id="chargeButton" maxWidth="Infinity" onAction="#openChargePopup" text="Charge" />
+                    <Button fx:id="charge_button" maxWidth="Infinity" onAction="#openChargePopup" text="Charge" />
                   </VBox>
                 </children>
               </VBox>

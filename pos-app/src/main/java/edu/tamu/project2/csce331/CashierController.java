@@ -20,11 +20,11 @@ import java.util.List;
 public class CashierController {
 
     @FXML
-    private Label subtotalLabel;
+    private Label subtotal_label;
     @FXML
-    private Label totalLabel;
+    private Label total_label;
     @FXML
-    private Button chargeButton;
+    private Button charge_button;
     @FXML
     private VBox orderItems;
     @FXML
@@ -210,9 +210,9 @@ public class CashierController {
             }
         }
         this.subtotal = sum;
-        // subtotalLabel.setText("$" + df.format(subtotal));
-        // totalLabel.setText("$" + df.format(subtotal));
-        // chargeButton.setText("Charge $" + df.format(subtotal));
+        // subtotal_label.setText("$" + df.format(subtotal));
+        // total_label.setText("$" + df.format(subtotal));
+        // charge_button.setText("Charge $" + df.format(subtotal));
     }
 
     private void resetModificationButtons() {
@@ -305,9 +305,9 @@ public class CashierController {
             orderItems.getChildren().clear();
             orderItems.getChildren().add(new Label("No items yet."));
             subtotal = 0;
-            subtotalLabel.setText("$0.00");
-            totalLabel.setText("$0.00");
-            chargeButton.setText("Charge $0.00");
+            subtotal_label.setText("$0.00");
+            total_label.setText("$0.00");
+            charge_button.setText("Charge $0.00");
 
             customerNameField.clear();
             chargePopup.setVisible(false);
@@ -327,7 +327,7 @@ public class CashierController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("project-2-gang-90\\pos-app\\src\\main\\resources\\edu\\tamu\\project2\\csce331\\manager_products.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) totalLabel.getScene().getWindow();
+            Stage stage = (Stage) total_label.getScene().getWindow();
 
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Products");
@@ -347,7 +347,7 @@ public class CashierController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("project-2-gang-90\\pos-app\\src\\main\\resources\\edu\\tamu\\project2\\csce331\\transactions_history.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) totalLabel.getScene().getWindow();
+            Stage stage = (Stage) total_label.getScene().getWindow();
 
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Transactions");
@@ -367,7 +367,7 @@ public class CashierController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("project-2-gang-90\\pos-app\\src\\main\\resources\\edu\\tamu\\project2\\csce331\\employee_list.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) totalLabel.getScene().getWindow();
+            Stage stage = (Stage) total_label.getScene().getWindow();
 
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Employee");
