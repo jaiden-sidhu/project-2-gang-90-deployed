@@ -55,7 +55,7 @@
             <center>
               <ScrollPane fitToWidth="true" styleClass="drink-menu" stylesheets="@cashier.css" BorderPane.alignment="CENTER">
                 <content>
-                  <GridPane fx:id="drinkGrid" alignment="TOP_LEFT" hgap="10" vgap="10">
+                  <GridPane fx:id="drink_grid" alignment="TOP_LEFT" hgap="10" vgap="10">
                       <padding>
                           <Insets bottom="20" left="20" right="20" top="20" />
                       </padding>
@@ -69,7 +69,7 @@
                 <padding><Insets bottom="15" left="15" right="15" top="15" /></padding>
                 <children>
                   <Label styleClass="order-title" text="Current Order" />
-                  <VBox fx:id="orderItems" spacing="10" styleClass="order-item-box" stylesheets="@cashier.css">
+                  <VBox fx:id="order_items" spacing="10" styleClass="order-item-box" stylesheets="@cashier.css">
                     <children>
                       <Label text="No items yet." />
                     </children>
@@ -91,7 +91,7 @@
                         <!-- <Label fx:id="total_label" text="$0.00"/> -->
                       </children>
                     </HBox>
-                    <Button fx:id="charge_button" maxWidth="Infinity" onAction="#openChargePopup" text="Charge" />
+                    <Button fx:id="charge_button" maxWidth="Infinity" onAction="#opencharge_popup" text="Charge" />
                   </VBox>
                 </children>
               </VBox>
@@ -102,7 +102,7 @@
     </children>
   </VBox>
 
-  <AnchorPane fx:id="modificationsPopup" style="-fx-background-color: rgba(0,0,0,0.5);" visible="false">
+  <AnchorPane fx:id="modifications_popup" style="-fx-background-color: rgba(0,0,0,0.5);" visible="false">
     <children>
       <VBox layoutX="100" layoutY="50" prefHeight="300" prefWidth="440" style="-fx-background-color: #e0e0e0; -fx-background-radius: 10; -fx-padding: 20;">
         <children>
@@ -129,14 +129,14 @@
     </children>
   </AnchorPane>
 
-  <AnchorPane fx:id="chargePopup" style="-fx-background-color: rgba(0,0,0,0.5);" visible="false">
+  <AnchorPane fx:id="charge_popup" style="-fx-background-color: rgba(0,0,0,0.5);" visible="false">
     <children>
       <VBox layoutX="150" layoutY="100" prefHeight="200" prefWidth="340" spacing="10" style="-fx-background-color: #e0e0e0; -fx-background-radius: 10; -fx-padding: 20;">
         <children>
           <Label text="Enter Customer Name:" />
-          <TextField fx:id="customerNameField" />
+          <TextField fx:id="customer_name_field" />
           <Button onAction="#confirmCharge" text="Confirm Charge" />
-          <Button onAction="#closeChargePopup" text="Cancel" />
+          <Button onAction="#closecharge_popup" text="Cancel" />
         </children>
       </VBox>
     </children>
