@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-// Using Text in FXML for status label
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -19,30 +18,27 @@ import java.util.List;
 public class EmployeeController {
     @FXML private TextField name_field;
     @FXML private TextField pay_field;
-    @FXML private TextField role_feild;
-    @FXML private TextField id_feild;
+    @FXML private TextField role_field;
+    @FXML private TextField id_field;
+    @FXML private TextField status_label;
     @FXML private TableView<Employee> employee_table;
     @FXML private TableColumn<Employee, String> col_role;
     @FXML private TableColumn<Employee, Integer> col_id;
     @FXML private TableColumn<Employee, String> col_employee;
     @FXML private TableColumn<Employee, Double> col_pay;
-    @FXML private Pagination pagination;
-    @FXML private Text status_label;
     @FXML private AnchorPane addPopup;
 
     private final Queries queries = new Queries();
-    private static final int PAGE_SIZE = 20; // fits better visually than 50; adjustable
+    private static final int PAGE_SIZE = 20;
     private int totalCount = 0;
 
     @FXML
     public void initialize() {
-        // Configure columns
-        col_employee.setCellValueFactory(new PropertyValueFactory<>("name"));
-        col_id.setCellValueFactory(new PropertyValueFactory<>("employee_id"));
-        col_role.setCellValueFactory(new PropertyValueFactory<>("role"));
-        col_pay.setCellValueFactory(new PropertyValueFactory<>("total_price"));
+    col_employee.setCellValueFactory(new PropertyValueFactory<>("name"));
+    col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+    col_role.setCellValueFactory(new PropertyValueFactory<>("role"));
+    col_pay.setCellValueFactory(new PropertyValueFactory<>("pay"));
 
-        // Add Delete button to each row
         TableColumn<Employee, Void> col_delete = new TableColumn<>("Delete");
         col_delete.setCellFactory(param -> new javafx.scene.control.TableCell<>() {
             private final javafx.scene.control.Button btn = new javafx.scene.control.Button("Delete");
@@ -50,7 +46,7 @@ public class EmployeeController {
             {
                 btn.setOnAction(event -> {
                     Employee employee = getTableView().getItems().get(getIndex());
-                    id_feild.setText(String.valueOf(employee.get_id()));
+                    id_field.setText(String.valueOf(employee.get_id()));
                     delete_employee_button();
                     load_page();
                 });
@@ -67,10 +63,12 @@ public class EmployeeController {
             }
         });
 
-        employee_table.getColumns().add(col_delete);
+        if (!employee_table.getColumns().contains(col_delete)) {
+            employee_table.getColumns().add(col_delete);
+        }
 
         try {
-            totalCount = queries.count_transactions();
+            totalCount = queries.count_employees();
         } catch (Exception e) {
             Throwable root = Database.getInitFailure();
             StringBuilder msg = new StringBuilder("DB error: ").append(e.getMessage());
@@ -79,9 +77,6 @@ public class EmployeeController {
                    .append(" - ").append(root.getCause().getMessage()).append(")");
             }
             status_label.setText(msg.toString());
-            if (pagination != null) {
-                pagination.setDisable(true);
-            }
             return;
         }
 
@@ -104,22 +99,40 @@ public class EmployeeController {
     @FXML
     private void add_employee_button(){
         String name =  name_field.getText().trim();
-        String role = role_feild.getText().trim();
-        double pay = Double.parseDouble(pay_field.getText().trim());
+        String role = role_field.getText().trim();
+        double pay;
+        try {
+            pay = Double.parseDouble(pay_field.getText().trim());
+        } catch (NumberFormatException nfe) {
+            status_label.setText("Invalid pay value");
+            return;
+        }
         try {
             queries.add_employee(name, role, pay);
+            totalCount = queries.count_employees();
             load_page();
+            status_label.setText("Employee added");
+            closePopup();
         } catch (Exception e) {
+            status_label.setText("Failed to add employee: " + e.getMessage());
         }
-        
     }
 
     @FXML
     private void delete_employee_button(){
-        int id = Integer.parseInt(id_feild.getText().trim());
+        int id;
+        try {
+            id = Integer.parseInt(id_field.getText().trim());
+        } catch (NumberFormatException nfe) {
+            status_label.setText("Invalid ID");
+            return;
+        }
         try {
             queries.delete_employee(id);
+            totalCount = queries.count_employees();
+            status_label.setText("Employee deleted");
         } catch (Exception e) {
+            status_label.setText("Failed to delete employee: " + e.getMessage());
         }
     }
 

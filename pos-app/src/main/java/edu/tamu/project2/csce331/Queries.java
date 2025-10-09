@@ -204,6 +204,18 @@ public class Queries {
     }
   }
 
+  public int count_employees() throws SQLException {
+    String sql = "SELECT COUNT(*) AS cnt FROM personnel;";
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery()) {
+      if (rs.next()) {
+        return rs.getInt("cnt");
+      }
+      return 0;
+    }
+  }
+
   public Transaction get_transaction(int transaction_id) throws SQLException {
     if (transaction_id < 0) {
       throw new IllegalArgumentException("Transaction ID cannot be negative.");
