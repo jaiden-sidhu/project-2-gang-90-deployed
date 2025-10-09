@@ -1,12 +1,16 @@
 package edu.tamu.project2.csce331;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
 import java.text.DecimalFormat;
-
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 
@@ -312,6 +316,63 @@ public class CashierController {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void go_products() 
+    {
+        try 
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("project-2-gang-90\\pos-app\\src\\main\\resources\\edu\\tamu\\project2\\csce331\\manager_products.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) totalLabel.getScene().getWindow();
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - Products");
+            stage.show();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void go_transactions() 
+    { 
+        try 
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("project-2-gang-90\\pos-app\\src\\main\\resources\\edu\\tamu\\project2\\csce331\\transactions_history.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) totalLabel.getScene().getWindow();
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - Transactions");
+            stage.show();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void go_manage_employee() 
+    { 
+        try 
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("project-2-gang-90\\pos-app\\src\\main\\resources\\edu\\tamu\\project2\\csce331\\employee_list.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) totalLabel.getScene().getWindow();
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("Cashier - Menu");
+            stage.show();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
         }
     }
 }
