@@ -319,6 +319,7 @@ public class CashierController {
         }
     }
 
+    @FXML
     public void go_products() 
     {
         try 
@@ -338,6 +339,7 @@ public class CashierController {
         }
     }
 
+    @FXML
     public void go_transactions() 
     { 
         try 
@@ -357,6 +359,7 @@ public class CashierController {
         }
     }
 
+    @FXML
     public void go_manage_employee() 
     { 
         try 

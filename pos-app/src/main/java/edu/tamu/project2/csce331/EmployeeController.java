@@ -162,4 +162,64 @@ public class EmployeeController {
     private void closePopup() {
         addPopup.setVisible(false);
     }
+
+    @FXML
+    public void go_products() 
+    { 
+        try 
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("project-2-gang-90\\pos-app\\src\\main\\resources\\edu\\tamu\\project2\\csce331\\manager_products.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) name_field.getScene().getWindow();
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - Products");
+            stage.show();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void go_sales() 
+    { 
+        try 
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("project-2-gang-90\\pos-app\\src\\main\\resources\\edu\\tamu\\project2\\csce331\\transactions_history.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) name_field.getScene().getWindow();
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - Sales");
+            stage.show();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void go_cashier() 
+    { 
+        try 
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("project-2-gang-90\\pos-app\\src\\main\\resources\\edu\\tamu\\project2\\csce331\\cashier_menu.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) name_field.getScene().getWindow();
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("Cashier - Menu");
+            stage.show();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+    }
 }

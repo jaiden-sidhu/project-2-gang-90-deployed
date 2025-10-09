@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!-- Copyright (c) 2015, 2019, Gluon and/or its affiliates. All rights reserved. Use is subject to license terms. This file is available and licensed under the following license: Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. - Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. - Neither the name of Oracle Corporation nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
 
 <?import javafx.geometry.Insets?>
@@ -9,7 +10,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
@@ -25,11 +25,11 @@
             <!-- Top Bar -->
             <top>
               <HBox prefHeight="46.0" spacing="10.0" styleClass="top-bar" stylesheets="@cashier.css" BorderPane.alignment="CENTER">
-                <padding><Insets top="12" bottom="12" left="20" right="20"/></padding>
+                <padding><Insets bottom="12" left="20" right="20" top="12" /></padding>
                 <children>
-                  <Label styleClass="top-title" text="Cashier Interface"/>
-                  <Region HBox.hgrow="ALWAYS"/>
-                  <Label fx:id="timeLabel" styleClass="top-time" text="Time"/>
+                  <Label styleClass="top-title" text="Cashier Interface" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Label fx:id="timeLabel" styleClass="top-time" text="Time" />
                 </children>
               </HBox>
             </top>
@@ -37,14 +37,17 @@
             <!-- Sidebar -->
             <left>
               <VBox prefWidth="166.0" styleClass="sidebar" stylesheets="@cashier.css" BorderPane.alignment="CENTER">
-                <padding><Insets top="15" bottom="15" left="15" right="15"/></padding>
+                <padding><Insets bottom="15" left="15" right="15" top="15" /></padding>
                 <children>
-                  <Label styleClass="menu-title" text="Main Menu"/>
+                  <Label styleClass="menu-title" text="Main Menu" />
                   <Separator>
-                    <VBox.margin><Insets top="5" bottom="5"/></VBox.margin>
+                    <VBox.margin><Insets bottom="5" top="5" /></VBox.margin>
                   </Separator>
-                  <Label styleClass="menu-item" text="Cashier Login"/>
-                  <Region VBox.vgrow="ALWAYS"/>
+                  <Label styleClass="menu-item" text="Cashier Login" />
+                           <Button mnemonicParsing="false" onAction="#go_products" text="Products" />
+                           <Button mnemonicParsing="false" onAction="#go_transactions" text="Transactions" />
+                           <Button mnemonicParsing="false" onAction="#go_manage_employee" text="Manage employees" />
+                  <Region VBox.vgrow="ALWAYS" />
                 </children>
               </VBox>
             </left>
@@ -52,9 +55,9 @@
             <center>
               <ScrollPane fitToWidth="true" styleClass="drink-menu" stylesheets="@cashier.css" BorderPane.alignment="CENTER">
                 <content>
-                  <GridPane fx:id="drinkGrid" hgap="10" vgap="10" alignment="TOP_LEFT">
+                  <GridPane fx:id="drinkGrid" alignment="TOP_LEFT" hgap="10" vgap="10">
                       <padding>
-                          <Insets top="20" right="20" bottom="20" left="20"/>
+                          <Insets bottom="20" left="20" right="20" top="20" />
                       </padding>
                   </GridPane>
                 </content>
@@ -63,32 +66,32 @@
 
             <right>
               <VBox prefWidth="207.0" spacing="15" styleClass="order-panel" stylesheets="@cashier.css" BorderPane.alignment="CENTER">
-                <padding><Insets top="15" bottom="15" left="15" right="15"/></padding>
+                <padding><Insets bottom="15" left="15" right="15" top="15" /></padding>
                 <children>
-                  <Label styleClass="order-title" text="Current Order"/>
+                  <Label styleClass="order-title" text="Current Order" />
                   <VBox fx:id="orderItems" spacing="10" styleClass="order-item-box" stylesheets="@cashier.css">
                     <children>
-                      <Label text="No items yet."/>
+                      <Label text="No items yet." />
                     </children>
                   </VBox>
 
-                  <Region VBox.vgrow="ALWAYS"/>
+                  <Region VBox.vgrow="ALWAYS" />
                   <VBox spacing="10">
                     <HBox>
                       <children>
-                        <Label text="Subtotal:"/>
-                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="Subtotal:" />
+                        <Region HBox.hgrow="ALWAYS" />
                         <!-- <Label fx:id="subtotalLabel" text="$0.00"/> -->
                       </children>
                     </HBox>
                     <HBox>
                       <children>
-                        <Label text="Total:"/>
-                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="Total:" />
+                        <Region HBox.hgrow="ALWAYS" />
                         <!-- <Label fx:id="totalLabel" text="$0.00"/> -->
                       </children>
                     </HBox>
-                    <Button maxWidth="Infinity" fx:id="chargeButton" onAction="#openChargePopup" text="Charge"/>
+                    <Button fx:id="chargeButton" maxWidth="Infinity" onAction="#openChargePopup" text="Charge" />
                   </VBox>
                 </children>
               </VBox>
@@ -103,24 +106,24 @@
     <children>
       <VBox layoutX="100" layoutY="50" prefHeight="300" prefWidth="440" style="-fx-background-color: #e0e0e0; -fx-background-radius: 10; -fx-padding: 20;">
         <children>
-          <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="Modifications"/>
+          <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="Modifications" />
 
           <HBox spacing="10">
-            <Label text="Ice Level:"/>
-            <Button text="Less" onAction="#selectModification"/>
-            <Button text="Normal" onAction="#selectModification"/>
-            <Button text="More" onAction="#selectModification"/>
+            <Label text="Ice Level:" />
+            <Button onAction="#selectModification" text="Less" />
+            <Button onAction="#selectModification" text="Normal" />
+            <Button onAction="#selectModification" text="More" />
           </HBox>
 
           <HBox spacing="10">
-            <Label text="Sugar Level:"/>
-            <Button text="0%" onAction="#selectModification"/>
-            <Button text="50%" onAction="#selectModification"/>
-            <Button text="100%" onAction="#selectModification"/>
+            <Label text="Sugar Level:" />
+            <Button onAction="#selectModification" text="0%" />
+            <Button onAction="#selectModification" text="50%" />
+            <Button onAction="#selectModification" text="100%" />
           </HBox>
 
-          <Button onAction="#confirmModifications" style="-fx-background-color: #444; -fx-text-fill: white;" text="Confirm"/>
-          <Button onAction="#closePopup" style="-fx-background-color: #aaa;" text="Cancel"/>
+          <Button onAction="#confirmModifications" style="-fx-background-color: #444; -fx-text-fill: white;" text="Confirm" />
+          <Button onAction="#closePopup" style="-fx-background-color: #aaa;" text="Cancel" />
         </children>
       </VBox>
     </children>
@@ -130,10 +133,10 @@
     <children>
       <VBox layoutX="150" layoutY="100" prefHeight="200" prefWidth="340" spacing="10" style="-fx-background-color: #e0e0e0; -fx-background-radius: 10; -fx-padding: 20;">
         <children>
-          <Label text="Enter Customer Name:"/>
-          <TextField fx:id="customerNameField"/>
-          <Button onAction="#confirmCharge" text="Confirm Charge"/>
-          <Button onAction="#closeChargePopup" text="Cancel"/>
+          <Label text="Enter Customer Name:" />
+          <TextField fx:id="customerNameField" />
+          <Button onAction="#confirmCharge" text="Confirm Charge" />
+          <Button onAction="#closeChargePopup" text="Cancel" />
         </children>
       </VBox>
     </children>

@@ -76,6 +76,7 @@ public class TransactionsHistoryController {
         }
     }
 
+    @FXML
     public void go_manage_employee() 
     { 
         try 
@@ -95,6 +96,7 @@ public class TransactionsHistoryController {
         }
     }
 
+    @FXML
     public void go_products() 
     { 
         try 
@@ -114,6 +116,7 @@ public class TransactionsHistoryController {
         }
     }
 
+    @FXML
     public void go_cashier() 
     { 
         try 
