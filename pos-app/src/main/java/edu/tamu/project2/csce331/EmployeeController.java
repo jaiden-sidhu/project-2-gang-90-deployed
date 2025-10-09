@@ -34,10 +34,10 @@ public class EmployeeController {
 
     @FXML
     public void initialize() {
-    col_employee.setCellValueFactory(new PropertyValueFactory<>("name"));
-    col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
-    col_role.setCellValueFactory(new PropertyValueFactory<>("role"));
-    col_pay.setCellValueFactory(new PropertyValueFactory<>("pay"));
+        col_employee.setCellValueFactory(new PropertyValueFactory<>("name"));
+        col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        col_role.setCellValueFactory(new PropertyValueFactory<>("role"));
+        col_pay.setCellValueFactory(new PropertyValueFactory<>("pay"));
 
         TableColumn<Employee, Void> col_delete = new TableColumn<>("Delete");
         col_delete.setCellFactory(param -> new javafx.scene.control.TableCell<>() {
@@ -63,12 +63,18 @@ public class EmployeeController {
             }
         });
 
-        if (!employee_table.getColumns().contains(col_delete)) {
-            employee_table.getColumns().add(col_delete);
-        }
-
         try {
-            totalCount = queries.count_employees();
+            java.util.List<Employee> list = queries.get_employee();
+            ObservableList<Employee> data = FXCollections.observableArrayList(list);
+            employee_table.setItems(data);
+
+            try {
+                totalCount = queries.count_employees();
+            } catch (Exception ignored) {
+                totalCount = data.size();
+            }
+
+            status_label.setText(String.format("Showing %d of %d total", data.size(), totalCount));
         } catch (Exception e) {
             Throwable root = Database.getInitFailure();
             StringBuilder msg = new StringBuilder("DB error: ").append(e.getMessage());
@@ -77,10 +83,7 @@ public class EmployeeController {
                    .append(" - ").append(root.getCause().getMessage()).append(")");
             }
             status_label.setText(msg.toString());
-            return;
         }
-
-        load_page();
     }
 
     private void load_page() {
