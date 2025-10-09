@@ -50,9 +50,14 @@ public class EmployeeController {
             {
                 btn.setOnAction(event -> {
                     Employee employee = getTableView().getItems().get(getIndex());
-                    id_field.setText(String.valueOf(employee.get_id()));
-                    delete_employee_button();
-                    load_page();
+                    try {
+                        queries.delete_employee(employee.get_id());
+                        totalCount = queries.count_employees();
+                        status_label.setText("Employee deleted");
+                        load_page();
+                    } catch (Exception ex) {
+                        status_label.setText("Failed to delete employee: " + ex.getMessage());
+                    }
                 });
             }
 
