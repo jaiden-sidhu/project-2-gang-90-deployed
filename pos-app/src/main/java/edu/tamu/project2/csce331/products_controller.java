@@ -138,7 +138,7 @@ public class products_controller
         catch (Exception e) 
         {
             e.printStackTrace();
-            show_info("Failed to add item.");
+            //show_info("Failed to add item.");
         }
 
         drinks.add(new_drink);

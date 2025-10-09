@@ -416,7 +416,7 @@ public class Queries {
   }
 
   public int add_menu_item(Item added_item) throws SQLException {
-    String sql = "INSERT INTO menu (item_name, item_popularity, price) VALUES (?, ?, ?, ?);";
+    String sql = "INSERT INTO menu (item_name, item_popularity, price) VALUES (?, ?, ?);";
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {

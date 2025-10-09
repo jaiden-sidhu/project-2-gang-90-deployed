@@ -39,7 +39,7 @@ public class CashierController {
     private DecimalFormat df = new DecimalFormat("#0.00");
 
     private String current_drink_name;
-    private double currentDrinkPrice;
+    private double current_drink_price;
     private List<String> currentModifications = new ArrayList<>();
 
     private double subtotal = 0;
@@ -111,7 +111,7 @@ public class CashierController {
 
     private void handleDrinkSelection(String name, double price) {
         current_drink_name = name;
-        currentDrinkPrice = price;
+        current_drink_price = price;
         currentModifications.clear();
         resetModificationButtons();
         modifications_popup.setVisible(true);
@@ -170,7 +170,7 @@ public class CashierController {
 
     @FXML
     private void confirmModifications() {
-        addDrinkToOrder(current_drink_name, currentDrinkPrice, new ArrayList<>(currentModifications));
+        addDrinkToOrder(current_drink_name, current_drink_price, new ArrayList<>(currentModifications));
         modifications_popup.setVisible(false);
         resetModificationButtons();
     }
