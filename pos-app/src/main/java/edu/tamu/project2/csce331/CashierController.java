@@ -324,7 +324,7 @@ public class CashierController {
     {
         try 
         {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("project-2-gang-90\\pos-app\\src\\main\\resources\\edu\\tamu\\project2\\csce331\\manager_products.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) total_label.getScene().getWindow();
@@ -344,7 +344,7 @@ public class CashierController {
     { 
         try 
         {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("project-2-gang-90\\pos-app\\src\\main\\resources\\edu\\tamu\\project2\\csce331\\transactions_history.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/transactions_history.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) total_label.getScene().getWindow();
@@ -364,7 +364,7 @@ public class CashierController {
     { 
         try 
         {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("project-2-gang-90\\pos-app\\src\\main\\resources\\edu\\tamu\\project2\\csce331\\employee_list.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/employee_list.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) total_label.getScene().getWindow();
