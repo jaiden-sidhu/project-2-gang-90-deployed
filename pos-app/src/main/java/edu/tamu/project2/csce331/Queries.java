@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import javafx.beans.property.IntegerProperty;
-
 public class Queries {
 
   public ArrayList<Employee> get_managers() throws SQLException {
@@ -431,9 +429,9 @@ public class Queries {
         } else {
           throw new SQLException("Creating transaction failed: no ID obtained.");
         }
+      }
     }
   }
-}
 
   public void add_ingredient_map(int item_id, ArrayList<Integer> ingredient_id_list)
       throws SQLException {
@@ -535,14 +533,34 @@ public class Queries {
 
   // need to delete ingredints
 
-  public void delete_ingredients(int id)
-    throws SQLException {
+  public void delete_ingredients(int id) throws SQLException {
     String sql = "DELETE FROM ingredients WHERE ingredient_id = $1";
 
-    try (Connection conn = Database.getConnection(); 
+    try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setInt(1,id);
+      stmt.setInt(1, id);
       stmt.executeUpdate();
+    }
+  }
+
+  public Item get_curr_special_item(Timestamp time) throws SQLException {
+    String sql = "SELECT * FROM seasonal_item WHERE ? < end_time AND ? >= start_time;";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setTimestamp(1, time);
+      stmt.setTimestamp(2, time);
+
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (rs.next()) {
+          int id = rs.getInt("item_id");
+          String name = rs.getString("item_name");
+          double price = rs.getDouble("item_price");
+          return (new Item(id, name, price));
+        } else {
+          return null;
+        }
+      }
     }
   }
 }
