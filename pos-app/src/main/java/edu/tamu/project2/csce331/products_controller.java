@@ -30,6 +30,7 @@ public class products_controller
     @FXML private TextField quantity_field;
 
     private final ObservableList<Product> drinks = FXCollections.observableArrayList();
+    private boolean season = false;
 
     @FXML
     public void initialize() 
@@ -133,13 +134,20 @@ public class products_controller
         try 
         {
             Item added_item = new Item(0, name, 0, price);
-            queries.add_menu_item(added_item);
+            if (season)
+            {
+                queries.add_seasonal_menu_item(added_item);
+            }
+            else
+            {
+                queries.add_menu_item(added_item);
+            }
         } 
         catch (Exception e) 
         {
             e.printStackTrace();
-            //show_info("Failed to add item.");
         }
+
 
         drinks.add(new_drink);
         products_table.refresh();
@@ -266,6 +274,50 @@ public class products_controller
         public javafx.beans.property.IntegerProperty quantity_property() 
         { 
             return quantity; 
+        }
+    }
+
+    @FXML
+    public void do_seasonal_view()
+    {
+        name_col.setCellValueFactory(data -> data.getValue().name_property());
+        price_col.setCellValueFactory(data -> data.getValue().price_property().asObject());
+        quantity_col.setCellValueFactory(data -> data.getValue().quantity_property().asObject());
+        
+        if(season)
+        {
+            drinks.clear();
+            try
+            {
+                for (Item item : queries.get_menu()) 
+                {
+                    drinks.add(new Product(item.get_name(), item.get_price(), item.get_popularity(), item.get_id()));
+                }
+            }
+            catch (Exception e) 
+            {
+                e.printStackTrace();
+                show_info("Something went wrong with the database.");
+            }
+            season = false;
+        }
+        else
+        {
+            drinks.clear();
+            try
+            {
+                for (Item item : queries.get_seasonal_menu()) 
+                {
+                    int season_id = -item.get_id();
+                    drinks.add(new Product(item.get_name(), item.get_price(), item.get_popularity(), season_id));
+                }
+            }
+            catch (Exception e) 
+            {
+                e.printStackTrace();
+                show_info("That is not very festive:(");
+            }
+            season = true;
         }
     }
 }

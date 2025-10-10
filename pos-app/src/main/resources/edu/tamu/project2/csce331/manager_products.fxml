@@ -16,6 +16,7 @@
     <Button disable="true" text="Products" />
     <Button onAction="#go_sales" text="Sales" />
     <Button onAction="#go_settings" text="Settings" />
+    <ToggleButton text="Seasonal" onAction="#do_seasonal_view" />
   </HBox>
 
   <Label style="-fx-font-size: 18px;" text="Products" />

@@ -366,6 +366,29 @@ public class Queries {
     }
   }
 
+  public ArrayList<Item> get_seasonal_menu() throws SQLException 
+  {
+    String sql_string = "SELECT * FROM seasonal_menu;";
+
+    try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql_string); ResultSet rs = stmt.executeQuery()) 
+    {
+      ArrayList<Item> menu = new ArrayList<>();
+
+      while (rs.next()) 
+      {
+        int item_id = rs.getInt("item_id");
+        String item_name = rs.getString("item_name");
+        int item_popularity = rs.getInt("item_popularity");
+        double price = rs.getDouble("price");
+        ArrayList<Integer> ingredients = get_ingredients_for_item(item_id, conn);
+        menu.add(new Item(item_id, item_name, item_popularity, price, ingredients));
+      }
+
+      return menu;
+    }
+}
+
+
   public void refill_inventory(String ingredient_name, int quantity) throws SQLException {
     if (quantity < 0) {
       throw new IllegalArgumentException("Quantity cannot be negative.");
@@ -434,6 +457,30 @@ public class Queries {
     }
   }
 }
+
+public int add_seasonal_menu_item(Item added_item) throws java.sql.SQLException 
+{
+    String sql_string = "INSERT INTO seasonal_menu (item_name, item_popularity, price, start_time, end_time) " + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '90 days') " + "RETURNING item_id;";
+
+    try (java.sql.Connection conn = Database.getConnection(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql_string);) 
+    {
+      stmt.setString(1, added_item.get_name());
+      stmt.setInt(2, added_item.get_popularity());
+      stmt.setDouble(3, added_item.get_price());
+      try (java.sql.ResultSet rs = stmt.executeQuery()) 
+      {
+        if (rs.next()) 
+        {
+          int new_id = rs.getInt("item_id");
+          added_item.set_id(new_id);
+          return new_id;
+        }
+      }
+    }
+    return -1;
+}
+
+
 
   public void add_ingredient_map(int item_id, ArrayList<Integer> ingredient_id_list)
       throws SQLException {
