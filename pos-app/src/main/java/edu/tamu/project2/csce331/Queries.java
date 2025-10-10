@@ -544,7 +544,7 @@ public class Queries {
   }
 
   public Item get_curr_special_item(Timestamp time) throws SQLException {
-    String sql = "SELECT * FROM seasonal_item WHERE ? < end_time AND ? >= start_time LIMIT 1;";
+    String sql = "SELECT * FROM seasonal_menu WHERE ? < end_time AND ? >= start_time LIMIT 1;";
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
