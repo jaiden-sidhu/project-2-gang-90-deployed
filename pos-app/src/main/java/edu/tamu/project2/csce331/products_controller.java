@@ -64,23 +64,38 @@ public class products_controller
                     String price_str = safe_trim(price_field.getText());
                     try 
                     {
-                        double price = Double.parseDouble(price_str);
-                        queries.update_menu_price(p.get_id(), price);
-                        show_info("Updated price for " + p.get_name());
+                        javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/item_editor.fxml"));
+                        javafx.scene.Parent root = loader.load();
+                        edu.tamu.project2.csce331.item_editor_controller c = loader.getController();
+                        c.set_context(p, queries, season);
+                        javafx.stage.Stage dialog = new javafx.stage.Stage();
+                        dialog.setTitle("Edit Item");
+                        dialog.initOwner(name_field.getScene().getWindow());
+                        dialog.initModality(javafx.stage.Modality.WINDOW_MODAL);
+                        dialog.setScene(new javafx.scene.Scene(root));
+                        dialog.showAndWait();
+                        products_table.refresh();
                     } 
                     catch (Exception ex) 
                     {
                         ex.printStackTrace();
                         show_info("Failed to update price.");
                     }
-                    populate_form(p);
+                    //populate_form(p);
                 });
 
                 remove_btn.setOnAction(e -> {
                     Product p = getTableView().getItems().get(getIndex());
                     try 
                     {
-                        queries.delete_item(p.get_id());
+                        if (season)
+                        {
+                            queries.delete_seasonal_item(p.get_id());
+                        }
+                        else
+                        {
+                            queries.delete_item(p.get_id());
+                        }
                         drinks.remove(p);
                         products_table.refresh();
                     } 
@@ -129,28 +144,29 @@ public class products_controller
             return;
         }
 
-        Product new_drink = new Product(name, price, quantity, 0);
-
         try 
         {
             Item added_item = new Item(0, name, 0, price);
+            int new_id;
+
             if (season)
             {
-                queries.add_seasonal_menu_item(added_item);
+                new_id = queries.add_seasonal_menu_item(added_item);
             }
             else
             {
-                queries.add_menu_item(added_item);
+                new_id = queries.add_menu_item(added_item);
             }
+
+            Product new_drink = new Product(name, price, quantity, new_id);
+            drinks.add(new_drink);
+            products_table.refresh();
         } 
         catch (Exception e) 
         {
             e.printStackTrace();
         }
 
-
-        drinks.add(new_drink);
-        products_table.refresh();
         clear_inputs();
     }
 

@@ -438,47 +438,49 @@ public class Queries {
     }
   }
 
-  public int add_menu_item(Item added_item) throws SQLException {
-    String sql = "INSERT INTO menu (item_name, item_popularity, price) VALUES (?, ?, ?);";
+public int add_menu_item(Item added_item) throws java.sql.SQLException {
 
-    try (Connection conn = Database.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setString(1, added_item.get_name());
-      stmt.setInt(2, added_item.get_popularity());
-      stmt.setDouble(3, added_item.get_price());
-      stmt.executeUpdate();
-      try (ResultSet keys = stmt.getGeneratedKeys()) {
-        if (keys.next()) {
-          int transaction_id = keys.getInt(1);
-          return transaction_id;
-        } else {
-          throw new SQLException("Creating transaction failed: no ID obtained.");
-        }
-    }
-  }
-}
+  String sql_string = "INSERT INTO menu (item_name, item_popularity, price) " + "VALUES (?, ?, ?) RETURNING item_id;";
 
-public int add_seasonal_menu_item(Item added_item) throws java.sql.SQLException 
-{
-    String sql_string = "INSERT INTO seasonal_menu (item_name, item_popularity, price, start_time, end_time) " + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '90 days') " + "RETURNING item_id;";
-
-    try (java.sql.Connection conn = Database.getConnection(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql_string);) 
+  try (java.sql.Connection conn = Database.getConnection(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql_string)) 
+  {
+    stmt.setString(1, added_item.get_name());
+    stmt.setInt(2, added_item.get_popularity());
+    stmt.setDouble(3, added_item.get_price());
+    try (java.sql.ResultSet rs = stmt.executeQuery()) 
     {
-      stmt.setString(1, added_item.get_name());
-      stmt.setInt(2, added_item.get_popularity());
-      stmt.setDouble(3, added_item.get_price());
-      try (java.sql.ResultSet rs = stmt.executeQuery()) 
+      if (rs.next()) 
       {
-        if (rs.next()) 
-        {
-          int new_id = rs.getInt("item_id");
-          added_item.set_id(new_id);
-          return new_id;
-        }
+        int new_id = rs.getInt("item_id");
+        added_item.set_id(new_id);
+        return new_id;
       }
     }
-    return -1;
+  }
+  throw new java.sql.SQLException("Failed to insert menu item properly");
 }
+
+
+public int add_seasonal_menu_item(Item added_item) throws java.sql.SQLException {
+  String sql_string = "INSERT INTO seasonal_menu (item_name, item_popularity, price, start_time, end_time) " + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '90 days') " + "RETURNING item_id;";
+
+  try (java.sql.Connection conn = Database.getConnection(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql_string)) 
+  {
+    stmt.setString(1, added_item.get_name());
+    stmt.setInt(2, added_item.get_popularity());
+    stmt.setDouble(3, added_item.get_price());
+    try (java.sql.ResultSet rs = stmt.executeQuery()) {
+      if (rs.next()) 
+      {
+        int new_id = rs.getInt("item_id");
+        added_item.set_id(new_id);
+        return new_id;
+      }
+    }
+  }
+  throw new java.sql.SQLException("No ID returned from INSERT");
+}
+
 
 
 
@@ -504,6 +506,18 @@ public int add_seasonal_menu_item(Item added_item) throws java.sql.SQLException
       stmt.executeUpdate();
     }
   }
+
+  public void delete_seasonal_item(int id) throws SQLException 
+  {
+    String sql = "DELETE FROM seasonal_menu WHERE item_id = ?";
+
+    try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) 
+    {
+      stmt.setInt(1, id);
+      stmt.executeUpdate();
+    }
+  }
+
 
   public void update_menu_price(int id, double price) throws SQLException {
     String sql = "UPDATE  menu SET price = ? WHERE item_id = ?";
@@ -589,6 +603,55 @@ public int add_seasonal_menu_item(Item added_item) throws java.sql.SQLException
     try (Connection conn = Database.getConnection(); 
         PreparedStatement stmt = conn.prepareStatement(sql)) {
       stmt.setInt(1,id);
+      stmt.executeUpdate();
+    }
+  }
+
+  public java.util.ArrayList<Ingredient> get_item_ingredients(int item_id) throws java.sql.SQLException 
+  {
+    String sql_string = "SELECT i.ingredient_id, i.ingredient_name, i.quantity, i.category " + "FROM ingredients i " + "JOIN ingredients_map m ON m.ingredient_id = i.ingredient_id " + "WHERE m.item_id = ?;";
+
+    try(java.sql.Connection conn = Database.getConnection(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql_string)) 
+    {
+      stmt.setInt(1, item_id);
+
+      try(java.sql.ResultSet rs = stmt.executeQuery())
+      {
+        java.util.ArrayList<Ingredient> list = new java.util.ArrayList<>();
+
+        while(rs.next())
+        {
+          int ingredient_id = rs.getInt("ingredient_id");
+          String ingredient_name = rs.getString("ingredient_name");
+          int quantity = rs.getInt("quantity");
+          String category = rs.getString("category");
+          list.add(new Ingredient(ingredient_name, quantity, category, ingredient_id));
+        }
+        return list;
+      }
+    }
+  }
+
+  public void add_ingredient_to_item(int item_id, int ingredient_id) throws java.sql.SQLException 
+  {
+    String sql_string = "INSERT INTO ingredients_map (ingredient_id, item_id) VALUES (?, ?);";
+
+    try(java.sql.Connection conn = Database.getConnection(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql_string)) 
+    {
+      stmt.setInt(1, ingredient_id);
+      stmt.setInt(2, item_id);
+      stmt.executeUpdate();
+    }
+  }
+
+  public void remove_ingredient_from_item(int item_id, int ingredient_id) throws java.sql.SQLException 
+  {
+    String sql_string = "DELETE FROM ingredients_map WHERE item_id = ? AND ingredient_id = ?;";
+
+    try (java.sql.Connection conn = Database.getConnection(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql_string)) 
+    {
+      stmt.setInt(1, item_id);
+      stmt.setInt(2, ingredient_id);
       stmt.executeUpdate();
     }
   }

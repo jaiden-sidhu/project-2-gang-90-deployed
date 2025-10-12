@@ -36,7 +36,7 @@ public class Ingredient {
   }
 
   public int get_ingredient_id() {
-    return quantity;
+    return ingredient_id;
   }
 
   public void set_ingredient_id(int ingredient_id) {
