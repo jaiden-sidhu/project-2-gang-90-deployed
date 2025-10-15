@@ -1,4 +1,7 @@
 module edu.tamu.project2.csce331 {
+  // For env
+  requires io.github.cdimascio.dotenv.java;
+
   // JDBC + HikariCP
   requires transitive java.sql;
   requires com.zaxxer.hikari;
