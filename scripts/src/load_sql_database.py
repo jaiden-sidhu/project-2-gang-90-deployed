@@ -2,6 +2,8 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 from pathlib import Path
 import traceback
+from dotenv import load_dotenv
+import os
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
@@ -21,11 +23,13 @@ INGREDIENTS_MAP_TABLE_NAME = "ingredients_map"
 MENU_TABLE_NAME = "menu"
 PERSONNEL_TABLE_NAME = "personnel"
 
-DB_USER = "gang_90"
-DB_PASS = "gang_90"
-DB_HOST = "csce-315-db.engr.tamu.edu"
-DB_PORT = "5432"
-DB_NAME = "gang_90_db"
+load_dotenv()
+
+DB_USER = os.getenv("DATABASE_USER")
+DB_PASS = os.getenv("DATABASE_PASS")
+DB_HOST = os.getenv("DATABASE_HOST")
+DB_PORT = os.getenv("DATABASE_PORT")
+DB_NAME = os.getenv("DATABASE_NAME")
 
 def load_csv_to_postgres():
     try:
