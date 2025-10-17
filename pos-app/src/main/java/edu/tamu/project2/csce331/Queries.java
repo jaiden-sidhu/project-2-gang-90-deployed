@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import javafx.beans.property.IntegerProperty;
+// import javafx.beans.property.IntegerProperty;
 
 public class Queries {
 
