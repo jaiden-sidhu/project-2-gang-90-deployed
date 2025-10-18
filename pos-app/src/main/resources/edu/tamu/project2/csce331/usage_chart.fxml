@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.tamu.project2.csce331.UsageChartController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.tamu.project2.csce331.TransactionsHistoryController">
    <children>
       <Pane layoutY="-1.0" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #393A3D;">
          <children>
@@ -25,7 +25,7 @@
       </Pane>
       <Pane layoutY="49.0" prefHeight="431.0" prefWidth="180.0" style="-fx-background-color: #D9D9D9;">
          <children>
-            <Button layoutX="12.0 " layoutY="14.0" mnemonicParsing="false" onAction="#go_cashier" prefHeight="28.0" prefWidth="156.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Recent Transactions" />
+            <Button layoutX="12.0" layoutY="14.0" mnemonicParsing="false" onAction="#go_cashier" prefHeight="28.0" prefWidth="156.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Recent Transactions" />
             <Button layoutX="12.0" layoutY="48.0" mnemonicParsing="false" onAction="#go_products" prefHeight="28.0" prefWidth="156.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Products" />
             <Button layoutX="12.0" layoutY="81.0" mnemonicParsing="false" onAction="#go_manage_employee" prefHeight="28.0" prefWidth="156.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Sales" />
             <Separator layoutX="12.0" layoutY="40.0" prefHeight="2.0" prefWidth="156.0" />

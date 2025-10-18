@@ -2,10 +2,26 @@ package edu.tamu.project2.csce331;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.*;
 import org.junit.jupiter.api.Test;
 
 public class DatabaseTest {
+  static void info(String msg) {
+    System.out.println("[INFO] " + msg);
+  }
+
+  @Test
+  void verify_credentials() throws Exception {
+    Dotenv env = Dotenv.load();
+    String db_user = env.get("DATABASE_USER");
+    String db_pass = env.get("DATABASE_PASSWORD");
+    String db_url = env.get("DATABASE_URL");
+    
+    assertNotNull(db_user, "Database username does not exist!");
+    assertNotNull(db_pass, "Database password does not exist!");
+    assertNotNull(db_url, "Database url does not exist!");
+  }
 
   @Test
   void verify_connection() throws Exception {
@@ -106,10 +122,11 @@ public class DatabaseTest {
       }
 
       // Check each expected table
-      System.out.println("\nChecking required tables in schema '" + current_schema + "':");
+      System.out.println();
+      info("Checking required tables in schema '" + current_schema + "':");
       for (String table : expected_tables) {
         boolean exists = tableExists(conn, table);
-        System.out.println(" - " + table + ": " + (exists ? "FOUND" : "MISSING"));
+        info(" - " + table + ": " + (exists ? "FOUND" : "MISSING"));
         assertTrue(exists, "Missing required table: " + table);
       }
     }

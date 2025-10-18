@@ -30,6 +30,7 @@ public class products_controller
     @FXML private TextField quantity_field;
 
     private final ObservableList<Product> drinks = FXCollections.observableArrayList();
+    private boolean season = false;
 
     @FXML
     public void initialize() 
@@ -63,23 +64,38 @@ public class products_controller
                     String price_str = safe_trim(price_field.getText());
                     try 
                     {
-                        double price = Double.parseDouble(price_str);
-                        queries.update_menu_price(p.get_id(), price);
-                        show_info("Updated price for " + p.get_name());
+                        javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/item_editor.fxml"));
+                        javafx.scene.Parent root = loader.load();
+                        edu.tamu.project2.csce331.item_editor_controller c = loader.getController();
+                        c.set_context(p, queries, season);
+                        javafx.stage.Stage dialog = new javafx.stage.Stage();
+                        dialog.setTitle("Edit Item");
+                        dialog.initOwner(name_field.getScene().getWindow());
+                        dialog.initModality(javafx.stage.Modality.WINDOW_MODAL);
+                        dialog.setScene(new javafx.scene.Scene(root));
+                        dialog.showAndWait();
+                        products_table.refresh();
                     } 
                     catch (Exception ex) 
                     {
                         ex.printStackTrace();
                         show_info("Failed to update price.");
                     }
-                    populate_form(p);
+                    //populate_form(p);
                 });
 
                 remove_btn.setOnAction(e -> {
                     Product p = getTableView().getItems().get(getIndex());
                     try 
                     {
-                        queries.delete_item(p.get_id());
+                        if (season)
+                        {
+                            queries.delete_seasonal_item(p.get_id());
+                        }
+                        else
+                        {
+                            queries.delete_item(p.get_id());
+                        }
                         drinks.remove(p);
                         products_table.refresh();
                     } 
@@ -128,21 +144,29 @@ public class products_controller
             return;
         }
 
-        Product new_drink = new Product(name, price, quantity, 0);
-
         try 
         {
             Item added_item = new Item(0, name, 0, price);
-            queries.add_menu_item(added_item);
+            int new_id;
+
+            if (season)
+            {
+                new_id = queries.add_seasonal_menu_item(added_item);
+            }
+            else
+            {
+                new_id = queries.add_menu_item(added_item);
+            }
+
+            Product new_drink = new Product(name, price, quantity, new_id);
+            drinks.add(new_drink);
+            products_table.refresh();
         } 
         catch (Exception e) 
         {
             e.printStackTrace();
-            //show_info("Failed to add item.");
         }
 
-        drinks.add(new_drink);
-        products_table.refresh();
         clear_inputs();
     }
 
@@ -266,6 +290,50 @@ public class products_controller
         public javafx.beans.property.IntegerProperty quantity_property() 
         { 
             return quantity; 
+        }
+    }
+
+    @FXML
+    public void do_seasonal_view()
+    {
+        name_col.setCellValueFactory(data -> data.getValue().name_property());
+        price_col.setCellValueFactory(data -> data.getValue().price_property().asObject());
+        quantity_col.setCellValueFactory(data -> data.getValue().quantity_property().asObject());
+        
+        if(season)
+        {
+            drinks.clear();
+            try
+            {
+                for (Item item : queries.get_menu()) 
+                {
+                    drinks.add(new Product(item.get_name(), item.get_price(), item.get_popularity(), item.get_id()));
+                }
+            }
+            catch (Exception e) 
+            {
+                e.printStackTrace();
+                show_info("Something went wrong with the database.");
+            }
+            season = false;
+        }
+        else
+        {
+            drinks.clear();
+            try
+            {
+                for (Item item : queries.get_seasonal_menu()) 
+                {
+                    int season_id = -item.get_id();
+                    drinks.add(new Product(item.get_name(), item.get_price(), item.get_popularity(), season_id));
+                }
+            }
+            catch (Exception e) 
+            {
+                e.printStackTrace();
+                show_info("That is not very festive:(");
+            }
+            season = true;
         }
     }
 }

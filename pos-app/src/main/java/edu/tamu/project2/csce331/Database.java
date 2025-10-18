@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class Database {
   private static final String CONFIG_PATH = "edu/tamu/project2/csce331/application.properties";
@@ -18,14 +19,15 @@ public class Database {
       if (input == null) {
         throw new RuntimeException("Cannot find application.properties in resources (tried: " + CONFIG_PATH + ").");
       }
+      Dotenv env = Dotenv.load();
 
       Properties props = new Properties();
       props.load(input);
 
       HikariConfig config = new HikariConfig();
-      config.setJdbcUrl(props.getProperty("db.url"));
-      config.setUsername(props.getProperty("db.username"));
-      config.setPassword(props.getProperty("db.password"));
+      config.setJdbcUrl(env.get("DATABASE_URL"));
+      config.setUsername(env.get("DATABASE_USER"));
+      config.setPassword(env.get("DATABASE_PASSWORD"));
 
       config.setMaximumPoolSize(
           Integer.parseInt(props.getProperty("db.hikari.maximum-pool-size", "10")));

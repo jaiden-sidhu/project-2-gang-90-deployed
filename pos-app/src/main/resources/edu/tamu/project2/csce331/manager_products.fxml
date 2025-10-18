@@ -4,59 +4,70 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/25"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="edu.tamu.project2.csce331.products_controller"
-      spacing="10">
-  <padding>
-    <Insets bottom="20" left="20" right="20" top="20" />
-  </padding>
+<BorderPane xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.tamu.project2.csce331.products_controller">
 
-  <HBox spacing="8">
-    <Button disable="true" text="Products" />
-    <Button onAction="#go_sales" text="Sales" />
-    <Button onAction="#go_settings" text="Settings" />
-  </HBox>
+  <left>
+    <VBox spacing="10" prefWidth="160" style="-fx-background-color: #d3d3d3;">
+      <padding>
+        <Insets bottom="20" left="12" right="12" top="20" />
+      </padding>
 
-  <Label style="-fx-font-size: 18px;" text="Products" />
+      <Button disable="true" text="Products" maxWidth="Infinity" />
+      <Button onAction="#go_sales" text="Sales" maxWidth="Infinity" />
+      <Button onAction="#go_settings" text="Settings" maxWidth="Infinity" />
+      <ToggleButton text="Seasonal" onAction="#do_seasonal_view" maxWidth="Infinity" />
+    </VBox>
+  </left>
 
-  <TextField fx:id="idField" managed="false" visible="false" />
+  <center>
+    <VBox spacing="10">
+      <padding>
+        <Insets bottom="20" left="20" right="20" top="20" />
+      </padding>
 
-  <GridPane hgap="8" vgap="8">
-    <columnConstraints>
-      <ColumnConstraints percentWidth="25" />
-      <ColumnConstraints percentWidth="25" />
-      <ColumnConstraints percentWidth="25" />
-      <ColumnConstraints percentWidth="25" />
-    </columnConstraints>
+      <Label style="-fx-font-size: 18px;" text="Products" />
 
-    <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-    <TextField fx:id="name_field" promptText="enter drink" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+      <TextField fx:id="idField" managed="false" visible="false" />
 
-    <Label text="Price $" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-    <TextField fx:id="price_field" promptText="5.50" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <GridPane hgap="8" vgap="8">
+        <columnConstraints>
+          <ColumnConstraints percentWidth="25" />
+          <ColumnConstraints percentWidth="25" />
+          <ColumnConstraints percentWidth="25" />
+          <ColumnConstraints percentWidth="25" />
+        </columnConstraints>
 
-    <Label text="Quantity" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-    <TextField fx:id="quantity_field" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+        <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="name_field" promptText="enter drink" GridPane.columnIndex="0" GridPane.rowIndex="1" />
 
-    <HBox spacing="8" GridPane.columnIndex="3" GridPane.rowIndex="1">
-      <Button onAction="#handle_save" text="Add" />
-      <Button onAction="#handle_clear" text="Clear" />
-    </HBox>
+        <Label text="Price $" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <TextField fx:id="price_field" promptText="5.50" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-    <rowConstraints>
-      <RowConstraints />
-      <RowConstraints />
-    </rowConstraints>
-  </GridPane>
+        <Label text="Quantity" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+        <TextField fx:id="quantity_field" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
 
-  <TableView fx:id="products_table" prefHeight="400">
-    <columns>
-      <TableColumn fx:id="name_col" prefWidth="300" text="Name" />
-      <TableColumn fx:id="price_col" prefWidth="120" text="Price" />
-      <TableColumn fx:id="quantity_col" prefWidth="80" text="Quantity" />
-      <TableColumn fx:id="actions_col" prefWidth="180" text="Actions" />
-    </columns>
-  </TableView>
+        <HBox spacing="8" GridPane.columnIndex="3" GridPane.rowIndex="1">
+          <Button onAction="#handle_save" text="Add" />
+          <Button onAction="#handle_clear" text="Clear" />
+        </HBox>
 
-</VBox>
+        <rowConstraints>
+          <RowConstraints />
+          <RowConstraints />
+        </rowConstraints>
+      </GridPane>
+
+      <TableView fx:id="products_table" prefHeight="400">
+        <columns>
+          <TableColumn fx:id="name_col" prefWidth="300" text="Name" />
+          <TableColumn fx:id="price_col" prefWidth="120" text="Price" />
+          <TableColumn fx:id="quantity_col" prefWidth="80" text="Quantity" />
+          <TableColumn fx:id="actions_col" prefWidth="180" text="Actions" />
+        </columns>
+      </TableView>
+    </VBox>
+  </center>
+
+</BorderPane>
