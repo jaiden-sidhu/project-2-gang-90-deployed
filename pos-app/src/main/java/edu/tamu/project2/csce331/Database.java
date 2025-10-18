@@ -26,7 +26,7 @@ public class Database {
 
       HikariConfig config = new HikariConfig();
       config.setJdbcUrl(env.get("DATABASE_URL"));
-      config.setUsername(env.get("DATABASE_USERNAME"));
+      config.setUsername(env.get("DATABASE_USER"));
       config.setPassword(env.get("DATABASE_PASSWORD"));
 
       config.setMaximumPoolSize(
