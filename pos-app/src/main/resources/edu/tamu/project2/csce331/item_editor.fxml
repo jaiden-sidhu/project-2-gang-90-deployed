@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="edu.tamu.project2.csce331.item_editor_controller"
+      spacing="10">
+  <padding>
+    <Insets bottom="16" left="16" right="16" top="16" />
+  </padding>
+
+  <Label text="Edit Item" style="-fx-font-size: 18px;" />
+
+  <GridPane hgap="8" vgap="8">
+    <columnConstraints>
+      <ColumnConstraints percentWidth="25" />
+      <ColumnConstraints percentWidth="25" />
+      <ColumnConstraints percentWidth="25" />
+      <ColumnConstraints percentWidth="25" />
+    </columnConstraints>
+
+    <Label text="Name" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <TextField fx:id="name_field" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+    <Label text="Popularity" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+    <TextField fx:id="popularity_field" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+    <Label text="Price $" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <TextField fx:id="price_field" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+    <Label text="Quantity" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+    <TextField fx:id="quantity_field" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+    <rowConstraints>
+      <RowConstraints/>
+      <RowConstraints/>
+    </rowConstraints>
+  </GridPane>
+
+  <HBox spacing="12">
+    <VBox spacing="6" prefWidth="300">
+      <Label text="All Ingredients"/>
+      <TableView fx:id="ingredients_table" prefHeight="260">
+        <columns>
+          <TableColumn fx:id="ing_name_col" text="Name" prefWidth="180"/>
+          <TableColumn fx:id="ing_qty_col" text="Qty" prefWidth="80"/>
+          <TableColumn fx:id="ing_cat_col" text="Category" prefWidth="120"/>
+        </columns>
+      </TableView>
+    </VBox>
+
+    <VBox alignment="CENTER" spacing="8">
+      <Button text="&gt;&gt;" onAction="#handle_add_ingredient"/>
+      <Button text="&lt;&lt;" onAction="#handle_remove_ingredient"/>
+    </VBox>
+
+    <VBox spacing="6" prefWidth="300">
+      <Label text="Item Ingredients"/>
+      <TableView fx:id="item_ingredients_table" prefHeight="260">
+        <columns>
+          <TableColumn fx:id="item_ing_name_col" text="Name" prefWidth="180"/>
+          <TableColumn fx:id="item_ing_qty_col" text="Qty" prefWidth="80"/>
+          <TableColumn fx:id="item_ing_cat_col" text="Category" prefWidth="120"/>
+        </columns>
+      </TableView>
+    </VBox>
+  </HBox>
+
+  <HBox spacing="8">
+    <Button text="Save" onAction="#handle_save"/>
+    <Button text="Cancel" onAction="#handle_cancel"/>
+  </HBox>
+</VBox>

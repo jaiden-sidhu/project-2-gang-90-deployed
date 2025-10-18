@@ -63,5 +63,139 @@ pip install -r requirements.txt
 
 ---
 
-### Application setup (Java)
+### Java Application Setup
 
+This section covers how to build and run the Java portion of the POS system, which powers the frontend and backend logic of the application using **JavaFX**, **JDBC**, and **HikariCP** for efficient database connectivity.
+
+---
+
+#### Prerequisites
+- **JDK 17 or 21 (ARM64 for Apple Silicon)**  
+  Check your version:
+  ```bash
+  java -version
+  ```
+- **Maven 3.8+**
+  Check your version for Maven:
+  ```bash
+  mvn -v
+  ```
+
+---
+
+#### 1. Configure the Database
+Before running the application, update your database credentials in:
+
+```
+pos-app/src/main/resources/application.properties
+```
+
+Example configuration:
+```properties
+db.url=jdbc:postgresql://csce-315-db.engr.tamu.edu:5432/gang_90_db
+db.user=gang_90
+db.password=your_password_here
+```
+
+> 💡 Tip: For better security, store credentials as environment variables and load them in `Database.java` instead of hardcoding.
+
+---
+
+#### 2. Build the Project
+From the root of the repository:
+```bash
+cd pos-app
+mvn clean install
+```
+
+If everything compiles successfully, you’ll see:
+```
+BUILD SUCCESS
+```
+
+The generated JAR file will be located at:
+```
+pos-app/target/pos-app-1.0.0.jar
+```
+
+---
+
+#### 3. Run the Application
+To run the JavaFX interface:
+```bash
+mvn javafx:run
+```
+
+---
+
+#### 5. Project Structure
+```
+pos-app/
+├─ src/main/java/edu/tamu/project2/csce331/
+│  ├─ App.java                 # JavaFX entry point
+│  ├─ controller/...           # JavaFX controllers (UI logic)
+│  ├─ dao/...                  # DAO classes (SQL operations)
+│  └─ Database.java            # HikariCP configuration and connection pool
+├─ src/main/resources/
+│  ├─ application.properties   # DB configuration
+│  ├─ *.fxml                   # JavaFX UI files
+│  └─ *.css                    # JavaFX styling
+├─ pom.xml
+└─ target/                     # Build output (auto-generated)
+```
+
+---
+
+### Testing
+
+This project includes **JUnit 5** tests to validate database connectivity and schema. Tests live under:
+
+```
+pos-app/src/test/java/edu/tamu/project2/csce331/
+```
+
+**Prerequisites**
+- PostgreSQL is running and reachable.
+- `pos-app/src/main/resources/application.properties` contains valid credentials.
+- The required tables exist in your database (see below to configure which tables are checked).
+
+**Run all tests**
+```bash
+cd pos-app
+mvn test
+```
+If everything is configured, you should see:
+```
+BUILD SUCCESS
+```
+
+**Run a single test class**
+```bash
+mvn -q -Dtest=edu.tamu.project2.csce331.DatabaseTest test
+```
+
+**What the tests do**
+- `connection_and_select1_works()` – opens a connection via **HikariCP** and verifies `SELECT 1` returns `1`.
+- `transactions_table_exists_and_accessible()` – queries up to 10 rows from `transactions` and prints them (handles empty tables gracefully).
+- `all_expected_tables_exist()` – checks a configurable list of table names against `information_schema.tables` and fails if any are missing.
+
+**Configure which tables are required**
+Edit the array inside `DatabaseTest#all_expected_tables_exist()`:
+```java
+// pos-app/src/test/java/edu/tamu/project2/csce331/DatabaseTest.java
+String[] expectedTables = new String[] {
+    "transactions"
+    // , "users", "products", "orders"  // add more as needed
+};
+```
+
+**Notes**
+- JUnit 5 and the Maven Surefire plugin are already configured in `pos-app/pom.xml`.
+- Tests use try-with-resources to automatically return connections to the Hikari pool and close JDBC resources.
+
+---
+
+#### Summary
+Maven compiles, builds, and launches the JavaFX application.  
+The DAOs handle all database logic **at runtime**—they are invoked by controllers or backend services, not directly by Maven.  
+This structure keeps the project modular, testable, and production-ready.
