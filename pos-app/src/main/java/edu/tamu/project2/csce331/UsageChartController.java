@@ -2,6 +2,7 @@ package edu.tamu.project2.csce331;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 import javafx.collections.FXCollections;
@@ -98,6 +99,73 @@ public class UsageChartController {
             usageBarChart.getData().add(series);
 
         } catch (Exception e) {
+            statusLabel.setText("Failed to load page: " + e.getMessage());
+        }
+    }
+
+    @FXML 
+    public void apply_dates(){
+        try{
+            LocalDate end_date = endDate.getValue();
+            LocalDate start_date = startDate.getValue();
+            Timestamp start_time = new Timestamp(start_date.toEpochDay());
+            Timestamp end_time = new Timestamp(end_date.toEpochDay());
+            loadPage(start_time,end_time);
+        }catch (Exception e) {
+            statusLabel.setText("Failed to load page: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void apply_today(){
+        try{
+            LocalDate start_date = LocalDate.now();
+            LocalDate end_date = start_date.minusDays(1);
+            Timestamp start_time = new Timestamp(start_date.toEpochDay());
+            Timestamp end_time = new Timestamp(end_date.toEpochDay());
+            loadPage(start_time,end_time);
+        }catch (Exception e) {
+            statusLabel.setText("Failed to load page: " + e.getMessage());
+        }
+
+
+    }
+
+    @FXML
+    public void apply_week(){
+        try{
+            LocalDate start_date = LocalDate.now();
+            LocalDate end_date = start_date.minusDays(7);
+            Timestamp start_time = new Timestamp(start_date.toEpochDay());
+            Timestamp end_time = new Timestamp(end_date.toEpochDay());
+            loadPage(start_time,end_time);
+        }catch (Exception e) {
+            statusLabel.setText("Failed to load page: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void apply_30_days(){
+        try{
+            LocalDate start_date = LocalDate.now();
+            LocalDate end_date = start_date.minusWeeks(30);
+            Timestamp start_time = new Timestamp(start_date.toEpochDay());
+            Timestamp end_time = new Timestamp(end_date.toEpochDay());
+            loadPage(start_time,end_time);
+        }catch (Exception e) {
+            statusLabel.setText("Failed to load page: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void apply_month(){
+        try{
+            LocalDate start_date = LocalDate.now();
+            LocalDate end_date = start_date.minusMonths(1);
+            Timestamp start_time = new Timestamp(start_date.toEpochDay());
+            Timestamp end_time = new Timestamp(end_date.toEpochDay());
+            loadPage(start_time,end_time);
+        }catch (Exception e) {
             statusLabel.setText("Failed to load page: " + e.getMessage());
         }
     }
