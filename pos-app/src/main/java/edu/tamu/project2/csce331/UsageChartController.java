@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -36,9 +38,9 @@ public class UsageChartController {
 
 
     //added
-    @FXML private TableView<Ingredient> usageTable; //TODO: add IngredientUsage object
-    @FXML private TableColumn<Ingredient, String> colIngredientUsage;
-    @FXML private TableColumn<Ingredient, Integer> colUsed;
+    @FXML private TableView<Map<String, Integer>> usageTable; //TODO: add IngredientUsage object
+    @FXML private TableColumn<Map<String, Integer>, String> colIngredientUsage;
+    @FXML private TableColumn<Map<String, Integer>, Integer> colUsed;
     @FXML private DatePicker startDate;
     @FXML private DatePicker endDate;
 
@@ -52,8 +54,8 @@ public class UsageChartController {
     @FXML
     public void initialize() {
         // Configure columns
-        colIngredientUsage.setCellValueFactory(new PropertyValueFactory<>("ingredient_name"));
-        colUsed.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        colIngredientUsage.setCellValueFactory( new MapValueFactory<String>("name"));
+        colUsed.setCellValueFactory(new MapValueFactory("amount"));
     
 
         try {
@@ -82,18 +84,18 @@ public class UsageChartController {
 
     private void loadPage(Timestamp begin_timestamp, Timestamp end_timeStamp) {
         try {
-            //List<Ingredient> list = queries.get_ingredients_amount(begin_timestamp, end_timeStamp);//insert quiery
-            List<Ingredient> list = null;
-            ObservableList<Ingredient> data = FXCollections.observableArrayList(list);
+            Map<String, Integer> list = queries.get_ingredient_usage(begin_timestamp, end_timeStamp);//insert quiery
+            
+            ObservableList<Map<String, Integer>> data = FXCollections.observableArrayList(list);
             usageTable.setItems(data);
             statusLabel.setText(String.format("Showing %d of %d total", data.size(), totalCount));
             usageBarChart.getData().clear();
 
             XYChart.Series<String, Integer> series = new XYChart.Series<>();
             series.setName("Total Usage");
-
-            for (Ingredient entry : list) {
-                series.getData().add(new XYChart.Data<>(entry.get_ingredient_name(), entry.get_quantity()));
+            
+            for (String entry : list.keySet()) {
+                series.getData().add(new XYChart.Data<>(entry, list.get(entry)));
             }
 
             usageBarChart.getData().add(series);
