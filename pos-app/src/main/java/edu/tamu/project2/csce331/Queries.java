@@ -706,7 +706,7 @@ public class Queries {
    *     ingredient was used during the period
    * @throws SQLException if a database access error occurs
    */
-  public static Map<String, Integer> get_ingredient_usage(Timestamp start, Timestamp end)
+  public Map<String, Integer> get_ingredient_usage(Timestamp start, Timestamp end)
       throws SQLException {
     String sql =
         "SELECT i.ingredient_name, COUNT(*) AS times_used "
