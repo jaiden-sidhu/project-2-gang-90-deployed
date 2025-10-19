@@ -39,13 +39,13 @@ public class UsageChartController {
 
 
     //added
-    @FXML private TableView<Ingredient_Usage> usageTable; //TODO: add IngredientUsage object
-    @FXML private TableColumn<Ingredient_Usage, String> colIngredientUsage;
-    @FXML private TableColumn<Ingredient_Usage, Integer> colUsed;
+    @FXML private TableView<IngredientUsage> usageTable; //TODO: add IngredientUsage object
+    @FXML private TableColumn<IngredientUsage, String> colIngredientUsage;
+    @FXML private TableColumn<IngredientUsage, Integer> colUsed;
     @FXML private DatePicker startDate;
     @FXML private DatePicker endDate;
 
-    @FXML private BarChart<String, Integer> usageBarChart;
+    @FXML private BarChart<String, Number> usageBarChart;
     
 
     private final Queries queries = new Queries();
@@ -84,7 +84,7 @@ public class UsageChartController {
 
     private void loadPage(Timestamp begin_timestamp, Timestamp end_timeStamp) {
         try {
-            ArrayList<Ingredient_Usage> list = queries.get_ingredient_usage(begin_timestamp, end_timeStamp);//insert quiery
+            ArrayList<IngredientUsage> list = queries.get_ingredient_usage(begin_timestamp, end_timeStamp);//insert quiery
             
             
             System.out.println(begin_timestamp);
@@ -92,16 +92,20 @@ public class UsageChartController {
 
             System.out.println("hello does this work");
 
-            ObservableList<Ingredient_Usage> data = FXCollections.observableArrayList(list);
+            ObservableList<IngredientUsage> data = FXCollections.observableArrayList(list);
             usageTable.setItems(data);
             statusLabel.setText(String.format("Showing %d of %d total", data.size(), totalCount));
             usageBarChart.getData().clear();
-
-            XYChart.Series<String, Integer> series = new XYChart.Series<>();
+            usageBarChart.setAnimated(false);
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
             series.setName("Total Usage");
             
-            for (Ingredient_Usage entry : list) {
-                series.getData().add(new XYChart.Data<>(entry.get_name(), entry.get_amount()));
+            for (IngredientUsage entry : list) {
+                String x = entry.getName();
+                Number y = entry.getAmount();
+                if(x != null && y != null){
+                    series.getData().add(new XYChart.Data<>(x, y));
+                }
             }
 
             usageBarChart.getData().add(series);
@@ -130,7 +134,7 @@ public class UsageChartController {
             LocalDate start_date = LocalDate.now();
             LocalDate end_date = start_date.plusDays(1);
             Timestamp start_time =  Timestamp.valueOf(start_date.atStartOfDay());
-            Timestamp end_time =  Timestamp.valueOf(end_date.atStartOfDay());
+            Timestamp end_time =  Timestamp.valueOf(end_date.plusDays(1).atStartOfDay());
 
             loadPage(start_time,end_time);
         }catch (Exception e) {
@@ -144,7 +148,7 @@ public class UsageChartController {
             LocalDate end_date = LocalDate.now();
             LocalDate start_date = end_date.minusDays(7);
             Timestamp start_time =  Timestamp.valueOf(start_date.atStartOfDay());
-            Timestamp end_time =  Timestamp.valueOf(end_date.atStartOfDay());
+            Timestamp end_time =  Timestamp.valueOf(end_date.plusDays(1).atStartOfDay());
             loadPage(start_time,end_time);
         }catch (Exception e) {
             statusLabel.setText("Failed to load page: " + e.getMessage());
@@ -155,9 +159,9 @@ public class UsageChartController {
     public void apply_30_days(){
         try{
             LocalDate end_date = LocalDate.now();
-            LocalDate start_date = end_date.minusWeeks(30);
+            LocalDate start_date = end_date.minusDays(30);
             Timestamp start_time =  Timestamp.valueOf(start_date.atStartOfDay());
-            Timestamp end_time =  Timestamp.valueOf(end_date.atStartOfDay());
+            Timestamp end_time =  Timestamp.valueOf(end_date.plusDays(1).atStartOfDay());
             loadPage(start_time,end_time);
         }catch (Exception e) {
             statusLabel.setText("Failed to load page: " + e.getMessage());
@@ -170,7 +174,7 @@ public class UsageChartController {
             LocalDate end_date = LocalDate.now();
             LocalDate start_date = end_date.minusMonths(1);
             Timestamp start_time =  Timestamp.valueOf(start_date.atStartOfDay());
-            Timestamp end_time =  Timestamp.valueOf(end_date.atStartOfDay());
+            Timestamp end_time =  Timestamp.valueOf(end_date.plusDays(1).atStartOfDay());
             loadPage(start_time,end_time);
         }catch (Exception e) {
             statusLabel.setText("Failed to load page: " + e.getMessage());

@@ -1,26 +1,26 @@
 package edu.tamu.project2.csce331;
 
-public class Ingredient_Usage {
+public class IngredientUsage {
     public String name;
     public Integer amount;
-    Ingredient_Usage(String name, Integer amount){
+    IngredientUsage(String name, Integer amount){
         this.name = name;
         this.amount = amount;
     }
 
-     public String get_name() {
+     public String getName() {
         return name;
     }
 
-    public void set_name(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public Integer get_amount() {
+    public Integer getAmount() {
         return amount;
     }
 
-    public void set_amount(Integer amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 

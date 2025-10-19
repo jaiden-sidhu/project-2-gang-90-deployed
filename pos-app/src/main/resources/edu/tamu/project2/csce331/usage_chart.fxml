@@ -82,7 +82,7 @@
                      <TableView fx:id="usageTable" prefHeight="268.0" prefWidth="966.0">
                         <columns>
                            <TableColumn fx:id="colIngredientUsage" prefWidth="420.0" text="Ingredient" />
-                           <TableColumn fx:id="colUsed" prefWidth="150.0" text="Used" />
+                           <TableColumn fx:id="colUsed" prefWidth="545.6000122070312" text="Used" />
                         </columns>
                      </TableView>
                   </children>

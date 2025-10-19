@@ -705,7 +705,7 @@ public class Queries {
    *     ingredient was used during the period
    * @throws SQLException if a database access error occurs
    */
-  public ArrayList<Ingredient_Usage> get_ingredient_usage(Timestamp start, Timestamp end)
+  public ArrayList<IngredientUsage> get_ingredient_usage(Timestamp start, Timestamp end)
       throws SQLException {
     String sql =
         "SELECT i.ingredient_name, COUNT(*) AS times_used "
@@ -718,7 +718,7 @@ public class Queries {
             + "ORDER BY times_used DESC, i.ingredient_name";
     
     // Create new object to store values later
-    ArrayList<Ingredient_Usage> res = new ArrayList<>();
+    ArrayList<IngredientUsage> res = new ArrayList<>();
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -729,7 +729,7 @@ public class Queries {
         while (rs.next()) {
           String name = rs.getString("ingredient_name");
           Integer count = rs.getInt("times_used");
-          Ingredient_Usage curr = new Ingredient_Usage(name, count);
+          IngredientUsage curr = new IngredientUsage(name, count);
           res.add(curr);
         }
       }
