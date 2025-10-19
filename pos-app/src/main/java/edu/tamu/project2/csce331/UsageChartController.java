@@ -3,6 +3,7 @@ package edu.tamu.project2.csce331;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,9 +39,9 @@ public class UsageChartController {
 
 
     //added
-    @FXML private TableView<Map<String, Integer>> usageTable; //TODO: add IngredientUsage object
-    @FXML private TableColumn<Map<String, Integer>, String> colIngredientUsage;
-    @FXML private TableColumn<Map<String, Integer>, Integer> colUsed;
+    @FXML private TableView<Ingredient_Usage> usageTable; //TODO: add IngredientUsage object
+    @FXML private TableColumn<Ingredient_Usage, String> colIngredientUsage;
+    @FXML private TableColumn<Ingredient_Usage, Integer> colUsed;
     @FXML private DatePicker startDate;
     @FXML private DatePicker endDate;
 
@@ -54,8 +55,8 @@ public class UsageChartController {
     @FXML
     public void initialize() {
         // Configure columns
-        colIngredientUsage.setCellValueFactory( new MapValueFactory<String>("name"));
-        colUsed.setCellValueFactory(new MapValueFactory("amount"));
+        colIngredientUsage.setCellValueFactory( new PropertyValueFactory<>("name"));
+        colUsed.setCellValueFactory(new PropertyValueFactory("amount"));
     
 
         try {
@@ -77,16 +78,22 @@ public class UsageChartController {
         //loadPage(0);
     }
 
-    @FXML
     
 
 
 
     private void loadPage(Timestamp begin_timestamp, Timestamp end_timeStamp) {
         try {
-            Map<String, Integer> list = queries.get_ingredient_usage(begin_timestamp, end_timeStamp);//insert quiery
+            Ingredient_Usage list = queries.get_ingredient_usage(begin_timestamp, end_timeStamp);//insert quiery
             
-            ObservableList<Map<String, Integer>> data = FXCollections.observableArrayList(list);
+            Map<String,Integer> real_list = list.asMap();
+            System.out.println(begin_timestamp);
+            System.out.println(end_timeStamp);
+
+            System.out.println("hello does this work");
+            System.out.println(real_list);
+
+            ObservableList<Ingredient_Usage> data = FXCollections.observableArrayList(list);
             usageTable.setItems(data);
             statusLabel.setText(String.format("Showing %d of %d total", data.size(), totalCount));
             usageBarChart.getData().clear();
@@ -94,7 +101,7 @@ public class UsageChartController {
             XYChart.Series<String, Integer> series = new XYChart.Series<>();
             series.setName("Total Usage");
             
-            for (String entry : list.keySet()) {
+            for (String entry : real_list.keySet()) {
                 series.getData().add(new XYChart.Data<>(entry, list.get(entry)));
             }
 
@@ -110,8 +117,8 @@ public class UsageChartController {
         try{
             LocalDate end_date = endDate.getValue();
             LocalDate start_date = startDate.getValue();
-            Timestamp start_time = new Timestamp(start_date.toEpochDay());
-            Timestamp end_time = new Timestamp(end_date.toEpochDay());
+            Timestamp start_time =  Timestamp.valueOf(start_date.atStartOfDay());
+            Timestamp end_time =  Timestamp.valueOf(end_date.atStartOfDay());
             loadPage(start_time,end_time);
         }catch (Exception e) {
             statusLabel.setText("Failed to load page: " + e.getMessage());
@@ -122,9 +129,10 @@ public class UsageChartController {
     public void apply_today(){
         try{
             LocalDate start_date = LocalDate.now();
-            LocalDate end_date = start_date.minusDays(1);
+            LocalDate end_date = start_date.plusDays(1);
             Timestamp start_time = new Timestamp(start_date.toEpochDay());
             Timestamp end_time = new Timestamp(end_date.toEpochDay());
+            
             loadPage(start_time,end_time);
         }catch (Exception e) {
             statusLabel.setText("Failed to load page: " + e.getMessage());
@@ -136,8 +144,8 @@ public class UsageChartController {
     @FXML
     public void apply_week(){
         try{
-            LocalDate start_date = LocalDate.now();
-            LocalDate end_date = start_date.minusDays(7);
+            LocalDate end_date = LocalDate.now();
+            LocalDate start_date = end_date.minusDays(7);
             Timestamp start_time = new Timestamp(start_date.toEpochDay());
             Timestamp end_time = new Timestamp(end_date.toEpochDay());
             loadPage(start_time,end_time);
@@ -149,8 +157,8 @@ public class UsageChartController {
     @FXML
     public void apply_30_days(){
         try{
-            LocalDate start_date = LocalDate.now();
-            LocalDate end_date = start_date.minusWeeks(30);
+            LocalDate end_date = LocalDate.now();
+            LocalDate start_date = end_date.minusWeeks(30);
             Timestamp start_time = new Timestamp(start_date.toEpochDay());
             Timestamp end_time = new Timestamp(end_date.toEpochDay());
             loadPage(start_time,end_time);
@@ -162,8 +170,8 @@ public class UsageChartController {
     @FXML
     public void apply_month(){
         try{
-            LocalDate start_date = LocalDate.now();
-            LocalDate end_date = start_date.minusMonths(1);
+            LocalDate end_date = LocalDate.now();
+            LocalDate start_date = end_date.minusMonths(1);
             Timestamp start_time = new Timestamp(start_date.toEpochDay());
             Timestamp end_time = new Timestamp(end_date.toEpochDay());
             loadPage(start_time,end_time);
