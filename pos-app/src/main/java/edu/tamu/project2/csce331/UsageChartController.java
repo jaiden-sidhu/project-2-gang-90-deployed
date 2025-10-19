@@ -132,13 +132,11 @@ public class UsageChartController {
             LocalDate end_date = start_date.plusDays(1);
             Timestamp start_time =  Timestamp.valueOf(start_date.atStartOfDay());
             Timestamp end_time =  Timestamp.valueOf(end_date.atStartOfDay());
-            
+
             loadPage(start_time,end_time);
         }catch (Exception e) {
             statusLabel.setText("Failed to load page: " + e.getMessage());
         }
-
-
     }
 
     @FXML
