@@ -11,6 +11,32 @@ import java.util.Map;
 
 // import javafx.beans.property.IntegerProperty;
 
+/**
+ * Data-access facade for the POS application.
+ *
+ * <p>Provides read/write operations over the core schema: {@code personnel}, {@code menu},
+ * {@code seasonal_menu}, {@code ingredients}, {@code ingredients_map}, {@code transactions},
+ * and {@code transaction_details}. Methods use JDBC (try-with-resources), acquire connections via
+ * {@link Database#getConnection()}, and throw {@link java.sql.SQLException} on database errors.
+ *
+ * <p><strong>Organization:</strong>
+ * <ul>
+ *   <li><em>EMPLOYEES</em> – get/add/update/delete/count employees</li>
+ *   <li><em>MENU & ITEMS</em> – menu fetch, item lookups, item–ingredient mapping, CRUD</li>
+ *   <li><em>SEASONAL MENU</em> – seasonal menu fetch/add/delete</li>
+ *   <li><em>INGREDIENTS</em> – ingredient CRUD, inventory adjustments, lookups</li>
+ *   <li><em>TRANSACTIONS</em> – list/count/get transactions, add with details</li>
+ *   <li><em>HELPERS</em> – private utilities used by other methods</li>
+ * </ul>
+ *
+ * <p><strong>Notes:</strong>
+ * <ul>
+ *   <li>Queries target a PostgreSQL schema and rely on the defined foreign keys/indexes.</li>
+ *   <li>Transactional boundaries are caller-controlled unless otherwise documented.</li>
+ *   <li>Return types favor order-preserving collections (e.g., {@link java.util.LinkedHashMap})
+ *       when SQL specifies ordering.</li>
+ * </ul>
+ */
 public class Queries {
   /* Index:
    * EMPLOYEES: get/add/update/delete/count employees
