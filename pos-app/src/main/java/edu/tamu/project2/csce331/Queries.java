@@ -13,27 +13,29 @@ import java.util.LinkedHashMap;
 /**
  * Data-access facade for the POS application.
  *
- * <p>Provides read/write operations over the core schema: {@code personnel}, {@code menu},
- * {@code seasonal_menu}, {@code ingredients}, {@code ingredients_map}, {@code transactions},
- * and {@code transaction_details}. Methods use JDBC (try-with-resources), acquire connections via
- * {@link Database#getConnection()}, and throw {@link java.sql.SQLException} on database errors.
+ * <p>Provides read/write operations over the core schema: {@code personnel}, {@code menu}, {@code
+ * seasonal_menu}, {@code ingredients}, {@code ingredients_map}, {@code transactions}, and {@code
+ * transaction_details}. Methods use JDBC (try-with-resources), acquire connections via {@link
+ * Database#getConnection()}, and throw {@link java.sql.SQLException} on database errors.
  *
  * <p><strong>Organization:</strong>
+ *
  * <ul>
- *   <li><em>EMPLOYEES</em> – get/add/update/delete/count employees</li>
- *   <li><em>MENU & ITEMS</em> – menu fetch, item lookups, item–ingredient mapping, CRUD</li>
- *   <li><em>SEASONAL MENU</em> – seasonal menu fetch/add/delete</li>
- *   <li><em>INGREDIENTS</em> – ingredient CRUD, inventory adjustments, lookups</li>
- *   <li><em>TRANSACTIONS</em> – list/count/get transactions, add with details</li>
- *   <li><em>HELPERS</em> – private utilities used by other methods</li>
+ *   <li><em>EMPLOYEES</em> – get/add/update/delete/count employees
+ *   <li><em>MENU & ITEMS</em> – menu fetch, item lookups, item–ingredient mapping, CRUD
+ *   <li><em>SEASONAL MENU</em> – seasonal menu fetch/add/delete
+ *   <li><em>INGREDIENTS</em> – ingredient CRUD, inventory adjustments, lookups
+ *   <li><em>TRANSACTIONS</em> – list/count/get transactions, add with details
+ *   <li><em>HELPERS</em> – private utilities used by other methods
  * </ul>
  *
  * <p><strong>Notes:</strong>
+ *
  * <ul>
- *   <li>Queries target a PostgreSQL schema and rely on the defined foreign keys/indexes.</li>
- *   <li>Transactional boundaries are caller-controlled unless otherwise documented.</li>
+ *   <li>Queries target a PostgreSQL schema and rely on the defined foreign keys/indexes.
+ *   <li>Transactional boundaries are caller-controlled unless otherwise documented.
  *   <li>Return types favor order-preserving collections (e.g., {@link java.util.LinkedHashMap})
- *       when SQL specifies ordering.</li>
+ *       when SQL specifies ordering.
  * </ul>
  */
 public class Queries {
@@ -51,9 +53,9 @@ public class Queries {
   /**
    * Retrieves all employees whose role is {@code 'manager'} from the {@code personnel} table.
    *
-   * <p>This method executes a simple SELECT filtered on {@code role = 'manager'} and
-   * constructs {@link Employee} instances for each matching row. The list preserves the
-   * database iteration order.
+   * <p>This method executes a simple SELECT filtered on {@code role = 'manager'} and constructs
+   * {@link Employee} instances for each matching row. The list preserves the database iteration
+   * order.
    *
    * @return a list of {@link Employee} objects representing all managers
    * @throws SQLException if a database access error occurs
@@ -107,7 +109,7 @@ public class Queries {
    *
    * @param name the employee's name
    * @param role the employee's role (e.g., cashier, manager)
-   * @param pay  the employee's pay rate
+   * @param pay the employee's pay rate
    * @throws SQLException if a database access error occurs
    */
   public void add_employee(String name, String role, double pay) throws SQLException {
@@ -125,10 +127,10 @@ public class Queries {
   /**
    * Updates an existing employee's name, role, and pay.
    *
-   * @param id   the employee's identifier
+   * @param id the employee's identifier
    * @param name the new name
    * @param role the new role
-   * @param pay  the new pay rate
+   * @param pay the new pay rate
    * @throws SQLException if a database access error occurs or the employee does not exist
    */
   public void update_employee(int id, String name, String role, double pay) throws SQLException {
@@ -150,7 +152,7 @@ public class Queries {
   /**
    * Updates an employee's role.
    *
-   * @param id   the employee's identifier
+   * @param id the employee's identifier
    * @param role the new role value
    * @throws SQLException if a database access error occurs or the employee does not exist
    */
@@ -171,7 +173,7 @@ public class Queries {
   /**
    * Updates an employee's pay.
    *
-   * @param id  the employee's identifier
+   * @param id the employee's identifier
    * @param pay the new pay rate
    * @throws SQLException if a database access error occurs or the employee does not exist
    */
@@ -231,8 +233,8 @@ public class Queries {
   /**
    * Retrieves all menu items and their ingredient ids.
    *
-   * <p>For each menu row, this method also loads ingredient identifiers via a helper query
-   * so that {@link Item} contains its associated ingredient ids.
+   * <p>For each menu row, this method also loads ingredient identifiers via a helper query so that
+   * {@link Item} contains its associated ingredient ids.
    *
    * @return a list of all {@link Item} records in the menu
    * @throws SQLException if a database access error occurs
@@ -318,7 +320,7 @@ public class Queries {
   /**
    * Adds a single ingredient mapping to a menu item.
    *
-   * @param item_id       the menu item's identifier
+   * @param item_id the menu item's identifier
    * @param ingredient_id the ingredient's identifier to associate
    * @throws SQLException if a database access error occurs
    */
@@ -336,7 +338,7 @@ public class Queries {
   /**
    * Removes an ingredient mapping from a menu item.
    *
-   * @param item_id       the menu item's identifier
+   * @param item_id the menu item's identifier
    * @param ingredient_id the ingredient's identifier to disassociate
    * @throws SQLException if a database access error occurs
    */
@@ -355,8 +357,8 @@ public class Queries {
   /**
    * Adds multiple ingredient mappings for a menu item.
    *
-   * @param item_id             the menu item's identifier
-   * @param ingredient_id_list  a list of ingredient identifiers to associate
+   * @param item_id the menu item's identifier
+   * @param ingredient_id_list a list of ingredient identifiers to associate
    * @throws SQLException if a database access error occurs
    */
   public void add_ingredient_map(int item_id, ArrayList<Integer> ingredient_id_list)
@@ -404,7 +406,7 @@ public class Queries {
   /**
    * Updates the price of a menu item.
    *
-   * @param id    the item's identifier
+   * @param id the item's identifier
    * @param price the new price
    * @throws SQLException if a database access error occurs
    */
@@ -583,7 +585,7 @@ public class Queries {
    * Increases an ingredient's inventory quantity by the specified amount.
    *
    * @param ingredient_name the ingredient name to update
-   * @param quantity        the amount to add (must be non-negative)
+   * @param quantity the amount to add (must be non-negative)
    * @throws SQLException if a database access error occurs or the ingredient is not found
    */
   public void refill_inventory(String ingredient_name, int quantity) throws SQLException {
@@ -608,7 +610,7 @@ public class Queries {
    * Decreases an ingredient's inventory quantity by the specified amount.
    *
    * @param ingredient_id the ingredient id to update
-   * @param quantity      the amount to subtract (must be non-negative)
+   * @param quantity the amount to subtract (must be non-negative)
    * @throws SQLException if a database access error occurs or the ingredient is not found
    */
   public void decrease_inventory(int ingredient_id, int quantity) throws SQLException {
@@ -716,7 +718,7 @@ public class Queries {
             + "WHERE t.transaction_time >= ? AND t.transaction_time <= ? "
             + "GROUP BY i.ingredient_name "
             + "ORDER BY times_used DESC, i.ingredient_name";
-    
+
     // Create new object to store values later
     ArrayList<IngredientUsage> res = new ArrayList<>();
 
@@ -731,6 +733,56 @@ public class Queries {
           Integer count = rs.getInt("times_used");
           IngredientUsage curr = new IngredientUsage(name, count);
           res.add(curr);
+        }
+      }
+    }
+    return res;
+  }
+
+  /**
+   * Produces a reverse-chronological “sales tape” of items sold within a time window.
+   *
+   * <p>Each row in the result represents one sold item (one row in {@code transaction_details}),
+   * joined to its transaction timestamp and menu name. Results are ordered by {@code
+   * transactions.transaction_time} descending, then {@code menu.item_name} ascending for stable
+   * per-timestamp ordering.
+   *
+   * @param start inclusive lower bound for {@code transactions.transaction_time}
+   * @param end inclusive upper bound for {@code transactions.transaction_time}
+   * @return a list of {@link TimeItemName} pairs, one per item sold in the window
+   * @throws SQLException if a database access error occurs
+   *     <p><strong>Notes:</strong>
+   *     <ul>
+   *       <li>Assumes {@code transaction_details(transaction_id)} and {@code menu(item_id)} foreign
+   *           keys.
+   *       <li>For large ranges, consider paging (LIMIT/OFFSET) or streaming the ResultSet.
+   *       <li>Indexes on {@code transactions(transaction_time)}, {@code
+   *           transaction_details(transaction_id)}, and {@code transaction_details(item_id)} will
+   *           improve performance.
+   *     </ul>
+   */
+  public ArrayList<TimeItemName> get_sales_report(Timestamp start, Timestamp end)
+      throws SQLException {
+    final String sql =
+        "SELECT m.item_name, t.transaction_time "
+            + "FROM transactions t "
+            + "JOIN transaction_details td ON td.transaction_id = t.transaction_id "
+            + "JOIN menu m ON td.item_id = m.item_id "
+            + "WHERE t.transaction_time >= ? AND t.transaction_time <= ? "
+            + "ORDER BY t.transaction_time DESC, m.item_name ASC";
+
+    ArrayList<TimeItemName> res = new ArrayList<>();
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setTimestamp(1, start);
+      stmt.setTimestamp(2, end);
+
+      try (ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+          Timestamp time = rs.getTimestamp("transaction_time");
+          String itemName = rs.getString("item_name");
+          res.add(new TimeItemName(time, itemName));
         }
       }
     }
@@ -777,7 +829,7 @@ public class Queries {
   /**
    * Retrieves a paged list of transactions using page and page-size.
    *
-   * @param page     the zero-based page number
+   * @param page the zero-based page number
    * @param pageSize the page size (must be > 0)
    * @return a list of {@link Transaction} records for the requested page
    * @throws SQLException if a database access error occurs
@@ -896,11 +948,11 @@ public class Queries {
   /**
    * Inserts a transaction row and returns its generated identifier.
    *
-   * @param customer_name    the customer's name
+   * @param customer_name the customer's name
    * @param transaction_time the time of the transaction
-   * @param employee_id      the employee responsible for the transaction
-   * @param total_price      the total amount charged
-   * @param conn             an open SQL connection (transactional context)
+   * @param employee_id the employee responsible for the transaction
+   * @param total_price the total amount charged
+   * @param conn an open SQL connection (transactional context)
    * @return the generated {@code transaction_id}
    * @throws SQLException if the insert fails or no id is generated
    */
@@ -942,7 +994,7 @@ public class Queries {
    * committed together or rolled back on failure.
    *
    * @param transaction the transaction header data (customer, time, employee, total)
-   * @param items       the list of items sold in the transaction
+   * @param items the list of items sold in the transaction
    * @throws SQLException if any database operation fails
    */
   public void add_transaction_and_details(Transaction transaction, ArrayList<Item> items)
@@ -983,7 +1035,7 @@ public class Queries {
    * Helper that returns ingredient identifiers for a given menu item.
    *
    * @param item_id the menu item's identifier
-   * @param conn    an open SQL connection to use
+   * @param conn an open SQL connection to use
    * @return a list of ingredient ids associated with the item
    * @throws SQLException if a database access error occurs
    */
