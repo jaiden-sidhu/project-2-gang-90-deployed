@@ -83,7 +83,7 @@ public class SalesReportController {
 
     private void loadPage(Timestamp begin_timestamp, Timestamp end_timeStamp) {
         try {
-            ArrayList<TimeItemName> list = queries.get_ingredient_usage(begin_timestamp, end_timeStamp);//insert quiery
+            ArrayList<TimeItemName> list = queries.get_sales_report(begin_timestamp, end_timeStamp);//insert quiery
             
 
             ObservableList<TimeItemName> data = FXCollections.observableArrayList(list);
