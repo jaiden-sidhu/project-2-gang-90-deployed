@@ -6,17 +6,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 // import javafx.beans.property.IntegerProperty;
 
 public class Queries {
   /* Index:
    * EMPLOYEES: get/add/update/delete/count employees
-	 * MENU & ITEMS: menu fetch, item lookups, item–ingredient mapping, CRUD
-	 * SEASONAL MENU: seasonal menu fetch/add/delete
-	 * INGREDIENTS: ingredient CRUD, inventory adjustments, lookups
-	 * TRANSACTIONS: list/count/get transactions, add with details
-	 * HELPERS: private utilities used by other methods
+   * MENU & ITEMS: menu fetch, item lookups, item–ingredient mapping, CRUD
+   * SEASONAL MENU: seasonal menu fetch/add/delete
+   * INGREDIENTS: ingredient CRUD, inventory adjustments, lookups
+   * TRANSACTIONS: list/count/get transactions, add with details
+   * HELPERS: private utilities used by other methods
    */
 
   // ============================== EMPLOYEES ==============================
@@ -467,6 +469,50 @@ public class Queries {
       stmt.setInt(1, id);
       stmt.executeUpdate();
     }
+  }
+
+  /**
+   * Retrieves a mapping of ingredient names to the number of times each ingredient was used in
+   * transactions within a specified time range.
+   *
+   * <p>This method queries the database by joining the {@code transactions}, {@code
+   * transaction_details}, {@code ingredients_map}, and {@code ingredients} tables. Each transaction
+   * within the given timestamp range contributes counts for its associated ingredients. The results
+   * are ordered by usage frequency (descending) and ingredient name, and returned as a {@link
+   * LinkedHashMap} to preserve that order.
+   *
+   * @param start the inclusive lower bound of the timestamp range
+   * @param end the inclusive upper bound of the timestamp range
+   * @return a map where each key is an ingredient name and each value is the number of times that
+   *     ingredient was used during the period
+   * @throws SQLException if a database access error occurs
+   */
+  public static Map<String, Integer> get_ingredient_usage(Timestamp start, Timestamp end)
+      throws SQLException {
+    String sql =
+        "SELECT i.ingredient_name, COUNT(*) AS times_used "
+            + "FROM transactions t "
+            + "JOIN transaction_details td ON td.transaction_id = t.transaction_id "
+            + "JOIN ingredients_map im ON im.item_id = td.item_id "
+            + "JOIN ingredients i ON i.ingredient_id = im.ingredient_id "
+            + "WHERE t.transaction_time >= ? AND t.transaction_time <= ? "
+            + "GROUP BY i.ingredient_name "
+            + "ORDER BY times_used DESC, i.ingredient_name";
+    Map<String, Integer> res = new LinkedHashMap<>();
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setTimestamp(1, start);
+      stmt.setTimestamp(2, end);
+
+      try (ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+          String name = rs.getString("ingredient_name");
+          int count = rs.getInt("times_used");
+          res.put(name, count);
+        }
+      }
+    }
+    return res;
   }
 
   // ============================== TRANSACTIONS ==============================
