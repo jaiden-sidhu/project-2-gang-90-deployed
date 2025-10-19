@@ -130,8 +130,8 @@ public class UsageChartController {
         try{
             LocalDate start_date = LocalDate.now();
             LocalDate end_date = start_date.plusDays(1);
-            Timestamp start_time = new Timestamp(start_date.toEpochDay());
-            Timestamp end_time = new Timestamp(end_date.toEpochDay());
+            Timestamp start_time =  Timestamp.valueOf(start_date.atStartOfDay());
+            Timestamp end_time =  Timestamp.valueOf(end_date.atStartOfDay());
             
             loadPage(start_time,end_time);
         }catch (Exception e) {
@@ -146,8 +146,8 @@ public class UsageChartController {
         try{
             LocalDate end_date = LocalDate.now();
             LocalDate start_date = end_date.minusDays(7);
-            Timestamp start_time = new Timestamp(start_date.toEpochDay());
-            Timestamp end_time = new Timestamp(end_date.toEpochDay());
+            Timestamp start_time =  Timestamp.valueOf(start_date.atStartOfDay());
+            Timestamp end_time =  Timestamp.valueOf(end_date.atStartOfDay());
             loadPage(start_time,end_time);
         }catch (Exception e) {
             statusLabel.setText("Failed to load page: " + e.getMessage());
@@ -159,8 +159,8 @@ public class UsageChartController {
         try{
             LocalDate end_date = LocalDate.now();
             LocalDate start_date = end_date.minusWeeks(30);
-            Timestamp start_time = new Timestamp(start_date.toEpochDay());
-            Timestamp end_time = new Timestamp(end_date.toEpochDay());
+            Timestamp start_time =  Timestamp.valueOf(start_date.atStartOfDay());
+            Timestamp end_time =  Timestamp.valueOf(end_date.atStartOfDay());
             loadPage(start_time,end_time);
         }catch (Exception e) {
             statusLabel.setText("Failed to load page: " + e.getMessage());
@@ -172,8 +172,8 @@ public class UsageChartController {
         try{
             LocalDate end_date = LocalDate.now();
             LocalDate start_date = end_date.minusMonths(1);
-            Timestamp start_time = new Timestamp(start_date.toEpochDay());
-            Timestamp end_time = new Timestamp(end_date.toEpochDay());
+            Timestamp start_time =  Timestamp.valueOf(start_date.atStartOfDay());
+            Timestamp end_time =  Timestamp.valueOf(end_date.atStartOfDay());
             loadPage(start_time,end_time);
         }catch (Exception e) {
             statusLabel.setText("Failed to load page: " + e.getMessage());
