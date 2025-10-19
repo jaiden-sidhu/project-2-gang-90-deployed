@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 
 
 
-public class UsageChartController {
+public class SalesReportController{
 
     @FXML private TableView<Transaction> transactionsTable;
     @FXML private TableColumn<Transaction, Timestamp> colTime;
@@ -40,11 +40,12 @@ public class UsageChartController {
 
     //added
     @FXML private TableView<IngredientUsage> usageTable; //TODO: add IngredientUsage object
-    @FXML private TableColumn<IngredientUsage, TimeStampe> colTimeItem;
+    @FXML private TableColumn<IngredientUsage, String> colIngredientUsage;
     @FXML private TableColumn<IngredientUsage, Integer> colUsed;
     @FXML private DatePicker startDate;
     @FXML private DatePicker endDate;
 
+    @FXML private BarChart<String, Number> usageBarChart;
     
 
     private final Queries queries = new Queries();
