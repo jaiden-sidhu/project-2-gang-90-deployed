@@ -639,8 +639,8 @@ public class Queries {
    */
   public void add_ingredients(Ingredient update_ingredients) throws SQLException {
     String sql =
-        "INSERST INTO  menu (ingredient_name, quantity, category, ingredient_id) VALUE"
-            + " ($1,$2,$3,$4)";
+        "INSERT INTO  menu (ingredient_name, quantity, category, ingredient_id) VALUE"
+            + " (?,?,?,?)";
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -681,7 +681,7 @@ public class Queries {
    * @throws SQLException if a database access error occurs
    */
   public void delete_ingredients(int id) throws SQLException {
-    String sql = "DELETE FROM ingredients WHERE ingredient_id = $1";
+    String sql = "DELETE FROM ingredients WHERE ingredient_id = ?";
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -706,7 +706,7 @@ public class Queries {
    *     ingredient was used during the period
    * @throws SQLException if a database access error occurs
    */
-  public Map<String, Integer> get_ingredient_usage(Timestamp start, Timestamp end)
+  public Ingredient_Usage get_ingredient_usage(Timestamp start, Timestamp end)
       throws SQLException {
     String sql =
         "SELECT i.ingredient_name, COUNT(*) AS times_used "
@@ -717,7 +717,10 @@ public class Queries {
             + "WHERE t.transaction_time >= ? AND t.transaction_time <= ? "
             + "GROUP BY i.ingredient_name "
             + "ORDER BY times_used DESC, i.ingredient_name";
-    Map<String, Integer> res = new LinkedHashMap<>();
+    
+    // Create new object to store values later
+    Ingredient_Usage res = new Ingredient_Usage();
+
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
       stmt.setTimestamp(1, start);
