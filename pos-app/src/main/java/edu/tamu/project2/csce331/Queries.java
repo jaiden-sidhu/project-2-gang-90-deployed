@@ -23,6 +23,16 @@ public class Queries {
 
   // ============================== EMPLOYEES ==============================
 
+  /**
+   * Retrieves all employees whose role is {@code 'manager'} from the {@code personnel} table.
+   *
+   * <p>This method executes a simple SELECT filtered on {@code role = 'manager'} and
+   * constructs {@link Employee} instances for each matching row. The list preserves the
+   * database iteration order.
+   *
+   * @return a list of {@link Employee} objects representing all managers
+   * @throws SQLException if a database access error occurs
+   */
   public ArrayList<Employee> get_managers() throws SQLException {
     String sql = "SELECT * FROM personnel WHERE role = 'manager';";
 
@@ -42,6 +52,12 @@ public class Queries {
     }
   }
 
+  /**
+   * Retrieves all employees from the {@code personnel} table.
+   *
+   * @return a list of all {@link Employee} records
+   * @throws SQLException if a database access error occurs
+   */
   public ArrayList<Employee> get_employee() throws SQLException {
     String sql = "SELECT * FROM personnel;";
 
@@ -61,6 +77,14 @@ public class Queries {
     }
   }
 
+  /**
+   * Inserts a new employee into the {@code personnel} table.
+   *
+   * @param name the employee's name
+   * @param role the employee's role (e.g., cashier, manager)
+   * @param pay  the employee's pay rate
+   * @throws SQLException if a database access error occurs
+   */
   public void add_employee(String name, String role, double pay) throws SQLException {
     String sql = "INSERT INTO personnel (name, role, pay) VALUES (?, ?, ?);";
 
@@ -73,6 +97,15 @@ public class Queries {
     }
   }
 
+  /**
+   * Updates an existing employee's name, role, and pay.
+   *
+   * @param id   the employee's identifier
+   * @param name the new name
+   * @param role the new role
+   * @param pay  the new pay rate
+   * @throws SQLException if a database access error occurs or the employee does not exist
+   */
   public void update_employee(int id, String name, String role, double pay) throws SQLException {
     String sql = "UPDATE personnel SET name = ?, role = ?, pay = ? WHERE employee_id = ?;";
 
@@ -89,6 +122,13 @@ public class Queries {
     }
   }
 
+  /**
+   * Updates an employee's role.
+   *
+   * @param id   the employee's identifier
+   * @param role the new role value
+   * @throws SQLException if a database access error occurs or the employee does not exist
+   */
   public void update_employee_role(int id, String role) throws SQLException {
     String sql = "UPDATE personnel SET role = ? WHERE employee_id = ?;";
 
@@ -103,6 +143,13 @@ public class Queries {
     }
   }
 
+  /**
+   * Updates an employee's pay.
+   *
+   * @param id  the employee's identifier
+   * @param pay the new pay rate
+   * @throws SQLException if a database access error occurs or the employee does not exist
+   */
   public void update_employee_pay(int id, double pay) throws SQLException {
     String sql = "UPDATE personnel SET pay = ? WHERE employee_id = ?;";
 
@@ -117,6 +164,12 @@ public class Queries {
     }
   }
 
+  /**
+   * Deletes an employee by identifier.
+   *
+   * @param id the employee's identifier
+   * @throws SQLException if a database access error occurs or the employee does not exist
+   */
   public void delete_employee(int id) throws SQLException {
     String sql = "DELETE FROM personnel WHERE employee_id = ?;";
 
@@ -130,6 +183,12 @@ public class Queries {
     }
   }
 
+  /**
+   * Counts the number of rows in the {@code personnel} table.
+   *
+   * @return the total number of employees
+   * @throws SQLException if a database access error occurs
+   */
   public int count_employees() throws SQLException {
     String sql = "SELECT COUNT(*) AS cnt FROM personnel;";
     try (Connection conn = Database.getConnection();
@@ -144,6 +203,15 @@ public class Queries {
 
   // ============================== MENU & ITEMS ==============================
 
+  /**
+   * Retrieves all menu items and their ingredient ids.
+   *
+   * <p>For each menu row, this method also loads ingredient identifiers via a helper query
+   * so that {@link Item} contains its associated ingredient ids.
+   *
+   * @return a list of all {@link Item} records in the menu
+   * @throws SQLException if a database access error occurs
+   */
   public ArrayList<Item> get_menu() throws SQLException {
     String sql = "SELECT * FROM menu;";
 
@@ -165,6 +233,13 @@ public class Queries {
     }
   }
 
+  /**
+   * Looks up an item's identifier by its name.
+   *
+   * @param item the item name to search for
+   * @return the corresponding {@code item_id}
+   * @throws SQLException if the item does not exist or a database access error occurs
+   */
   public int get_item_id(String item) throws SQLException {
     String sql = "SELECT item_id, item_name FROM menu WHERE item_name = ?;";
 
@@ -181,6 +256,13 @@ public class Queries {
     }
   }
 
+  /**
+   * Retrieves the ingredient details for a given menu item.
+   *
+   * @param item_id the menu item's identifier
+   * @return a list of {@link Ingredient} records used by the item
+   * @throws SQLException if a database access error occurs
+   */
   public java.util.ArrayList<Ingredient> get_item_ingredients(int item_id)
       throws java.sql.SQLException {
     String sql_string =
@@ -208,6 +290,13 @@ public class Queries {
     }
   }
 
+  /**
+   * Adds a single ingredient mapping to a menu item.
+   *
+   * @param item_id       the menu item's identifier
+   * @param ingredient_id the ingredient's identifier to associate
+   * @throws SQLException if a database access error occurs
+   */
   public void add_ingredient_to_item(int item_id, int ingredient_id) throws java.sql.SQLException {
     String sql_string = "INSERT INTO ingredients_map (ingredient_id, item_id) VALUES (?, ?);";
 
@@ -219,6 +308,13 @@ public class Queries {
     }
   }
 
+  /**
+   * Removes an ingredient mapping from a menu item.
+   *
+   * @param item_id       the menu item's identifier
+   * @param ingredient_id the ingredient's identifier to disassociate
+   * @throws SQLException if a database access error occurs
+   */
   public void remove_ingredient_from_item(int item_id, int ingredient_id)
       throws java.sql.SQLException {
     String sql_string = "DELETE FROM ingredients_map WHERE item_id = ? AND ingredient_id = ?;";
@@ -231,6 +327,13 @@ public class Queries {
     }
   }
 
+  /**
+   * Adds multiple ingredient mappings for a menu item.
+   *
+   * @param item_id             the menu item's identifier
+   * @param ingredient_id_list  a list of ingredient identifiers to associate
+   * @throws SQLException if a database access error occurs
+   */
   public void add_ingredient_map(int item_id, ArrayList<Integer> ingredient_id_list)
       throws SQLException {
     String sql = "INSERT INTO ingredients_map (ingredients_id, item_id) VALUES (?, ?);";
@@ -244,6 +347,13 @@ public class Queries {
     }
   }
 
+  /**
+   * Inserts a new menu item and returns the generated {@code item_id}.
+   *
+   * @param added_item the item to insert (name, popularity, price are used)
+   * @return the generated {@code item_id}
+   * @throws SQLException if the insert fails or a database access error occurs
+   */
   public int add_menu_item(Item added_item) throws java.sql.SQLException {
 
     String sql_string =
@@ -266,6 +376,13 @@ public class Queries {
     throw new java.sql.SQLException("Failed to insert menu item properly");
   }
 
+  /**
+   * Updates the price of a menu item.
+   *
+   * @param id    the item's identifier
+   * @param price the new price
+   * @throws SQLException if a database access error occurs
+   */
   public void update_menu_price(int id, double price) throws SQLException {
     String sql = "UPDATE  menu SET price = ? WHERE item_id = ?";
 
@@ -277,6 +394,12 @@ public class Queries {
     }
   }
 
+  /**
+   * Updates a menu item's fields.
+   *
+   * @param update_item the item containing new values (name, popularity, price, id)
+   * @throws SQLException if a database access error occurs
+   */
   public void update_menu_items(Item update_item) throws SQLException {
     String sql = "UPDATE  menu SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
 
@@ -290,6 +413,12 @@ public class Queries {
     }
   }
 
+  /**
+   * Deletes a menu item by identifier.
+   *
+   * @param id the item's identifier
+   * @throws SQLException if a database access error occurs
+   */
   public void delete_item(int id) throws SQLException {
     String sql = "DELETE FROM menu ingredients_map WHERE item_id = ?";
 
@@ -302,6 +431,12 @@ public class Queries {
 
   // ============================== SEASONAL MENU ==============================
 
+  /**
+   * Retrieves all items from the seasonal menu, including their ingredient ids.
+   *
+   * @return a list of seasonal {@link Item} entries
+   * @throws SQLException if a database access error occurs
+   */
   public ArrayList<Item> get_seasonal_menu() throws SQLException {
     String sql_string = "SELECT * FROM seasonal_menu;";
 
@@ -323,6 +458,13 @@ public class Queries {
     }
   }
 
+  /**
+   * Inserts a new seasonal menu item and returns its generated identifier.
+   *
+   * @param added_item the seasonal item to insert
+   * @return the generated seasonal {@code item_id}
+   * @throws SQLException if the insert fails or a database access error occurs
+   */
   public int add_seasonal_menu_item(Item added_item) throws java.sql.SQLException {
     String sql_string =
         "INSERT INTO seasonal_menu (item_name, item_popularity, price, start_time, end_time) "
@@ -345,6 +487,12 @@ public class Queries {
     throw new java.sql.SQLException("No ID returned from INSERT");
   }
 
+  /**
+   * Deletes a seasonal menu item by identifier.
+   *
+   * @param id the item's identifier
+   * @throws SQLException if a database access error occurs
+   */
   public void delete_seasonal_item(int id) throws SQLException {
     String sql = "DELETE FROM seasonal_menu WHERE item_id = ?";
 
@@ -357,6 +505,12 @@ public class Queries {
 
   // ============================== INGREDIENTS ==============================
 
+  /**
+   * Retrieves all ingredients.
+   *
+   * @return a list of {@link Ingredient} records
+   * @throws SQLException if a database access error occurs
+   */
   public ArrayList<Ingredient> get_ingredients() throws SQLException {
     String sql = "SELECT * FROM ingredients";
 
@@ -377,6 +531,13 @@ public class Queries {
     }
   }
 
+  /**
+   * Looks up an ingredient id by its name.
+   *
+   * @param ingredient the ingredient name
+   * @return the corresponding {@code ingredient_id}
+   * @throws SQLException if the ingredient does not exist or a database access error occurs
+   */
   public int get_ingredient_id(String ingredient) throws SQLException {
     String sql = "SELECT item_id, item_name FROM ingredients WHERE ingredient_name = ?;";
 
@@ -393,6 +554,13 @@ public class Queries {
     }
   }
 
+  /**
+   * Increases an ingredient's inventory quantity by the specified amount.
+   *
+   * @param ingredient_name the ingredient name to update
+   * @param quantity        the amount to add (must be non-negative)
+   * @throws SQLException if a database access error occurs or the ingredient is not found
+   */
   public void refill_inventory(String ingredient_name, int quantity) throws SQLException {
     if (quantity < 0) {
       throw new IllegalArgumentException("Quantity cannot be negative.");
@@ -411,6 +579,13 @@ public class Queries {
     }
   }
 
+  /**
+   * Decreases an ingredient's inventory quantity by the specified amount.
+   *
+   * @param ingredient_id the ingredient id to update
+   * @param quantity      the amount to subtract (must be non-negative)
+   * @throws SQLException if a database access error occurs or the ingredient is not found
+   */
   public void decrease_inventory(int ingredient_id, int quantity) throws SQLException {
     if (quantity < 0) {
       throw new IllegalArgumentException("Quantity cannot be negative.");
@@ -430,6 +605,12 @@ public class Queries {
   }
 
   // need to add ingredits
+  /**
+   * Adds a new ingredient record.
+   *
+   * @param update_ingredients the ingredient data to insert
+   * @throws SQLException if a database access error occurs
+   */
   public void add_ingredients(Ingredient update_ingredients) throws SQLException {
     String sql =
         "INSERST INTO  menu (ingredient_name, quantity, category, ingredient_id) VALUE"
@@ -446,6 +627,12 @@ public class Queries {
   }
 
   // need to alter ingredints
+  /**
+   * Updates fields on an existing ingredient record.
+   *
+   * @param update_ingredients the ingredient data containing new values
+   * @throws SQLException if a database access error occurs
+   */
   public void update_ingredients(Ingredient update_ingredients) throws SQLException {
     String sql =
         "UPDATE  ingredients SET item_name = ? item_popularity = ? price = ? WHERE item_id = ?";
@@ -461,6 +648,12 @@ public class Queries {
   }
 
   // need to delete ingredints
+  /**
+   * Deletes an ingredient by identifier.
+   *
+   * @param id the ingredient id
+   * @throws SQLException if a database access error occurs
+   */
   public void delete_ingredients(int id) throws SQLException {
     String sql = "DELETE FROM ingredients WHERE ingredient_id = $1";
 
@@ -517,6 +710,13 @@ public class Queries {
 
   // ============================== TRANSACTIONS ==============================
 
+  /**
+   * Retrieves a paged list of transactions using an absolute offset.
+   *
+   * @param offset the starting row offset (must be non-negative)
+   * @return up to 50 {@link Transaction} records beginning at the offset
+   * @throws SQLException if a database access error occurs
+   */
   public ArrayList<Transaction> get_transactions(int offset) throws SQLException {
     if (offset < 0) {
       throw new IllegalArgumentException("Offset cannot be negative.");
@@ -545,6 +745,14 @@ public class Queries {
     }
   }
 
+  /**
+   * Retrieves a paged list of transactions using page and page-size.
+   *
+   * @param page     the zero-based page number
+   * @param pageSize the page size (must be > 0)
+   * @return a list of {@link Transaction} records for the requested page
+   * @throws SQLException if a database access error occurs
+   */
   public ArrayList<Transaction> get_transactions(int page, int pageSize) throws SQLException {
     if (page < 0 || pageSize <= 0) {
       throw new IllegalArgumentException("Page must be >= 0 and pageSize > 0");
@@ -572,6 +780,12 @@ public class Queries {
     }
   }
 
+  /**
+   * Counts the number of rows in the {@code transactions} table.
+   *
+   * @return the total number of transactions
+   * @throws SQLException if a database access error occurs
+   */
   public int count_transactions() throws SQLException {
     String sql = "SELECT COUNT(*) AS cnt FROM transactions;";
     try (Connection conn = Database.getConnection();
@@ -584,6 +798,13 @@ public class Queries {
     }
   }
 
+  /**
+   * Retrieves a single transaction by identifier.
+   *
+   * @param transaction_id the transaction identifier
+   * @return the matching {@link Transaction}
+   * @throws SQLException if the transaction does not exist or a database access error occurs
+   */
   public Transaction get_transaction(int transaction_id) throws SQLException {
     if (transaction_id < 0) {
       throw new IllegalArgumentException("Transaction ID cannot be negative.");
@@ -609,6 +830,13 @@ public class Queries {
     }
   }
 
+  /**
+   * Retrieves all transactions that occurred at an exact timestamp.
+   *
+   * @param time the exact timestamp to match
+   * @return a list of {@link Transaction} records matching the timestamp
+   * @throws SQLException if a database access error occurs
+   */
   public ArrayList<Transaction> get_transactions(Timestamp time) throws SQLException {
     String sql = "SELECT * FROM transactions WHERE  transaction_time = ?;";
 
@@ -636,6 +864,17 @@ public class Queries {
     }
   }
 
+  /**
+   * Inserts a transaction row and returns its generated identifier.
+   *
+   * @param customer_name    the customer's name
+   * @param transaction_time the time of the transaction
+   * @param employee_id      the employee responsible for the transaction
+   * @param total_price      the total amount charged
+   * @param conn             an open SQL connection (transactional context)
+   * @return the generated {@code transaction_id}
+   * @throws SQLException if the insert fails or no id is generated
+   */
   private int add_transaction(
       String customer_name,
       Timestamp transaction_time,
@@ -666,6 +905,17 @@ public class Queries {
     }
   }
 
+  /**
+   * Inserts a transaction header and its associated item detail rows atomically.
+   *
+   * <p>This method begins a transaction, creates the {@code transactions} row, then inserts
+   * corresponding {@code transaction_details} rows for each provided item. All changes are
+   * committed together or rolled back on failure.
+   *
+   * @param transaction the transaction header data (customer, time, employee, total)
+   * @param items       the list of items sold in the transaction
+   * @throws SQLException if any database operation fails
+   */
   public void add_transaction_and_details(Transaction transaction, ArrayList<Item> items)
       throws SQLException {
     try (Connection conn = Database.getConnection()) {
@@ -700,6 +950,14 @@ public class Queries {
 
   // ============================== HELPERS ==============================
 
+  /**
+   * Helper that returns ingredient identifiers for a given menu item.
+   *
+   * @param item_id the menu item's identifier
+   * @param conn    an open SQL connection to use
+   * @return a list of ingredient ids associated with the item
+   * @throws SQLException if a database access error occurs
+   */
   private ArrayList<Integer> get_ingredients_for_item(int item_id, Connection conn)
       throws SQLException {
     String sql = "SELECT ingredient_id FROM ingredients_map WHERE item_id = ?;";
