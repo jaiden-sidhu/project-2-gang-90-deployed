@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.BarChart?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -36,7 +33,7 @@
          <children>
                <VBox layoutX="10.0" layoutY="10.0" prefHeight="746.0" prefWidth="966.0" spacing="10.0">
                   <children>
-                     <Text style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Product Usage" />
+                     <Text style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Sales Report" />
                      <HBox spacing="8.0">
                         <children>
                            <Label text="Start date:" />
@@ -71,10 +68,10 @@
                            <Text fx:id="statusLabel" text="" />
                         </children>
                      </Pane>
-                     <TableView fx:id="usageTable" prefHeight="268.0" prefWidth="966.0">
+                     <TableView fx:id="itemTable" prefHeight="624.0" prefWidth="966.0">
                         <columns>
-                           <TableColumn fx:id="colIngredientUsage" prefWidth="420.0" text="Ingredient" />
-                           <TableColumn fx:id="colUsed" prefWidth="545.6000122070312" text="Used" />
+                           <TableColumn fx:id="colTimeItem" prefWidth="420.0" text="Time" />
+                           <TableColumn fx:id="colName" prefWidth="545.6000122070312" text="Item" />
                         </columns>
                      </TableView>
                   </children>
