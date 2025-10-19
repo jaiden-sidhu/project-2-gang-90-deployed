@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 
 
 
-public class SalesReportController{
+public class SalesReportController {
 
     @FXML private TableView<Transaction> transactionsTable;
     @FXML private TableColumn<Transaction, Timestamp> colTime;
@@ -39,13 +39,12 @@ public class SalesReportController{
 
 
     //added
-    @FXML private TableView<IngredientUsage> usageTable; //TODO: add IngredientUsage object
-    @FXML private TableColumn<IngredientUsage, String> colIngredientUsage;
-    @FXML private TableColumn<IngredientUsage, Integer> colUsed;
+    @FXML private TableView<TimeItemName> itemTable; //TODO: add IngredientUsage object
+    @FXML private TableColumn<TimeItemName, Timestamp> colTimeItem;
+    @FXML private TableColumn<TimeItemName, String> colName;
     @FXML private DatePicker startDate;
     @FXML private DatePicker endDate;
 
-    @FXML private BarChart<String, Number> usageBarChart;
     
 
     private final Queries queries = new Queries();
@@ -55,8 +54,8 @@ public class SalesReportController{
     @FXML
     public void initialize() {
         // Configure columns
-        colIngredientUsage.setCellValueFactory( new PropertyValueFactory<>("name"));
-        colUsed.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        colTimeItem.setCellValueFactory( new PropertyValueFactory<>("name"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("time"));
     
 
         try {
@@ -84,31 +83,12 @@ public class SalesReportController{
 
     private void loadPage(Timestamp begin_timestamp, Timestamp end_timeStamp) {
         try {
-            ArrayList<IngredientUsage> list = queries.get_ingredient_usage(begin_timestamp, end_timeStamp);//insert quiery
+            ArrayList<TimeItemName> list = queries.get_ingredient_usage(begin_timestamp, end_timeStamp);//insert quiery
             
-            
-            System.out.println(begin_timestamp);
-            System.out.println(end_timeStamp);
 
-            System.out.println("hello does this work");
-
-            ObservableList<IngredientUsage> data = FXCollections.observableArrayList(list);
-            usageTable.setItems(data);
+            ObservableList<TimeItemName> data = FXCollections.observableArrayList(list);
+            itemTable.setItems(data);
             statusLabel.setText(String.format("Showing %d of %d total", data.size(), totalCount));
-            usageBarChart.getData().clear();
-            usageBarChart.setAnimated(false);
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            series.setName("Total Usage");
-            
-            for (IngredientUsage entry : list) {
-                String x = entry.getName();
-                Number y = entry.getAmount();
-                if(x != null && y != null){
-                    series.getData().add(new XYChart.Data<>(x, y));
-                }
-            }
-
-            usageBarChart.getData().add(series);
 
         } catch (Exception e) {
             statusLabel.setText("Failed to load page: " + e.getMessage());
