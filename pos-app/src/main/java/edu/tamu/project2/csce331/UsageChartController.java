@@ -56,7 +56,7 @@ public class UsageChartController {
     public void initialize() {
         // Configure columns
         colIngredientUsage.setCellValueFactory( new PropertyValueFactory<>("name"));
-        colUsed.setCellValueFactory(new PropertyValueFactory("amount"));
+        colUsed.setCellValueFactory(new PropertyValueFactory<>("amount"));
     
 
         try {
@@ -84,14 +84,13 @@ public class UsageChartController {
 
     private void loadPage(Timestamp begin_timestamp, Timestamp end_timeStamp) {
         try {
-            Ingredient_Usage list = queries.get_ingredient_usage(begin_timestamp, end_timeStamp);//insert quiery
+            ArrayList<Ingredient_Usage> list = queries.get_ingredient_usage(begin_timestamp, end_timeStamp);//insert quiery
             
-            Map<String,Integer> real_list = list.asMap();
+            
             System.out.println(begin_timestamp);
             System.out.println(end_timeStamp);
 
             System.out.println("hello does this work");
-            System.out.println(real_list);
 
             ObservableList<Ingredient_Usage> data = FXCollections.observableArrayList(list);
             usageTable.setItems(data);
@@ -101,8 +100,8 @@ public class UsageChartController {
             XYChart.Series<String, Integer> series = new XYChart.Series<>();
             series.setName("Total Usage");
             
-            for (String entry : real_list.keySet()) {
-                series.getData().add(new XYChart.Data<>(entry, list.get(entry)));
+            for (Ingredient_Usage entry : list) {
+                series.getData().add(new XYChart.Data<>(entry.get_name(), entry.get_amount()));
             }
 
             usageBarChart.getData().add(series);
