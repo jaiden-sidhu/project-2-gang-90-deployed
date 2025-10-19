@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.chart.BarChart?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.tamu.project2.csce331.UsageChartController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="812.0" prefWidth="1169.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.tamu.project2.csce331.UsageChartController">
    <children>
-      <Pane layoutY="-1.0" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #393A3D;">
+      <Pane layoutY="-1.0" prefHeight="50.0" prefWidth="1169.0" style="-fx-background-color: #393A3D;">
          <children>
             <Text fill="WHITE" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Usage Chart" />
-            <Text fill="WHITE" layoutX="700.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00:00AM/PM" />
+            <Text fill="WHITE" layoutX="1052.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00:00AM/PM" />
          </children>
       </Pane>
-      <Pane layoutY="49.0" prefHeight="431.0" prefWidth="180.0" style="-fx-background-color: #D9D9D9;">
+      <Pane layoutY="49.0" prefHeight="765.0" prefWidth="180.0" style="-fx-background-color: #D9D9D9;">
          <children>
             <Button layoutX="12.0" layoutY="14.0" mnemonicParsing="false" onAction="#go_cashier" prefHeight="28.0" prefWidth="156.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Recent Transactions" />
             <Button layoutX="12.0" layoutY="48.0" mnemonicParsing="false" onAction="#go_products" prefHeight="28.0" prefWidth="156.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Products" />
@@ -32,43 +32,29 @@
             <Separator layoutX="12.0" layoutY="74.0" prefHeight="2.0" prefWidth="156.0" />
          </children>
       </Pane>
-      <Pane layoutX="179.0" layoutY="50.0" prefHeight="430.0" prefWidth="611.0">
+      <Pane layoutX="179.0" layoutY="50.0" prefHeight="420.0" prefWidth="611.0">
          <children>
-               <VBox layoutX="10.0" layoutY="10.0" spacing="10.0" prefWidth="591.0" prefHeight="410.0">
+               <VBox layoutX="10.0" layoutY="10.0" prefHeight="746.0" prefWidth="966.0" spacing="10.0">
                   <children>
-                     <Text text="Product Usage" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                     <Text style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Product Usage" />
                      <HBox spacing="8.0">
                         <children>
                            <Label text="Start date:" />
                            <DatePicker fx:id="startDate" />
                            <Label text="End date:" />
                            <DatePicker fx:id="endDate" />
-                           <Button text="Apply" onAction="#apply_dates"/>
+                           <Button onAction="#apply_dates" text="Apply" />
                         </children>
                      </HBox>
                      <HBox spacing="6.0">
                         <children>
                            <Label text="Quick ranges:" />
-                           <Button text="Today" onAction="#apply_today"/>
-                           <Button text="Last 7 days" onAction="#apply_week"/>
-                           <Button text="Last 30 days" onAction="#apply_30_days" />
-                           <Button text="This month" onAction="#apply_month"/>
+                           <Button onAction="#apply_today" text="Today" />
+                           <Button onAction="#apply_week" text="Last 7 days" />
+                           <Button onAction="#apply_30_days" text="Last 30 days" />
+                           <Button onAction="#apply_month" text="This month" />
                         </children>
                      </HBox>
-                     <BarChart fx:id="usageBarChart" prefHeight="200.0" prefWidth="580.0">
-                        <xAxis>
-                           <CategoryAxis label="Ingredient" />
-                        </xAxis>
-                        <yAxis>
-                           <NumberAxis label="Units Used" />
-                        </yAxis>
-                     </BarChart>
-                     <TableView fx:id="usageTable" prefHeight="180.0" prefWidth="580.0">
-                        <columns>
-                           <TableColumn fx:id="colIngredientUsage" text="Ingredient" prefWidth="420.0" />
-                           <TableColumn fx:id="colUsed" text="Used" prefWidth="150.0" />
-                        </columns>
-                     </TableView>
                      <!-- Hidden nodes required by TransactionsHistoryController to avoid NPEs -->
                      <Pane managed="false" visible="false">
                         <children>
@@ -85,6 +71,20 @@
                            <Text fx:id="statusLabel" text="" />
                         </children>
                      </Pane>
+                     <BarChart fx:id="usageBarChart" prefHeight="333.0" prefWidth="966.0">
+                        <xAxis>
+                           <CategoryAxis label="Ingredient" />
+                        </xAxis>
+                        <yAxis>
+                           <NumberAxis label="Units Used" />
+                        </yAxis>
+                     </BarChart>
+                     <TableView fx:id="usageTable" prefHeight="268.0" prefWidth="966.0">
+                        <columns>
+                           <TableColumn fx:id="colIngredientUsage" prefWidth="420.0" text="Ingredient" />
+                           <TableColumn fx:id="colUsed" prefWidth="150.0" text="Used" />
+                        </columns>
+                     </TableView>
                   </children>
                </VBox>
          </children>
