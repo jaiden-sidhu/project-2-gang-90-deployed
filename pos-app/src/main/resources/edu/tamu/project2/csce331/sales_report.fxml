@@ -70,8 +70,8 @@
                      </Pane>
                      <TableView fx:id="itemTable" prefHeight="624.0" prefWidth="966.0">
                         <columns>
-                           <TableColumn fx:id="colTimeItem" prefWidth="420.0" text="Time" />
-                           <TableColumn fx:id="colName" prefWidth="545.6000122070312" text="Item" />
+                           <TableColumn fx:id="colTimeItem" prefWidth="420.0" text="Item" />
+                           <TableColumn fx:id="colName" prefWidth="545.6000122070312" text="Time" />
                         </columns>
                      </TableView>
                   </children>
