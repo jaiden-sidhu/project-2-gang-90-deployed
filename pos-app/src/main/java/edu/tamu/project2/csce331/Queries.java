@@ -51,7 +51,7 @@ public class Queries {
   // ============================== EMPLOYEES ==============================
 
   /**
-   * Retrieves all employees whose role is {@code 'manager'} from the {@code personnel} table.
+   * Retrieves all active employees whose role is {@code 'manager'} from the {@code personnel} table.
    *
    * <p>This method executes a simple SELECT filtered on {@code role = 'manager'} and constructs
    * {@link Employee} instances for each matching row. The list preserves the database iteration
@@ -61,7 +61,7 @@ public class Queries {
    * @throws SQLException if a database access error occurs
    */
   public ArrayList<Employee> get_managers() throws SQLException {
-    String sql = "SELECT * FROM personnel WHERE role = 'manager';";
+    String sql = "SELECT * FROM personnel WHERE role = 'manager' AND is_active = TRUE;";
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);
@@ -81,13 +81,13 @@ public class Queries {
   }
 
   /**
-   * Retrieves all employees from the {@code personnel} table.
+   * Retrieves all active employees from the {@code personnel} table.
    *
    * @return a list of all {@link Employee} records
    * @throws SQLException if a database access error occurs
    */
   public ArrayList<Employee> get_employee() throws SQLException {
-    String sql = "SELECT * FROM personnel;";
+    String sql = "SELECT * FROM personnel WHERE is_active = TRUE;";
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);
@@ -126,6 +126,7 @@ public class Queries {
       stmt.executeUpdate();
     }
   }
+  
   /**
    * Inserts a new employee into the {@code personnel} table. 
    *
