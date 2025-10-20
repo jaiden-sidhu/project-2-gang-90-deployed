@@ -15,14 +15,14 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.tamu.project2.csce331.CashierController">
+<StackPane stylesheets="@cashier.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.tamu.project2.csce331.CashierController">
   <VBox prefHeight="800.0" prefWidth="1280.0">
     <children>
       <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
         <children>
           <BorderPane prefHeight="800.0" prefWidth="1280.0">
             <top>
-              <HBox prefHeight="46.0" spacing="10.0" styleClass="top-bar" stylesheets="@cashier.css" BorderPane.alignment="CENTER">
+              <HBox prefHeight="46.0" spacing="10.0" styleClass="top-bar" BorderPane.alignment="CENTER">
                 <padding><Insets bottom="12" left="20" right="20" top="12" /></padding>
                 <children>
                   <Label styleClass="top-title" text="Cashier Interface" />
@@ -33,7 +33,7 @@
             </top>
 
             <left>
-              <VBox prefWidth="332.0" styleClass="sidebar" stylesheets="@cashier.css" BorderPane.alignment="CENTER">
+              <VBox prefWidth="332.0" styleClass="sidebar" BorderPane.alignment="CENTER">
                 <padding><Insets bottom="15" left="15" right="15" top="15" /></padding>
                 <children>
                   <Button mnemonicParsing="false" onAction="#go_products" text="Manager View">
@@ -47,7 +47,7 @@
             </left>
 
             <center>
-              <ScrollPane fitToWidth="true" styleClass="drink-menu" stylesheets="@cashier.css" BorderPane.alignment="CENTER">
+              <ScrollPane fitToWidth="true" styleClass="drink-menu" BorderPane.alignment="CENTER">
                 <content>
                   <GridPane fx:id="drinkGrid" alignment="TOP_LEFT" hgap="10" vgap="10">
                     <padding>
@@ -59,11 +59,11 @@
             </center>
 
             <right>
-              <VBox prefWidth="414.0" spacing="15" styleClass="order-panel" stylesheets="@cashier.css" BorderPane.alignment="CENTER">
+              <VBox prefWidth="414.0" spacing="15" styleClass="order-panel" BorderPane.alignment="CENTER">
                 <padding><Insets bottom="15" left="15" right="15" top="15" /></padding>
                 <children>
                   <Label styleClass="order-title" text="Current Order" />
-                  <VBox fx:id="orderItems" spacing="10" styleClass="order-item-box" stylesheets="@cashier.css">
+                  <VBox fx:id="orderItems" spacing="10" styleClass="order-item-box">
                     <children>
                       <Label text="No items yet." />
                     </children>
@@ -75,15 +75,17 @@
                       <children>
                         <Label text="Subtotal:" />
                         <Region HBox.hgrow="ALWAYS" />
+                        <Label fx:id="subtotalLabel" text="0.00" />
                       </children>
                     </HBox>
                     <HBox>
                       <children>
                         <Label text="Total:" />
                         <Region HBox.hgrow="ALWAYS" />
+                        <Label fx:id="totalLabel" text="0.00" />
                       </children>
                     </HBox>
-                    <Button fx:id="charge_button" maxWidth="Infinity" onAction="#openChargePopup" text="Charge" />
+                    <Button fx:id="chargeButton" maxWidth="Infinity" onAction="#openChargePopup" text="Charge" />
                   </VBox>
                 </children>
               </VBox>

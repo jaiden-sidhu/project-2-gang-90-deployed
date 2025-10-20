@@ -22,11 +22,11 @@ import java.util.List;
 public class CashierController {
 
     @FXML
-    private Label subtotal_label;
+    private Label subtotalLabel;
     @FXML
-    private Label total_label;
+    private Label totalLabel;
     @FXML
-    private Button charge_button;
+    private Button chargeButton;
     @FXML
     private VBox orderItems;
     @FXML
@@ -262,9 +262,9 @@ public class CashierController {
             }
         }
         this.subtotal = sum;
-        // subtotal_label.setText("$" + df.format(subtotal));
-        // total_label.setText("$" + df.format(subtotal));
-        // charge_button.setText("Charge $" + df.format(subtotal));
+        subtotalLabel.setText(df.format(subtotal));
+        totalLabel.setText(df.format(subtotal));
+        chargeButton.setText("Charge " + df.format(subtotal));
     }
 
     private void resetModificationButtons() {
@@ -367,9 +367,9 @@ public class CashierController {
             orderItems.getChildren().clear();
             orderItems.getChildren().add(new Label("No items yet."));
             subtotal = 0;
-            subtotal_label.setText("$0.00");
-            total_label.setText("$0.00");
-            charge_button.setText("Charge $0.00");
+            subtotalLabel.setText("0.00");
+            totalLabel.setText("0.00");
+            chargeButton.setText("Charge 0.00");
 
             customerNameField.clear();
             chargePopup.setVisible(false);
@@ -385,7 +385,7 @@ public class CashierController {
     public void go_products() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
-            Stage stage = (Stage) total_label.getScene().getWindow();
+            Stage stage = (Stage) totalLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Products");
             stage.show();
