@@ -77,41 +77,29 @@ public class TransactionsHistoryController {
     }
 
     @FXML
-    public void go_manage_employee() 
+    public void go_products() 
     { 
-        try 
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/employee_list.fxml"));
-            Parent root = loader.load();
-
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
             Stage stage = (Stage) statusLabel.getScene().getWindow();
-
             stage.setScene(new Scene(root));
-            stage.setTitle("Manager - Employee");
+            stage.setTitle("Manager - Products");
             stage.show();
-        } 
-        catch (IOException e) 
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    public void go_products() 
+    public void go_sales() 
     { 
-        try 
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
-            Parent root = loader.load();
-
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/transactions_history.fxml"));
             Stage stage = (Stage) statusLabel.getScene().getWindow();
-
             stage.setScene(new Scene(root));
-            stage.setTitle("Manager - Products");
+            stage.setTitle("Manager - Transactions");
             stage.show();
-        } 
-        catch (IOException e) 
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -119,19 +107,27 @@ public class TransactionsHistoryController {
     @FXML
     public void go_cashier() 
     { 
-        try 
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/cashier_menu.fxml"));
-            Parent root = loader.load();
-
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/cashier_menu.fxml"));
             Stage stage = (Stage) statusLabel.getScene().getWindow();
-
             stage.setScene(new Scene(root));
             stage.setTitle("Cashier - Menu");
             stage.show();
-        } 
-        catch (IOException e) 
-        {
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void go_employees() 
+    { 
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/employee_list.fxml"));
+            Stage stage = (Stage) statusLabel.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - Employees");
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

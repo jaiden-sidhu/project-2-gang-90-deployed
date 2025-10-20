@@ -2,10 +2,12 @@ package edu.tamu.project2.csce331;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
@@ -20,21 +22,33 @@ import java.util.List;
 public class CashierController {
 
     @FXML
-    private Label subtotal_label;
+    private Label subtotalLabel;
     @FXML
-    private Label total_label;
+    private Label totalLabel;
     @FXML
-    private Button charge_button;
+    private Label employeeName;
+    @FXML
+    private Button chargeButton;
     @FXML
     private VBox order_Items;
     @FXML
-    private AnchorPane modifications_popup;
+    private AnchorPane modificationsPopup;
+    @FXML
+    private AnchorPane loginPopup;
     @FXML
     private AnchorPane charge_popup;
     @FXML
-    private TextField customer_name_field;
+    private TextField customerNameField;
     @FXML
-    private GridPane drink_grid;
+    private TextField loginNameField;
+    @FXML
+    private TextField loginIDField;
+    @FXML
+    private GridPane drinkGrid;
+    @FXML
+    private Label errorLogin;
+    @FXML
+    private Button managerViewButton;
 
     private DecimalFormat df = new DecimalFormat("#0.00");
 
@@ -46,6 +60,7 @@ public class CashierController {
 
     private String[] drinkNames;
     private double[] drinkPrices;
+    private int cashierID = 0;
 
     @FXML
     public void initialize() {
@@ -96,8 +111,11 @@ public class CashierController {
             double price = drinkPrices[i];
 
             Button btn = new Button(name);
-            btn.setPrefSize(100, 100);
+            btn.setPrefSize(140, 140);
             btn.setWrapText(true);
+            btn.setStyle("-fx-font-size: 18px; -fx-text-alignment: center; -fx-alignment: center;");
+            btn.setTextAlignment(TextAlignment.CENTER);
+            btn.setAlignment(Pos.CENTER);
             btn.setOnAction(e -> handleDrinkSelection(name, price));
 
             drink_grid.add(btn, col, row);
@@ -175,6 +193,51 @@ public class CashierController {
         resetModificationButtons();
     }
 
+    @FXML
+    private void confirmLogin() {
+        String enteredName = loginNameField.getText().trim();
+        String enteredID = loginIDField.getText().trim();
+
+        errorLogin.setText("");
+
+        if (enteredName.isEmpty() || enteredID.isEmpty()) {
+            errorLogin.setText("Please enter both Name and Employee ID.");
+            return;
+        }
+
+        try {
+            edu.tamu.project2.csce331.Queries queries = new edu.tamu.project2.csce331.Queries();
+            ArrayList<Employee> employees = queries.get_employee();
+            boolean matchFound = false;
+
+            for (Employee emp : employees) {
+                if (emp.get_name().equalsIgnoreCase(enteredName) &&
+                    String.valueOf(emp.get_id()).equals(enteredID)) {
+
+                    cashierID = emp.get_id();
+                    loginPopup.setVisible(false);
+                    matchFound = true;
+                    employeeName.setText("Hello, " + emp.get_name());
+                    if (emp.get_role().equals("manager")) {
+                        managerViewButton.setVisible(true);
+                    }
+                    else {
+                        managerViewButton.setVisible(false);
+                    }
+                    break;
+                }
+            }
+
+            if (!matchFound) {
+                errorLogin.setText("Login failed. Try again.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            errorLogin.setText("Database error occurred.");
+        }
+    }
+
     private void addDrinkToOrder(String name, double price, List<String> mods) {
         if (order_Items.getChildren().size() == 1 && order_Items.getChildren().get(0) instanceof Label) {
             order_Items.getChildren().clear();
@@ -210,9 +273,9 @@ public class CashierController {
             }
         }
         this.subtotal = sum;
-        // subtotal_label.setText("$" + df.format(subtotal));
-        // total_label.setText("$" + df.format(subtotal));
-        // charge_button.setText("Charge $" + df.format(subtotal));
+        subtotalLabel.setText(df.format(subtotal));
+        totalLabel.setText(df.format(subtotal));
+        chargeButton.setText("Charge " + df.format(subtotal));
     }
 
     private void resetModificationButtons() {
@@ -241,17 +304,27 @@ public class CashierController {
 
     @FXML
     private void closePopup() {
-        modifications_popup.setVisible(false);
+        modificationsPopup.setVisible(false);
     }
 
     @FXML
-    private void opencharge_popup() {
-        charge_popup.setVisible(true);
+    private void openChargePopup() {
+        chargePopup.setVisible(true);
     }
 
     @FXML
-    private void closecharge_popup() {
-        charge_popup.setVisible(false);
+    private void closeChargePopup() {
+        chargePopup.setVisible(false);
+    }
+
+    @FXML
+    private void openLoginPopup() {
+        loginPopup.setVisible(true);
+    }
+
+    @FXML
+    private void closeLoginPopup() {
+        loginPopup.setVisible(false);
     }
 
     @FXML
@@ -296,7 +369,7 @@ public class CashierController {
                     0,
                     name,
                     Timestamp.valueOf(LocalDateTime.now()),
-                    1,
+                    cashierID,
                     subtotal
             );
 
@@ -305,9 +378,9 @@ public class CashierController {
             order_Items.getChildren().clear();
             order_Items.getChildren().add(new Label("No items yet."));
             subtotal = 0;
-            subtotal_label.setText("$0.00");
-            total_label.setText("$0.00");
-            charge_button.setText("Charge $0.00");
+            subtotalLabel.setText("0.00");
+            totalLabel.setText("0.00");
+            chargeButton.setText("Charge 0.00");
 
             customer_name_field.clear();
             charge_popup.setVisible(false);
@@ -320,61 +393,14 @@ public class CashierController {
     }
 
     @FXML
-    public void go_products() 
-    {
-        try 
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) charge_button.getScene().getWindow();
-
+    public void go_products() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
+            Stage stage = (Stage) totalLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Products");
             stage.show();
-        } 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void go_transactions() 
-    { 
-        try 
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/transactions_history.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) charge_button.getScene().getWindow();
-
-            stage.setScene(new Scene(root));
-            stage.setTitle("Manager - Transactions");
-            stage.show();
-        } 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void go_manage_employee() 
-    { 
-        try 
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/employee_list.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) charge_button.getScene().getWindow();
-
-            stage.setScene(new Scene(root));
-            stage.setTitle("Manager - Employee");
-            stage.show();
-        } 
-        catch (IOException e) 
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

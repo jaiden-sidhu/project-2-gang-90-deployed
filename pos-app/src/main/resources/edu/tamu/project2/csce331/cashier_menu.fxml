@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -16,60 +15,55 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.tamu.project2.csce331.CashierController">
-  <VBox prefHeight="400.0" prefWidth="640.0">
+<StackPane stylesheets="@cashier.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.tamu.project2.csce331.CashierController">
+  <VBox prefHeight="800.0" prefWidth="1280.0">
     <children>
       <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
         <children>
-          <BorderPane prefHeight="400.0" prefWidth="640.0">
-            <!-- Top Bar -->
+          <BorderPane prefHeight="800.0" prefWidth="1280.0">
             <top>
-              <HBox prefHeight="46.0" spacing="10.0" styleClass="top-bar" stylesheets="@cashier.css" BorderPane.alignment="CENTER">
+              <HBox prefHeight="46.0" spacing="10.0" styleClass="top-bar" BorderPane.alignment="CENTER">
                 <padding><Insets bottom="12" left="20" right="20" top="12" /></padding>
                 <children>
                   <Label styleClass="top-title" text="Cashier Interface" />
                   <Region HBox.hgrow="ALWAYS" />
-                  <Label fx:id="timeLabel" styleClass="top-time" text="Time" />
+                  <Label fx:id="employeeName" styleClass="top-time" text="Logged Out" />
                 </children>
               </HBox>
             </top>
 
-            <!-- Sidebar -->
             <left>
-              <VBox prefWidth="166.0" styleClass="sidebar" stylesheets="@cashier.css" BorderPane.alignment="CENTER">
+              <VBox prefWidth="332.0" styleClass="sidebar" BorderPane.alignment="CENTER">
                 <padding><Insets bottom="15" left="15" right="15" top="15" /></padding>
                 <children>
-                  <Label styleClass="menu-title" text="Main Menu" />
-                  <Separator>
-                    <VBox.margin><Insets bottom="5" top="5" /></VBox.margin>
-                  </Separator>
-                  <Label styleClass="menu-item" text="Cashier Login" />
-                           <Button mnemonicParsing="false" onAction="#go_products" text="Products" />
-                           <Button mnemonicParsing="false" onAction="#go_transactions" text="Transactions" />
-                           <Button mnemonicParsing="false" onAction="#go_manage_employee" text="Manage employees" />
+                  <Button fx:id="managerViewButton" mnemonicParsing="false" onAction="#go_products" text="Manager View" visible="false">
+                              <VBox.margin>
+                                 <Insets bottom="5.0" />
+                              </VBox.margin></Button>
+                  <Button mnemonicParsing="false" onAction="#openLoginPopup" text="Change Cashier"></Button>
                   <Region VBox.vgrow="ALWAYS" />
                 </children>
               </VBox>
             </left>
 
             <center>
-              <ScrollPane fitToWidth="true" styleClass="drink-menu" stylesheets="@cashier.css" BorderPane.alignment="CENTER">
+              <ScrollPane fitToWidth="true" styleClass="drink-menu" BorderPane.alignment="CENTER">
                 <content>
-                  <GridPane fx:id="drink_grid" alignment="TOP_LEFT" hgap="10" vgap="10">
-                      <padding>
-                          <Insets bottom="20" left="20" right="20" top="20" />
-                      </padding>
+                  <GridPane fx:id="drinkGrid" alignment="TOP_LEFT" hgap="10" vgap="10">
+                    <padding>
+                      <Insets bottom="20" left="20" right="20" top="20" />
+                    </padding>
                   </GridPane>
                 </content>
               </ScrollPane>
             </center>
 
             <right>
-              <VBox prefWidth="207.0" spacing="15" styleClass="order-panel" stylesheets="@cashier.css" BorderPane.alignment="CENTER">
+              <VBox prefWidth="414.0" spacing="15" styleClass="order-panel" BorderPane.alignment="CENTER">
                 <padding><Insets bottom="15" left="15" right="15" top="15" /></padding>
                 <children>
                   <Label styleClass="order-title" text="Current Order" />
-                  <VBox fx:id="order_items" spacing="10" styleClass="order-item-box" stylesheets="@cashier.css">
+                  <VBox fx:id="orderItems" spacing="10" styleClass="order-item-box">
                     <children>
                       <Label text="No items yet." />
                     </children>
@@ -81,17 +75,17 @@
                       <children>
                         <Label text="Subtotal:" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <!-- <Label fx:id="subtotal_label" text="$0.00"/> -->
+                        <Label fx:id="subtotalLabel" text="0.00" />
                       </children>
                     </HBox>
                     <HBox>
                       <children>
                         <Label text="Total:" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <!-- <Label fx:id="total_label" text="$0.00"/> -->
+                        <Label fx:id="totalLabel" text="0.00" />
                       </children>
                     </HBox>
-                    <Button fx:id="charge_button" maxWidth="Infinity" onAction="#opencharge_popup" text="Charge" />
+                    <Button fx:id="chargeButton" maxWidth="Infinity" onAction="#openChargePopup" text="Charge" />
                   </VBox>
                 </children>
               </VBox>
@@ -104,10 +98,9 @@
 
   <AnchorPane fx:id="modifications_popup" style="-fx-background-color: rgba(0,0,0,0.5);" visible="false">
     <children>
-      <VBox layoutX="100" layoutY="50" prefHeight="300" prefWidth="440" style="-fx-background-color: #e0e0e0; -fx-background-radius: 10; -fx-padding: 20;">
+      <VBox layoutX="200" layoutY="100" prefHeight="300" prefWidth="440" style="-fx-background-color: #e0e0e0; -fx-background-radius: 10; -fx-padding: 20;">
         <children>
           <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="Modifications" />
-
           <HBox spacing="10">
             <Label text="Ice Level:" />
             <Button onAction="#selectModification" text="Less" />
@@ -131,7 +124,7 @@
 
   <AnchorPane fx:id="charge_popup" style="-fx-background-color: rgba(0,0,0,0.5);" visible="false">
     <children>
-      <VBox layoutX="150" layoutY="100" prefHeight="200" prefWidth="340" spacing="10" style="-fx-background-color: #e0e0e0; -fx-background-radius: 10; -fx-padding: 20;">
+      <VBox layoutX="300" layoutY="200" prefHeight="200" prefWidth="340" spacing="10" style="-fx-background-color: #e0e0e0; -fx-background-radius: 10; -fx-padding: 20;">
         <children>
           <Label text="Enter Customer Name:" />
           <TextField fx:id="customer_name_field" />
@@ -142,4 +135,19 @@
     </children>
   </AnchorPane>
 
+  <AnchorPane fx:id="loginPopup" style="-fx-background-color: rgba(0,0,0,0.5);" visible="false">
+    <children>
+      <VBox layoutX="300" layoutY="200" prefHeight="200" prefWidth="340" spacing="10" style="-fx-background-color: #e0e0e0; -fx-background-radius: 10; -fx-padding: 20;">
+        <children>
+          <Label text="Enter Name:" />
+          <TextField fx:id="loginNameField" />
+          <Label text="Enter ID:" />
+          <TextField fx:id="loginIDField" />
+          <Label fx:id="errorLogin" />
+          <Button onAction="#confirmLogin" text="Login" />
+          <Button onAction="#closeLoginPopup" text="Cancel" />
+        </children>
+      </VBox>
+    </children>
+  </AnchorPane>
 </StackPane>

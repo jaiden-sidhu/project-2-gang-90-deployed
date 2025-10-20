@@ -58,10 +58,10 @@ public class EmployeeController {
                     try {
                         queries.delete_employee(employee.get_id());
                         totalCount = queries.count_employees();
-                        status_label.setText("Employee deleted");
+                        // status_label.setText("Employee deleted");
                         load_page();
                     } catch (Exception ex) {
-                        status_label.setText("Failed to delete employee: " + ex.getMessage());
+                        // status_label.setText("Failed to delete employee: " + ex.getMessage());
                     }
                 });
             }
@@ -89,7 +89,7 @@ public class EmployeeController {
                 totalCount = data.size();
             }
 
-            status_label.setText(String.format("Showing %d of %d total", data.size(), totalCount));
+            // status_label.setText(String.format("Showing %d of %d total", data.size(), totalCount));
         } catch (Exception e) {
             Throwable root = Database.getInitFailure();
             StringBuilder msg = new StringBuilder("DB error: ").append(e.getMessage());
@@ -97,7 +97,7 @@ public class EmployeeController {
                 msg.append(" (cause: ").append(root.getCause().getClass().getSimpleName())
                    .append(" - ").append(root.getCause().getMessage()).append(")");
             }
-            status_label.setText(msg.toString());
+            // status_label.setText(msg.toString());
         }
     }
 
@@ -106,10 +106,10 @@ public class EmployeeController {
             List<Employee> list = queries.get_employee();
             ObservableList<Employee> data = FXCollections.observableArrayList(list);
             employee_table.setItems(data);
-            status_label.setText(String.format("Showing %d of %d total", data.size(), totalCount));
+            // status_label.setText(String.format("Showing %d of %d total", data.size(), totalCount));
 
         } catch (Exception e) {
-            status_label.setText("Failed to load page: " + e.getMessage());
+            // status_label.setText("Failed to load page: " + e.getMessage());
         }
     }
 
@@ -121,17 +121,17 @@ public class EmployeeController {
         try {
             pay = Double.parseDouble(pay_field.getText().trim());
         } catch (NumberFormatException nfe) {
-            status_label.setText("Invalid pay value");
+            // status_label.setText("Invalid pay value");
             return;
         }
         try {
-            queries.add_employee(name, role, pay);
+            queries.add_employee(name, role, pay, true);
             totalCount = queries.count_employees();
             load_page();
-            status_label.setText("Employee added");
+            // status_label.setText("Employee added");
             closePopup();
         } catch (Exception e) {
-            status_label.setText("Failed to add employee: " + e.getMessage());
+            // status_label.setText("Failed to add employee: " + e.getMessage());
         }
     }
 
@@ -141,15 +141,15 @@ public class EmployeeController {
         try {
             id = Integer.parseInt(id_field.getText().trim());
         } catch (NumberFormatException nfe) {
-            status_label.setText("Invalid ID");
+            // status_label.setText("Invalid ID");
             return;
         }
         try {
             queries.delete_employee(id);
             totalCount = queries.count_employees();
-            status_label.setText("Employee deleted");
+            // status_label.setText("Employee deleted");
         } catch (Exception e) {
-            status_label.setText("Failed to delete employee: " + e.getMessage());
+            // status_label.setText("Failed to delete employee: " + e.getMessage());
         }
     }
 
@@ -166,19 +166,13 @@ public class EmployeeController {
     @FXML
     public void go_products() 
     { 
-        try 
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) name_field.getScene().getWindow();
-
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
+            Stage stage = (Stage) status_label.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Products");
             stage.show();
-        } 
-        catch (IOException e) 
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -186,19 +180,13 @@ public class EmployeeController {
     @FXML
     public void go_sales() 
     { 
-        try 
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/transactions_history.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) name_field.getScene().getWindow();
-
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/transactions_history.fxml"));
+            Stage stage = (Stage) status_label.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Manager - Sales");
+            stage.setTitle("Manager - Transactions");
             stage.show();
-        } 
-        catch (IOException e) 
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -206,19 +194,27 @@ public class EmployeeController {
     @FXML
     public void go_cashier() 
     { 
-        try 
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/cashier_menu.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) name_field.getScene().getWindow();
-
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/cashier_menu.fxml"));
+            Stage stage = (Stage) status_label.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Cashier - Menu");
             stage.show();
-        } 
-        catch (IOException e) 
-        {
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void go_employees() 
+    { 
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/employee_list.fxml"));
+            Stage stage = (Stage) status_label.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - Employees");
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
