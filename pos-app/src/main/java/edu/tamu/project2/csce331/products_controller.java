@@ -194,6 +194,20 @@ public class products_controller
         }
     }
 
+    @FXML
+    public void go_employees() 
+    { 
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/employee_list.fxml"));
+            Stage stage = (Stage) name_field.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - Employees");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void populate_form(Product p) 
     {
         if (p == null) return;
