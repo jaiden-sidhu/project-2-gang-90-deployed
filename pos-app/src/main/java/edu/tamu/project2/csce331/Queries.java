@@ -594,6 +594,18 @@ public int add_seasonal_menu_item(Item added_item) throws java.sql.SQLException 
     }
   }
 
+  public void update_seasonal_price(int id, double price) throws SQLException 
+  {
+    String sql = "UPDATE seasonal_menu SET price = ? WHERE item_id = ?;";
+
+    try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) 
+    {
+      stmt.setDouble(1, price);
+      stmt.setInt(2, id);
+      stmt.executeUpdate();
+    }
+  }
+
   // need to delete ingredints
 
   public void delete_ingredients(int id)
@@ -607,19 +619,19 @@ public int add_seasonal_menu_item(Item added_item) throws java.sql.SQLException 
     }
   }
 
-  public java.util.ArrayList<Ingredient> get_item_ingredients(int item_id) throws java.sql.SQLException 
-  {
-    String sql_string = "SELECT i.ingredient_id, i.ingredient_name, i.quantity, i.category " + "FROM ingredients i " + "JOIN ingredients_map m ON m.ingredient_id = i.ingredient_id " + "WHERE m.item_id = ?;";
+  public java.util.ArrayList<Ingredient> get_item_ingredients(int item_id, boolean is_seasonal) throws java.sql.SQLException {
+    String sql = "SELECT i.ingredient_id, i.ingredient_name, i.quantity, i.category " + "FROM ingredients i " + "JOIN ingredients_map m ON m.ingredient_id = i.ingredient_id " + "WHERE m.item_id = ? AND m.is_seasonal = ?;";
 
-    try(java.sql.Connection conn = Database.getConnection(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql_string)) 
+    try (java.sql.Connection conn = Database.getConnection(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) 
     {
       stmt.setInt(1, item_id);
+      stmt.setBoolean(2, is_seasonal);
 
-      try(java.sql.ResultSet rs = stmt.executeQuery())
+      try (java.sql.ResultSet rs = stmt.executeQuery()) 
       {
         java.util.ArrayList<Ingredient> list = new java.util.ArrayList<>();
 
-        while(rs.next())
+        while (rs.next()) 
         {
           int ingredient_id = rs.getInt("ingredient_id");
           String ingredient_name = rs.getString("ingredient_name");
@@ -632,26 +644,28 @@ public int add_seasonal_menu_item(Item added_item) throws java.sql.SQLException 
     }
   }
 
-  public void add_ingredient_to_item(int item_id, int ingredient_id) throws java.sql.SQLException 
+  public void add_ingredient_to_item(int item_id, int ingredient_id, boolean is_seasonal) throws java.sql.SQLException 
   {
-    String sql_string = "INSERT INTO ingredients_map (ingredient_id, item_id) VALUES (?, ?);";
+    String sql = "INSERT INTO ingredients_map (ingredient_id, item_id, is_seasonal) VALUES (?, ?, ?);";
 
-    try(java.sql.Connection conn = Database.getConnection(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql_string)) 
+    try (java.sql.Connection conn = Database.getConnection(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) 
     {
       stmt.setInt(1, ingredient_id);
       stmt.setInt(2, item_id);
+      stmt.setBoolean(3, is_seasonal);
       stmt.executeUpdate();
     }
   }
 
-  public void remove_ingredient_from_item(int item_id, int ingredient_id) throws java.sql.SQLException 
+  public void remove_ingredient_from_item(int item_id, int ingredient_id, boolean is_seasonal) throws java.sql.SQLException 
   {
-    String sql_string = "DELETE FROM ingredients_map WHERE item_id = ? AND ingredient_id = ?;";
+    String sql = "DELETE FROM ingredients_map WHERE item_id = ? AND ingredient_id = ? AND is_seasonal = ?;";
 
-    try (java.sql.Connection conn = Database.getConnection(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql_string)) 
+    try (java.sql.Connection conn = Database.getConnection(); java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) 
     {
       stmt.setInt(1, item_id);
       stmt.setInt(2, ingredient_id);
+      stmt.setBoolean(3, is_seasonal);
       stmt.executeUpdate();
     }
   }
