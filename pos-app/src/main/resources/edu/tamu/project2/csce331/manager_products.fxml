@@ -16,7 +16,9 @@
 
       <Button disable="true" text="Products" maxWidth="Infinity" />
       <Button onAction="#go_sales" text="Sales" maxWidth="Infinity" />
-      <Button onAction="#go_settings" text="Settings" maxWidth="Infinity" />
+      <Button onAction="#go_cashier" text="cashier" maxWidth="Infinity" />
+      <Button onAction="#go_products" text="products" maxWidth="Infinity" />
+      <Button onAction="#go_employees" text="employees" maxWidth="Infinity" />
       <ToggleButton text="Seasonal" onAction="#do_seasonal_view" maxWidth="Infinity" />
     </VBox>
   </left>
