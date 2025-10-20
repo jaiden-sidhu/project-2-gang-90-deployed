@@ -1,16 +1,18 @@
 package edu.tamu.project2.csce331;
 
 import java.util.Set;
+import java.sql.Timestamp;
 
 public class Employee {
   private int id;
   private String name;
   private String role;
   private double pay;
+  private boolean status;
   private static final Set<String> VALID_ROLES = Set.of("cashier", "manager");
 
   // Constructor
-  public Employee(int id, String name, String role, double pay) throws IllegalArgumentException {
+  public Employee(int id, String name, String role, double pay, boolean state) throws IllegalArgumentException {
     // Quick luh checks
     if (id < 0) {
       throw new IllegalArgumentException("ID cannot be negative.");
@@ -27,6 +29,7 @@ public class Employee {
     this.name = name;
     this.role = role;
     this.pay = pay;
+    this.status = state;
   }
 
   // Getters
@@ -44,6 +47,10 @@ public class Employee {
 
   public double get_pay() {
     return pay;
+  }
+
+  public boolean get_status() {
+    return status;
   }
 
   // Setters

@@ -73,7 +73,8 @@ public class Queries {
         String name = rs.getString("name");
         String role = rs.getString("role");
         double pay = rs.getDouble("pay");
-        managers.add(new Employee(id, name, role, pay));
+        Boolean state = rs.getBoolean("is_active");
+        managers.add(new Employee(id, name, role, pay, state));
       }
       return managers;
     }
@@ -98,14 +99,15 @@ public class Queries {
         String name = rs.getString("name");
         String role = rs.getString("role");
         double pay = rs.getDouble("pay");
-        employees.add(new Employee(id, name, role, pay));
+        Boolean state = rs.getBoolean("is_active");
+        employees.add(new Employee(id, name, role, pay, state));
       }
       return employees;
     }
   }
 
   /**
-   * Inserts a new employee into the {@code personnel} table.
+   * Inserts a new employee into the {@code personnel} table. Assumes that the new employee is active.
    *
    * @param name the employee's name
    * @param role the employee's role (e.g., cashier, manager)
@@ -113,13 +115,35 @@ public class Queries {
    * @throws SQLException if a database access error occurs
    */
   public void add_employee(String name, String role, double pay) throws SQLException {
-    String sql = "INSERT INTO personnel (name, role, pay) VALUES (?, ?, ?);";
+    String sql = "INSERT INTO personnel (name, role, pay, is_active) VALUES (?, ?, ?, ?);";
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
       stmt.setString(1, name);
       stmt.setString(2, role);
       stmt.setDouble(3, pay);
+      stmt.setBoolean(4, true);
+      stmt.executeUpdate();
+    }
+  }
+  /**
+   * Inserts a new employee into the {@code personnel} table. 
+   *
+   * @param name the employee's name
+   * @param role the employee's role (e.g., cashier, manager)
+   * @param pay the employee's pay rate
+   * @param state the status of the employee (e.g., fired, still working)
+   * @throws SQLException if a database access error occurs
+   */
+  public void add_employee(String name, String role, double pay, boolean state) throws SQLException {
+    String sql = "INSERT INTO personnel (name, role, pay, is_active) VALUES (?, ?, ?, ?);";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, name);
+      stmt.setString(2, role);
+      stmt.setDouble(3, pay);
+      stmt.setBoolean(4, state);
       stmt.executeUpdate();
     }
   }
@@ -148,6 +172,34 @@ public class Queries {
       }
     }
   }
+
+  /**
+   * Updates an existing employee's name, role, and pay.
+   *
+   * @param id the employee's identifier
+   * @param name the new name
+   * @param role the new role
+   * @param pay the new pay rate
+   * @param state the current status of the employee (with the company or gone)
+   * @throws SQLException if a database access error occurs or the employee does not exist
+   */
+  public void update_employee(int id, String name, String role, double pay, boolean state) throws SQLException {
+    String sql = "UPDATE personnel SET name = ?, role = ?, pay = ?, is_active = ? WHERE employee_id = ?;";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, name);
+      stmt.setString(2, role);
+      stmt.setDouble(3, pay);
+      stmt.setBoolean(4, state);
+      stmt.setInt(5, id);
+      int rowsAffected = stmt.executeUpdate();
+      if (rowsAffected == 0) {
+        throw new SQLException("Employee not found with ID: " + id);
+      }
+    }
+  }
+
 
   /**
    * Updates an employee's role.
@@ -211,13 +263,32 @@ public class Queries {
   }
 
   /**
-   * Counts the number of rows in the {@code personnel} table.
+   * Sets the status of the employee to false to indicate that the employee no longer works at the company
+   *
+   * @param id the employee's identifier
+   * @throws SQLException if a database access error occurs or the employee does not exist
+   */
+  public void fire_employee(int id) throws SQLException {
+    String sql = "UPDATE personnel SET is_active = FALSE WHERE employee_id = ?;";
+
+     try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1, id);
+      int rowsAffected = stmt.executeUpdate();
+      if (rowsAffected == 0) {
+        throw new SQLException("Employee not found with ID: " + id);
+      }
+    }
+  }
+
+  /**
+   * Counts the number of rows in the {@code personnel} table. Does not count employees that no longer work at the company
    *
    * @return the total number of employees
    * @throws SQLException if a database access error occurs
    */
   public int count_employees() throws SQLException {
-    String sql = "SELECT COUNT(*) AS cnt FROM personnel;";
+    String sql = "SELECT COUNT(*) AS cnt FROM personnel WHERE is_active = TRUE;";
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);
         ResultSet rs = stmt.executeQuery()) {
