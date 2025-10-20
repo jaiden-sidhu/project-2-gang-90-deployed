@@ -32,19 +32,19 @@ public class CashierController {
     @FXML
     private VBox order_Items;
     @FXML
-    private AnchorPane modificationsPopup;
+    private AnchorPane modifications_popup;
     @FXML
     private AnchorPane loginPopup;
     @FXML
     private AnchorPane charge_popup;
     @FXML
-    private TextField customerNameField;
+    private TextField customer_name_field;
     @FXML
     private TextField loginNameField;
     @FXML
     private TextField loginIDField;
     @FXML
-    private GridPane drinkGrid;
+    private GridPane drink_grid;
     @FXML
     private Label errorLogin;
     @FXML
@@ -304,17 +304,17 @@ public class CashierController {
 
     @FXML
     private void closePopup() {
-        modificationsPopup.setVisible(false);
+        modifications_popup.setVisible(false);
     }
 
     @FXML
     private void openChargePopup() {
-        chargePopup.setVisible(true);
+        charge_popup.setVisible(true);
     }
 
     @FXML
     private void closeChargePopup() {
-        chargePopup.setVisible(false);
+        charge_popup.setVisible(false);
     }
 
     @FXML
