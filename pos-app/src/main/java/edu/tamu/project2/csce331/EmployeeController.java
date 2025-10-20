@@ -145,7 +145,7 @@ public class EmployeeController {
             return;
         }
         try {
-            queries.delete_employee(id);
+            queries.fire_employee(id);
             totalCount = queries.count_employees();
             // status_label.setText("Employee deleted");
         } catch (Exception e) {
