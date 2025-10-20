@@ -125,7 +125,7 @@ public class EmployeeController {
             return;
         }
         try {
-            queries.add_employee(name, role, pay);
+            queries.add_employee(name, role, pay, true);
             totalCount = queries.count_employees();
             load_page();
             // status_label.setText("Employee added");
