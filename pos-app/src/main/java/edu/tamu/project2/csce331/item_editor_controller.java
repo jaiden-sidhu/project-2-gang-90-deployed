@@ -33,6 +33,11 @@ public class item_editor_controller {
     private final ObservableList<Ingredient> all_ingredients = FXCollections.observableArrayList();
     private final ObservableList<Ingredient> item_ingredients = FXCollections.observableArrayList();
 
+    private int normalizedItemId() 
+    {
+        return Math.abs(product_ref.get_id());
+    }
+
     public void set_context(products_controller.Product product, Queries queries, boolean is_seasonal) 
     {
         this.product_ref = product;
@@ -52,12 +57,11 @@ public class item_editor_controller {
         item_ing_qty_col.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().get_quantity()));
         item_ing_cat_col.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().get_category()));
 
-
         try 
         {
             all_ingredients.setAll(queries_ref.get_ingredients());
         } 
-        catch(Exception e) 
+        catch (Exception e) 
         {
             e.printStackTrace();
             new Alert(Alert.AlertType.INFORMATION, "Failed to load ingredients", ButtonType.OK).showAndWait();
@@ -65,9 +69,9 @@ public class item_editor_controller {
 
         try 
         {
-            item_ingredients.setAll(queries_ref.get_item_ingredients(product_ref.get_id()));
+            item_ingredients.setAll(queries_ref.get_item_ingredients(normalizedItemId(), seasonal));
         } 
-        catch(Exception e) 
+        catch (Exception e) 
         {
             e.printStackTrace();
         }
@@ -81,20 +85,21 @@ public class item_editor_controller {
     {
         Ingredient sel = ingredients_table.getSelectionModel().getSelectedItem();
 
-        if(sel == null)
+        if (sel == null) 
         {
             return;
         }
-        try 
+
+        try
         {
-            queries_ref.add_ingredient_to_item(product_ref.get_id(), sel.get_ingredient_id());
+            queries_ref.add_ingredient_to_item(normalizedItemId(), sel.get_ingredient_id(), seasonal);
 
             if (!item_ingredients.contains(sel)) 
             {
                 item_ingredients.add(sel);
             }
         } 
-        catch(Exception e) 
+        catch (Exception e) 
         {
             e.printStackTrace();
             new Alert(Alert.AlertType.INFORMATION, "Failed to add ingredient", ButtonType.OK).showAndWait();
@@ -110,11 +115,12 @@ public class item_editor_controller {
         {
             return;
         }
+
         try 
         {
-            queries_ref.remove_ingredient_from_item(product_ref.get_id(), sel.get_ingredient_id());
+            queries_ref.remove_ingredient_from_item(normalizedItemId(), sel.get_ingredient_id(), seasonal);
             item_ingredients.remove(sel);
-        }
+        } 
         catch (Exception e) 
         {
             e.printStackTrace();
@@ -147,12 +153,20 @@ public class item_editor_controller {
 
             try 
             {
-                queries_ref.update_menu_price(product_ref.get_id(), price);
+                if (seasonal) 
+                {
+                    queries_ref.update_seasonal_price(normalizedItemId(), price);
+                } 
+                else 
+                {
+                    queries_ref.update_menu_price(normalizedItemId(), price);
+                }
             } 
             catch (Exception e) 
             {
                 e.printStackTrace();
             }
+            
             ((Stage) name_field.getScene().getWindow()).close();
         } 
         catch (NumberFormatException nfe) 
