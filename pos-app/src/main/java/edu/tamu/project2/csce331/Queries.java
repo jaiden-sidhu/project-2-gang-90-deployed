@@ -362,7 +362,7 @@ public class Queries {
         int popularity = rs.getInt("item_popularity");
         double price = rs.getDouble("price");
         boolean state = rs.getBoolean("is_active");
-        
+
         // Fetch ingredients for the item
         ArrayList<Integer> ingredients = get_ingredients_for_item(id, conn);
         menu.add(new Item(id, name, popularity, price, ingredients, state));
@@ -398,20 +398,22 @@ public class Queries {
    * Retrieves the ingredient details for a given menu item.
    *
    * @param item_id the menu item's identifier
+   * @param is_seasonal is a flag for whether the item is seasonal or not
    * @return a list of {@link Ingredient} records used by the item
    * @throws SQLException if a database access error occurs
    */
-  public java.util.ArrayList<Ingredient> get_item_ingredients(int item_id)
+  public java.util.ArrayList<Ingredient> get_item_ingredients(int item_id, boolean is_seasonal)
       throws java.sql.SQLException {
-    String sql_string =
+    String sql =
         "SELECT i.ingredient_id, i.ingredient_name, i.quantity, i.category "
             + "FROM ingredients i "
             + "JOIN ingredients_map m ON m.ingredient_id = i.ingredient_id "
-            + "WHERE m.item_id = ?;";
+            + "WHERE m.item_id = ? AND m.is_seasonal = ?;";
 
     try (java.sql.Connection conn = Database.getConnection();
-        java.sql.PreparedStatement stmt = conn.prepareStatement(sql_string)) {
+        java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
       stmt.setInt(1, item_id);
+      stmt.setBoolean(2, is_seasonal);
 
       try (java.sql.ResultSet rs = stmt.executeQuery()) {
         java.util.ArrayList<Ingredient> list = new java.util.ArrayList<>();
@@ -433,15 +435,19 @@ public class Queries {
    *
    * @param item_id the menu item's identifier
    * @param ingredient_id the ingredient's identifier to associate
+   * @param is_seasonal switch between tables to find out if its seasonal or not
    * @throws SQLException if a database access error occurs
    */
-  public void add_ingredient_to_item(int item_id, int ingredient_id) throws java.sql.SQLException {
-    String sql_string = "INSERT INTO ingredients_map (ingredient_id, item_id) VALUES (?, ?);";
+  public void add_ingredient_to_item(int item_id, int ingredient_id, boolean is_seasonal)
+      throws java.sql.SQLException {
+    String sql =
+        "INSERT INTO ingredients_map (ingredient_id, item_id, is_seasonal) VALUES (?, ?, ?);";
 
     try (java.sql.Connection conn = Database.getConnection();
-        java.sql.PreparedStatement stmt = conn.prepareStatement(sql_string)) {
+        java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
       stmt.setInt(1, ingredient_id);
       stmt.setInt(2, item_id);
+      stmt.setBoolean(3, is_seasonal);
       stmt.executeUpdate();
     }
   }
@@ -451,16 +457,19 @@ public class Queries {
    *
    * @param item_id the menu item's identifier
    * @param ingredient_id the ingredient's identifier to disassociate
+   * @param is_seasonal switch between tables to find out if its seasonal or not
    * @throws SQLException if a database access error occurs
    */
-  public void remove_ingredient_from_item(int item_id, int ingredient_id)
+  public void remove_ingredient_from_item(int item_id, int ingredient_id, boolean is_seasonal)
       throws java.sql.SQLException {
-    String sql_string = "DELETE FROM ingredients_map WHERE item_id = ? AND ingredient_id = ?;";
+    String sql =
+        "DELETE FROM ingredients_map WHERE item_id = ? AND ingredient_id = ? AND is_seasonal = ?;";
 
     try (java.sql.Connection conn = Database.getConnection();
-        java.sql.PreparedStatement stmt = conn.prepareStatement(sql_string)) {
+        java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
       stmt.setInt(1, item_id);
       stmt.setInt(2, ingredient_id);
+      stmt.setBoolean(3, is_seasonal);
       stmt.executeUpdate();
     }
   }
