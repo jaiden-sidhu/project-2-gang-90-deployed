@@ -666,6 +666,33 @@ public class Queries {
     }
   }
 
+  /**
+   * Updates the price of a seasonal menu item.
+   *
+   * <p>Executes the SQL statement
+   * {@code UPDATE seasonal_menu SET price = ? WHERE item_id = ?} using a
+   * {@link java.sql.PreparedStatement} obtained from {@link Database#getConnection()}.
+   * Resources are managed via try-with-resources.
+   *
+   * @param id the identifier of the seasonal menu item to update
+   * @param price the new price to set for the item
+   * @throws SQLException if a database access error occurs while preparing or executing the update
+   *
+   * <p><strong>Note:</strong> this method does not currently verify the number of affected rows;
+   * if {@code item_id} does not exist, the call completes without error but no data is changed.
+   */
+  public void update_seasonal_price(int id, double price) throws SQLException 
+  {
+    String sql = "UPDATE seasonal_menu SET price = ? WHERE item_id = ?;";
+
+    try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) 
+    {
+      stmt.setDouble(1, price);
+      stmt.setInt(2, id);
+      stmt.executeUpdate();
+    }
+  }
+
   // ============================== INGREDIENTS ==============================
 
   /**
