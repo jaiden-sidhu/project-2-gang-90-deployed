@@ -2,10 +2,12 @@ package edu.tamu.project2.csce331;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
@@ -30,11 +32,19 @@ public class CashierController {
     @FXML
     private AnchorPane modificationsPopup;
     @FXML
+    private AnchorPane loginPopup;
+    @FXML
     private AnchorPane chargePopup;
     @FXML
     private TextField customerNameField;
     @FXML
+    private TextField loginNameField;
+    @FXML
+    private TextField loginIDField;
+    @FXML
     private GridPane drinkGrid;
+    @FXML
+    private Label errorLogin;
 
     private DecimalFormat df = new DecimalFormat("#0.00");
 
@@ -46,6 +56,7 @@ public class CashierController {
 
     private String[] drinkNames;
     private double[] drinkPrices;
+    private int cashierID = 0;
 
     @FXML
     public void initialize() {
@@ -96,8 +107,11 @@ public class CashierController {
             double price = drinkPrices[i];
 
             Button btn = new Button(name);
-            btn.setPrefSize(100, 100);
+            btn.setPrefSize(140, 140);
             btn.setWrapText(true);
+            btn.setStyle("-fx-font-size: 18px; -fx-text-alignment: center; -fx-alignment: center;");
+            btn.setTextAlignment(TextAlignment.CENTER);
+            btn.setAlignment(Pos.CENTER);
             btn.setOnAction(e -> handleDrinkSelection(name, price));
 
             drinkGrid.add(btn, col, row);
@@ -173,6 +187,44 @@ public class CashierController {
         addDrinkToOrder(currentDrinkName, currentDrinkPrice, new ArrayList<>(currentModifications));
         modificationsPopup.setVisible(false);
         resetModificationButtons();
+    }
+
+    @FXML
+    private void confirmLogin() {
+        String enteredName = loginNameField.getText().trim();
+        String enteredID = loginIDField.getText().trim();
+
+        errorLogin.setText("");
+
+        if (enteredName.isEmpty() || enteredID.isEmpty()) {
+            errorLogin.setText("Please enter both Name and Employee ID.");
+            return;
+        }
+
+        try {
+            edu.tamu.project2.csce331.Queries queries = new edu.tamu.project2.csce331.Queries();
+            ArrayList<Employee> employees = queries.get_employee();
+            boolean matchFound = false;
+
+            for (Employee emp : employees) {
+                if (emp.get_name().equalsIgnoreCase(enteredName) &&
+                    String.valueOf(emp.get_id()).equals(enteredID)) {
+
+                    cashierID = emp.get_id();
+                    loginPopup.setVisible(false);
+                    matchFound = true;
+                    break;
+                }
+            }
+
+            if (!matchFound) {
+                errorLogin.setText("Login failed. Try again.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            errorLogin.setText("Database error occurred.");
+        }
     }
 
     private void addDrinkToOrder(String name, double price, List<String> mods) {
@@ -255,6 +307,16 @@ public class CashierController {
     }
 
     @FXML
+    private void openLoginPopup() {
+        loginPopup.setVisible(true);
+    }
+
+    @FXML
+    private void closeLoginPopup() {
+        loginPopup.setVisible(false);
+    }
+
+    @FXML
     private void confirmCharge() {
         String name = customerNameField.getText().trim();
         if (name.isEmpty()) return;
@@ -320,61 +382,14 @@ public class CashierController {
     }
 
     @FXML
-    public void go_products() 
-    {
-        try 
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
-            Parent root = loader.load();
-
+    public void go_products() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
             Stage stage = (Stage) total_label.getScene().getWindow();
-
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Products");
             stage.show();
-        } 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void go_transactions() 
-    { 
-        try 
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/transactions_history.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) total_label.getScene().getWindow();
-
-            stage.setScene(new Scene(root));
-            stage.setTitle("Manager - Transactions");
-            stage.show();
-        } 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void go_manage_employee() 
-    { 
-        try 
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/employee_list.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) total_label.getScene().getWindow();
-
-            stage.setScene(new Scene(root));
-            stage.setTitle("Manager - Employee");
-            stage.show();
-        } 
-        catch (IOException e) 
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -153,41 +153,43 @@ public class products_controller
     }
 
     @FXML
-    public void go_sales() 
+    public void go_products() 
     { 
-        try 
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/transactions_history.fxml"));
-            Parent root = loader.load();
-
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
             Stage stage = (Stage) name_field.getScene().getWindow();
-
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Products");
             stage.show();
-        } 
-        catch (IOException e) 
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    public void go_settings() // DOES NOT GO TO SETTINGS RN
+    public void go_sales() 
     { 
-        try 
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/cashier_menu.fxml"));
-            Parent root = loader.load();
-
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/transactions_history.fxml"));
             Stage stage = (Stage) name_field.getScene().getWindow();
-
             stage.setScene(new Scene(root));
-            stage.setTitle("Manager - Products");
+            stage.setTitle("Manager - Transactions");
             stage.show();
-        } 
-        catch (IOException e) 
-        {
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void go_cashier() 
+    { 
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/cashier_menu.fxml"));
+            Stage stage = (Stage) name_field.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Cashier - Menu");
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
