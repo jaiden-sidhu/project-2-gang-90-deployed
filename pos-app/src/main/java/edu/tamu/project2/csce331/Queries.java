@@ -51,7 +51,8 @@ public class Queries {
   // ============================== EMPLOYEES ==============================
 
   /**
-   * Retrieves all active employees whose role is {@code 'manager'} from the {@code personnel} table.
+   * Retrieves all active employees whose role is {@code 'manager'} from the {@code personnel}
+   * table.
    *
    * <p>This method executes a simple SELECT filtered on {@code role = 'manager'} and constructs
    * {@link Employee} instances for each matching row. The list preserves the database iteration
@@ -107,7 +108,8 @@ public class Queries {
   }
 
   /**
-   * Inserts a new employee into the {@code personnel} table. Assumes that the new employee is active.
+   * Inserts a new employee into the {@code personnel} table. Assumes that the new employee is
+   * active.
    *
    * @param name the employee's name
    * @param role the employee's role (e.g., cashier, manager)
@@ -126,9 +128,9 @@ public class Queries {
       stmt.executeUpdate();
     }
   }
-  
+
   /**
-   * Inserts a new employee into the {@code personnel} table. 
+   * Inserts a new employee into the {@code personnel} table.
    *
    * @param name the employee's name
    * @param role the employee's role (e.g., cashier, manager)
@@ -136,7 +138,8 @@ public class Queries {
    * @param state the status of the employee (e.g., fired, still working)
    * @throws SQLException if a database access error occurs
    */
-  public void add_employee(String name, String role, double pay, boolean state) throws SQLException {
+  public void add_employee(String name, String role, double pay, boolean state)
+      throws SQLException {
     String sql = "INSERT INTO personnel (name, role, pay, is_active) VALUES (?, ?, ?, ?);";
 
     try (Connection conn = Database.getConnection();
@@ -184,8 +187,10 @@ public class Queries {
    * @param state the current status of the employee (with the company or gone)
    * @throws SQLException if a database access error occurs or the employee does not exist
    */
-  public void update_employee(int id, String name, String role, double pay, boolean state) throws SQLException {
-    String sql = "UPDATE personnel SET name = ?, role = ?, pay = ?, is_active = ? WHERE employee_id = ?;";
+  public void update_employee(int id, String name, String role, double pay, boolean state)
+      throws SQLException {
+    String sql =
+        "UPDATE personnel SET name = ?, role = ?, pay = ?, is_active = ? WHERE employee_id = ?;";
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -200,7 +205,6 @@ public class Queries {
       }
     }
   }
-
 
   /**
    * Updates an employee's role.
@@ -264,7 +268,8 @@ public class Queries {
   }
 
   /**
-   * Sets the status of the employee to false to indicate that the employee no longer works at the company
+   * Sets the status of the employee to false to indicate that the employee no longer works at the
+   * company
    *
    * @param id the employee's identifier
    * @throws SQLException if a database access error occurs or the employee does not exist
@@ -272,7 +277,7 @@ public class Queries {
   public void fire_employee(int id) throws SQLException {
     String sql = "UPDATE personnel SET is_active = FALSE WHERE employee_id = ?;";
 
-     try (Connection conn = Database.getConnection();
+    try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
       stmt.setInt(1, id);
       int rowsAffected = stmt.executeUpdate();
@@ -283,7 +288,8 @@ public class Queries {
   }
 
   /**
-   * Counts the number of rows in the {@code personnel} table. Does not count employees that no longer work at the company
+   * Counts the number of rows in the {@code personnel} table. Does not count employees that no
+   * longer work at the company
    *
    * @return the total number of employees
    * @throws SQLException if a database access error occurs
@@ -324,9 +330,41 @@ public class Queries {
         String name = rs.getString("item_name");
         int popularity = rs.getInt("item_popularity");
         double price = rs.getDouble("price");
+        boolean state = rs.getBoolean("is_active");
         // Fetch ingredients for the item
         ArrayList<Integer> ingredients = get_ingredients_for_item(id, conn);
-        menu.add(new Item(id, name, popularity, price, ingredients));
+        menu.add(new Item(id, name, popularity, price, ingredients, state));
+      }
+      return menu;
+    }
+  }
+
+  /**
+   * Retrieves all active menu items and their ingredient ids.
+   *
+   * <p>For each menu row, this method also loads ingredient identifiers via a helper query so that
+   * {@link Item} contains its associated ingredient ids.
+   *
+   * @return a list of all {@link Item} records in the menu
+   * @throws SQLException if a database access error occurs
+   */
+  public ArrayList<Item> get_active_menu() throws SQLException {
+    String sql = "SELECT * FROM menu WHERE is_active = TRUE;";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery()) {
+      ArrayList<Item> menu = new ArrayList<>();
+
+      while (rs.next()) {
+        int id = rs.getInt("item_id");
+        String name = rs.getString("item_name");
+        int popularity = rs.getInt("item_popularity");
+        double price = rs.getDouble("price");
+        
+        // Fetch ingredients for the item
+        ArrayList<Integer> ingredients = get_ingredients_for_item(id, conn);
+        menu.add(new Item(id, name, popularity, price, ingredients, state));
       }
       return menu;
     }
@@ -520,6 +558,22 @@ public class Queries {
    */
   public void delete_item(int id) throws SQLException {
     String sql = "DELETE FROM menu ingredients_map WHERE item_id = ?";
+
+    try (Connection conn = Database.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1, id);
+      stmt.executeUpdate();
+    }
+  }
+
+  /**
+   * Sets status of menu item to false (not being offered) by identifier.
+   *
+   * @param id the item's identifier
+   * @throws SQLException if a database access error occurs
+   */
+  public void retire_item(int id) throws SQLException {
+    String sql = "UPDATE is_active = FALSE FROM menu WHERE item_id = ?";
 
     try (Connection conn = Database.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {

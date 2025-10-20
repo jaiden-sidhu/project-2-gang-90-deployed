@@ -7,6 +7,7 @@ public class Item {
   private String name;
   private int popularity;
   private double price;
+  private boolean state;
   private ArrayList<Integer> ingredients;
 
   // Constructor
@@ -30,6 +31,31 @@ public class Item {
     this.popularity = popularity;
     this.price = price;
     this.ingredients = ingredients;
+    this.state = true;
+  }
+
+  // Second constructor
+  public Item(int id, String name, int popularity, double price, ArrayList<Integer> ingredients, boolean is_active)
+      throws IllegalArgumentException {
+    // Quick luh checks
+    if (id < 0) {
+      throw new IllegalArgumentException("ID cannot be negative.");
+    }
+    if (popularity < 0) {
+      throw new IllegalArgumentException("Popularity cannot be negative.");
+    }
+    if (price < 0) {
+      throw new IllegalArgumentException("Price cannot be negative.");
+    }
+    if (ingredients == null) {
+      throw new IllegalArgumentException("Ingredients cannot be null.");
+    }
+    this.id = id;
+    this.name = name;
+    this.popularity = popularity;
+    this.price = price;
+    this.ingredients = ingredients;
+    this.state = is_active;
   }
 
   public Item(int id, String name, int popularity, double price) throws IllegalArgumentException {
@@ -55,6 +81,10 @@ public class Item {
 
   public double get_price() {
     return price;
+  }
+
+  public boolean get_status() {
+    return state;
   }
 
   public ArrayList<Integer> get_ingredients() {
