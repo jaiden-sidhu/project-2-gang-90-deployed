@@ -361,6 +361,7 @@ public class Queries {
         String name = rs.getString("item_name");
         int popularity = rs.getInt("item_popularity");
         double price = rs.getDouble("price");
+        boolean state = rs.getBoolean("is_active");
         
         // Fetch ingredients for the item
         ArrayList<Integer> ingredients = get_ingredients_for_item(id, conn);
