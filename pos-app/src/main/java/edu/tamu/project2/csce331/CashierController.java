@@ -26,6 +26,8 @@ public class CashierController {
     @FXML
     private Label totalLabel;
     @FXML
+    private Label employeeName;
+    @FXML
     private Button chargeButton;
     @FXML
     private VBox orderItems;
@@ -45,6 +47,8 @@ public class CashierController {
     private GridPane drinkGrid;
     @FXML
     private Label errorLogin;
+    @FXML
+    private Button managerViewButton;
 
     private DecimalFormat df = new DecimalFormat("#0.00");
 
@@ -213,6 +217,13 @@ public class CashierController {
                     cashierID = emp.get_id();
                     loginPopup.setVisible(false);
                     matchFound = true;
+                    employeeName.setText("Hello, " + emp.get_name());
+                    if (emp.get_role().equals("manager")) {
+                        managerViewButton.setVisible(true);
+                    }
+                    else {
+                        managerViewButton.setVisible(false);
+                    }
                     break;
                 }
             }
