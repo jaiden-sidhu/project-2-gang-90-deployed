@@ -49,7 +49,7 @@
             <center>
               <ScrollPane fitToWidth="true" styleClass="drink-menu" BorderPane.alignment="CENTER">
                 <content>
-                  <GridPane fx:id="drinkGrid" alignment="TOP_LEFT" hgap="10" vgap="10">
+                  <GridPane fx:id="drink_grid" alignment="TOP_LEFT" hgap="10" vgap="10">
                     <padding>
                       <Insets bottom="20" left="20" right="20" top="20" />
                     </padding>
@@ -129,7 +129,7 @@
           <Label text="Enter Customer Name:" />
           <TextField fx:id="customer_name_field" />
           <Button onAction="#confirmCharge" text="Confirm Charge" />
-          <Button onAction="#closecharge_popup" text="Cancel" />
+          <Button onAction="#closeChargePopup" text="Cancel" />
         </children>
       </VBox>
     </children>
