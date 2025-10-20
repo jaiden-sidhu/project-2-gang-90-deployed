@@ -358,7 +358,7 @@ public class CashierController {
                     0,
                     name,
                     Timestamp.valueOf(LocalDateTime.now()),
-                    1,
+                    cashierID,
                     subtotal
             );
 
