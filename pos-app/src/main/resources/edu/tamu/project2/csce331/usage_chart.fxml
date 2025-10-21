@@ -29,10 +29,10 @@
       <Button layoutX="12.0" layoutY="54.0" mnemonicParsing="false" onAction="#go_sales" prefHeight="32.0" styleClass="sidebar-button" text="Recent Transactions" />
       <Button layoutX="12.0" layoutY="94.0" mnemonicParsing="false" onAction="#go_products" prefHeight="32.0" styleClass="sidebar-button" text="Products" />
       <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_employees" prefHeight="32.0" styleClass="sidebar-button" text="Employees" />
-      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_x_report" prefHeight="32.0" styleClass="sidebar-button" text="X Report" />
-      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_usage_chart" prefHeight="32.0" styleClass="sidebar-button" text="Usage Chart" />
-      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_sales_report" prefHeight="32.0" styleClass="sidebar-button" text="Sales Report" />
-      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_z_report" prefHeight="32.0" styleClass="sidebar-button" text="Z Report" />
+      <Button layoutX="12.0" layoutY="174.0" mnemonicParsing="false" onAction="#go_x_report" prefHeight="32.0" styleClass="sidebar-button" text="X Report" />
+      <Button layoutX="12.0" layoutY="214.0" mnemonicParsing="false" onAction="#go_usage_chart" prefHeight="32.0" styleClass="sidebar-button" text="Usage Chart" />
+      <Button layoutX="12.0" layoutY="254.0" mnemonicParsing="false" onAction="#go_sales_report" prefHeight="32.0" styleClass="sidebar-button" text="Sales Report" />
+      <Button layoutX="12.0" layoutY="294.0" mnemonicParsing="false" onAction="#go_z_report" prefHeight="32.0" styleClass="sidebar-button" text="Z Report" />
          </children>
       </Pane>
       <Pane layoutX="179.0" layoutY="50.0" prefHeight="420.0" prefWidth="611.0">
@@ -71,7 +71,7 @@
                               </columns>
                            </TableView>
                            <Pagination fx:id="pagination" />
-                           <Text fx:id="statusLabel" text="" />
+                           <Text fx:id="status_label" text="" />
                         </children>
                      </Pane>
                      <BarChart fx:id="usageBarChart" prefHeight="333.0" prefWidth="966.0">
