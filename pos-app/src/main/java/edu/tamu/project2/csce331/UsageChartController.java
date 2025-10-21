@@ -35,7 +35,7 @@ public class UsageChartController{
     @FXML private TableColumn<Transaction, Double> colCost;
     @FXML private TableColumn<Transaction, String> colCustomer;
     @FXML private Pagination pagination;
-    @FXML private Text statusLabel;
+    @FXML private Text status_label;
 
 
     //added
@@ -68,7 +68,7 @@ public class UsageChartController{
                 msg.append(" (cause: ").append(root.getCause().getClass().getSimpleName())
                    .append(" - ").append(root.getCause().getMessage()).append(")");
             }
-            statusLabel.setText(msg.toString());
+            status_label.setText(msg.toString());
             if (pagination != null) {
                 pagination.setDisable(true);
             }
@@ -94,7 +94,7 @@ public class UsageChartController{
 
             ObservableList<IngredientUsage> data = FXCollections.observableArrayList(list);
             usageTable.setItems(data);
-            statusLabel.setText(String.format("Showing %d of %d total", data.size(), totalCount));
+            status_label.setText(String.format("Showing %d of %d total", data.size(), totalCount));
             usageBarChart.getData().clear();
             usageBarChart.setAnimated(false);
             XYChart.Series<String, Number> series = new XYChart.Series<>();
@@ -111,7 +111,7 @@ public class UsageChartController{
             usageBarChart.getData().add(series);
 
         } catch (Exception e) {
-            statusLabel.setText("Failed to load page: " + e.getMessage());
+            status_label.setText("Failed to load page: " + e.getMessage());
         }
     }
 
@@ -124,7 +124,7 @@ public class UsageChartController{
             Timestamp end_time =  Timestamp.valueOf(end_date.atStartOfDay());
             loadPage(start_time,end_time);
         }catch (Exception e) {
-            statusLabel.setText("Failed to load page: " + e.getMessage());
+            status_label.setText("Failed to load page: " + e.getMessage());
         }
     }
 
@@ -138,7 +138,7 @@ public class UsageChartController{
 
             loadPage(start_time,end_time);
         }catch (Exception e) {
-            statusLabel.setText("Failed to load page: " + e.getMessage());
+            status_label.setText("Failed to load page: " + e.getMessage());
         }
     }
 
@@ -151,7 +151,7 @@ public class UsageChartController{
             Timestamp end_time =  Timestamp.valueOf(end_date.plusDays(1).atStartOfDay());
             loadPage(start_time,end_time);
         }catch (Exception e) {
-            statusLabel.setText("Failed to load page: " + e.getMessage());
+            status_label.setText("Failed to load page: " + e.getMessage());
         }
     }
 
@@ -164,7 +164,7 @@ public class UsageChartController{
             Timestamp end_time =  Timestamp.valueOf(end_date.plusDays(1).atStartOfDay());
             loadPage(start_time,end_time);
         }catch (Exception e) {
-            statusLabel.setText("Failed to load page: " + e.getMessage());
+            status_label.setText("Failed to load page: " + e.getMessage());
         }
     }
 
@@ -177,7 +177,7 @@ public class UsageChartController{
             Timestamp end_time =  Timestamp.valueOf(end_date.plusDays(1).atStartOfDay());
             loadPage(start_time,end_time);
         }catch (Exception e) {
-            statusLabel.setText("Failed to load page: " + e.getMessage());
+            status_label.setText("Failed to load page: " + e.getMessage());
         }
     }
 
@@ -189,7 +189,7 @@ public class UsageChartController{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/employee_list.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) statusLabel.getScene().getWindow();
+            Stage stage = (Stage) status_label.getScene().getWindow();
 
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Employee");
@@ -209,7 +209,7 @@ public class UsageChartController{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) statusLabel.getScene().getWindow();
+            Stage stage = (Stage) status_label.getScene().getWindow();
 
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Products");
@@ -229,7 +229,7 @@ public class UsageChartController{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/cashier_menu.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) statusLabel.getScene().getWindow();
+            Stage stage = (Stage) status_label.getScene().getWindow();
 
             stage.setScene(new Scene(root));
             stage.setTitle("Cashier - Menu");
@@ -237,6 +237,65 @@ public class UsageChartController{
         } 
         catch (IOException e) 
         {
+            e.printStackTrace();
+        }
+    }
+
+    
+     @FXML
+    public void go_x_report() 
+    { 
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/x_report.fxml"));
+            Stage stage = (Stage) status_label.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - X Report");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void go_usage_chart() 
+    { 
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/usage_chart.fxml"));
+            Stage stage = (Stage) status_label.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - Usage Chart");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    public void go_sales_report() 
+    { 
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/sales_report.fxml"));
+            Stage stage = (Stage) status_label.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - Sale Report");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    public void go_z_report() 
+    { 
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/z_rport.fxml"));
+            Stage stage = (Stage) status_label.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - Sale Report");
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -25,11 +25,14 @@
       </Pane>
       <Pane layoutY="49.0" prefHeight="431.0" prefWidth="180.0" style="-fx-background-color: #D9D9D9;">
          <children>
-            <Button layoutX="12.0" layoutY="14.0" mnemonicParsing="false" onAction="#go_cashier" prefHeight="28.0" prefWidth="156.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Recent Transactions" />
-            <Button layoutX="12.0" layoutY="48.0" mnemonicParsing="false" onAction="#go_products" prefHeight="28.0" prefWidth="156.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Products" />
-            <Button layoutX="12.0" layoutY="81.0" mnemonicParsing="false" onAction="#go_manage_employee" prefHeight="28.0" prefWidth="156.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Sales" />
-            <Separator layoutX="12.0" layoutY="40.0" prefHeight="2.0" prefWidth="156.0" />
-            <Separator layoutX="12.0" layoutY="74.0" prefHeight="2.0" prefWidth="156.0" />
+<Button layoutX="12.0" layoutY="14.0" mnemonicParsing="false" onAction="#go_cashier" prefHeight="32.0" styleClass="sidebar-button" text="Cashier View" />
+      <Button layoutX="12.0" layoutY="54.0" mnemonicParsing="false" onAction="#go_sales" prefHeight="32.0" styleClass="sidebar-button" text="Recent Transactions" />
+      <Button layoutX="12.0" layoutY="94.0" mnemonicParsing="false" onAction="#go_products" prefHeight="32.0" styleClass="sidebar-button" text="Products" />
+      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_employees" prefHeight="32.0" styleClass="sidebar-button" text="Employees" />
+      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_x_report" prefHeight="32.0" styleClass="sidebar-button" text="X Report" />
+      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_usage_chart" prefHeight="32.0" styleClass="sidebar-button" text="Usage Chart" />
+      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_sales_report" prefHeight="32.0" styleClass="sidebar-button" text="Sales Report" />
+      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_z_report" prefHeight="32.0" styleClass="sidebar-button" text="Z Report" />
          </children>
       </Pane>
       <Pane layoutX="179.0" layoutY="50.0" prefHeight="430.0" prefWidth="611.0">
