@@ -30,7 +30,7 @@ public class CashierController {
     @FXML
     private Button chargeButton;
     @FXML
-    private VBox order_Items;
+    private VBox orderItems;
     @FXML
     private AnchorPane modifications_popup;
     @FXML
@@ -239,8 +239,8 @@ public class CashierController {
     }
 
     private void addDrinkToOrder(String name, double price, List<String> mods) {
-        if (order_Items.getChildren().size() == 1 && order_Items.getChildren().get(0) instanceof Label) {
-            order_Items.getChildren().clear();
+        if (orderItems.getChildren().size() == 1 && orderItems.getChildren().get(0) instanceof Label) {
+            orderItems.getChildren().clear();
         }
 
         VBox itemBox = new VBox(5);
@@ -249,14 +249,14 @@ public class CashierController {
         modsLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #555;");
         itemBox.getChildren().addAll(nameLabel, modsLabel);
 
-        order_Items.getChildren().add(itemBox);
+    orderItems.getChildren().add(itemBox);
 
         recalcTotal();
     }
 
     private void recalcTotal() {
         double sum = 0.0;
-        for (javafx.scene.Node n : order_Items.getChildren()) {
+    for (javafx.scene.Node n : orderItems.getChildren()) {
             if (!(n instanceof VBox)) continue;
             VBox itemBox = (VBox) n;
             if (itemBox.getChildren().isEmpty()) continue;
@@ -341,9 +341,9 @@ public class CashierController {
             }
 
             java.util.ArrayList<edu.tamu.project2.csce331.Item> itemsForTransaction = new java.util.ArrayList<>();
-            for (int i = 0; i < order_Items.getChildren().size(); i++) {
-                if (!(order_Items.getChildren().get(i) instanceof VBox)) continue;
-                VBox itemBox = (VBox) order_Items.getChildren().get(i);
+            for (int i = 0; i < orderItems.getChildren().size(); i++) {
+                if (!(orderItems.getChildren().get(i) instanceof VBox)) continue;
+                VBox itemBox = (VBox) orderItems.getChildren().get(i);
                 Label nameLabel = (Label) itemBox.getChildren().get(0);
                 String itemText = nameLabel.getText();
                 String drinkName = itemText.split(" - ")[0];
@@ -375,8 +375,8 @@ public class CashierController {
 
             queries.add_transaction_and_details(tx, itemsForTransaction);
 
-            order_Items.getChildren().clear();
-            order_Items.getChildren().add(new Label("No items yet."));
+            orderItems.getChildren().clear();
+            orderItems.getChildren().add(new Label("No items yet."));
             subtotal = 0;
             subtotalLabel.setText("0.00");
             totalLabel.setText("0.00");
