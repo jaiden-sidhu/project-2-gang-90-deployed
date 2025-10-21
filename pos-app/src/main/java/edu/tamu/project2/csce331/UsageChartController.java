@@ -182,7 +182,7 @@ public class UsageChartController{
     }
 
     @FXML
-    public void go_manage_employee() 
+    public void go_employees() 
     { 
         try 
         {
@@ -217,6 +217,19 @@ public class UsageChartController{
         } 
         catch (IOException e) 
         {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    public void go_sales() 
+    { 
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/transactions_history.fxml"));
+            Stage stage = (Stage) status_label.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - Transactions");
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
