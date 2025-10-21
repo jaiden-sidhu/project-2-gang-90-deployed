@@ -14,11 +14,14 @@
         <Insets bottom="20" left="12" right="12" top="20" />
       </padding>
 
-      <Button disable="true" text="Products" maxWidth="Infinity" />
-      <Button onAction="#go_sales" text="Sales" maxWidth="Infinity" />
-      <Button onAction="#go_cashier" text="cashier" maxWidth="Infinity" />
-      <Button onAction="#go_products" text="products" maxWidth="Infinity" />
-      <Button onAction="#go_employees" text="employees" maxWidth="Infinity" />
+      <Button layoutX="12.0" layoutY="14.0" mnemonicParsing="false" onAction="#go_cashier" prefHeight="32.0" styleClass="sidebar-button" text="Cashier View" />
+      <Button layoutX="12.0" layoutY="54.0" mnemonicParsing="false" onAction="#go_sales" prefHeight="32.0" styleClass="sidebar-button" text="Recent Transactions" />
+      <Button layoutX="12.0" layoutY="94.0" mnemonicParsing="false" onAction="#go_products" prefHeight="32.0" styleClass="sidebar-button" text="Products" />
+      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_employees" prefHeight="32.0" styleClass="sidebar-button" text="Employees" />
+      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_x_report" prefHeight="32.0" styleClass="sidebar-button" text="X Report" />
+      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_usage_chart" prefHeight="32.0" styleClass="sidebar-button" text="Usage Chart" />
+      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_sales_report" prefHeight="32.0" styleClass="sidebar-button" text="Sales Report" />
+      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_z_report" prefHeight="32.0" styleClass="sidebar-button" text="Z Report" />
       <ToggleButton text="Seasonal" onAction="#do_seasonal_view" maxWidth="Infinity" />
     </VBox>
   </left>
