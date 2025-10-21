@@ -24,6 +24,6 @@ public final class ReportState {
 
     public static synchronized void incrementDay() {
         initIfNeeded();
-        currentDate = currentDate.plusDays(1);
+        currentDate = currentDate.plusDays(5);
     }
 }
