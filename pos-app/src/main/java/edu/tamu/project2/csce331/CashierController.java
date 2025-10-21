@@ -14,7 +14,9 @@ import javafx.event.ActionEvent;
 import java.text.DecimalFormat;
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -365,13 +367,15 @@ public class CashierController {
                 if (menuItem != null) itemsForTransaction.add(menuItem);
             }
 
-        edu.tamu.project2.csce331.Transaction tx = new edu.tamu.project2.csce331.Transaction(
-                    0,
-                    name,
-                    Timestamp.valueOf(LocalDateTime.now()),
-                    cashierID,
-                    subtotal
-            );
+    LocalDate reportDate = ReportState.getCurrentDate();
+    LocalDateTime txDateTime = LocalDateTime.of(reportDate, LocalTime.now());
+    edu.tamu.project2.csce331.Transaction tx = new edu.tamu.project2.csce331.Transaction(
+        0,
+        name,
+        Timestamp.valueOf(txDateTime),
+        cashierID,
+        subtotal
+    );
 
             queries.add_transaction_and_details(tx, itemsForTransaction);
 
