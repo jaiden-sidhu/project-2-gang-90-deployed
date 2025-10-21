@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.chart.BarChart?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.tamu.project2.csce331.TransactionsHistoryController">
+<!--  -->
+<!--  -->
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.tamu.project2.csce331.XReportQueries">
    <children>
       <Pane layoutY="-1.0" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #393A3D;">
          <children>
@@ -23,85 +26,87 @@
             <Text fill="WHITE" layoutX="700.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00:00AM/PM" />
          </children>
       </Pane>
-      <Pane layoutY="49.0" prefHeight="431.0" prefWidth="180.0" style="-fx-background-color: #D9D9D9;">
+      <Pane layoutY="49.0" prefHeight="765.0" prefWidth="180.0" style="-fx-background-color: #D9D9D9;">
          <children>
-<Button layoutX="12.0" layoutY="14.0" mnemonicParsing="false" onAction="#go_cashier" prefHeight="32.0" styleClass="sidebar-button" text="Cashier View" />
-<Button layoutX="12.0" layoutY="54.0" mnemonicParsing="false" onAction="#go_sales" prefHeight="32.0" styleClass="sidebar-button" text="Recent Transactions" />
-      <Button layoutX="12.0" layoutY="94.0" mnemonicParsing="false" onAction="#go_products" prefHeight="32.0" styleClass="sidebar-button" text="Products" />
-      <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_employees" prefHeight="32.0" styleClass="sidebar-button" text="Employees" />
-      <Button layoutX="12.0" layoutY="174.0" mnemonicParsing="false" onAction="#go_x_report" prefHeight="32.0" styleClass="sidebar-button" text="X Report" />
-      <Button layoutX="12.0" layoutY="214.0" mnemonicParsing="false" onAction="#go_usage_chart" prefHeight="32.0" styleClass="sidebar-button" text="Usage Chart" />
-      <Button layoutX="12.0" layoutY="254.0" mnemonicParsing="false" onAction="#go_sales_report" prefHeight="32.0" styleClass="sidebar-button" text="Sales Report" />
-      <Button layoutX="12.0" layoutY="294.0" mnemonicParsing="false" onAction="#go_z_report" prefHeight="32.0" styleClass="sidebar-button" text="Z Report" />
+            <Button layoutX="12.0" layoutY="14.0" mnemonicParsing="false" onAction="#go_cashier" prefHeight="32.0" styleClass="sidebar-button" text="Cashier View" />
+            <Button layoutX="12.0" layoutY="54.0" mnemonicParsing="false" onAction="#go_sales" prefHeight="32.0" styleClass="sidebar-button" text="Recent Transactions" />
+            <Button layoutX="12.0" layoutY="94.0" mnemonicParsing="false" onAction="#go_products" prefHeight="32.0" styleClass="sidebar-button" text="Products" />
+            <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_employees" prefHeight="32.0" styleClass="sidebar-button" text="Employees" />
+            <Button layoutX="12.0" layoutY="174.0" mnemonicParsing="false" onAction="#go_x_report" prefHeight="32.0" styleClass="sidebar-button" text="X Report" />
+            <Button layoutX="12.0" layoutY="214.0" mnemonicParsing="false" onAction="#go_usage_chart" prefHeight="32.0" styleClass="sidebar-button" text="Usage Chart" />
+            <Button layoutX="12.0" layoutY="254.0" mnemonicParsing="false" onAction="#go_sales_report" prefHeight="32.0" styleClass="sidebar-button" text="Sales Report" />
+            <Button layoutX="12.0" layoutY="294.0" mnemonicParsing="false" onAction="#go_z_report" prefHeight="32.0" styleClass="sidebar-button" text="Z Report" />
          </children>
       </Pane>
       <Pane layoutX="179.0" layoutY="50.0" prefHeight="430.0" prefWidth="611.0">
          <children>
-            <VBox layoutX="10.0" layoutY="10.0" spacing="10.0" prefWidth="591.0" prefHeight="410.0">
+            <VBox layoutX="10.0" layoutY="10.0" prefHeight="410.0" prefWidth="591.0" spacing="10.0">
                <children>
-                  <Text text="X-Report (Hourly)" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                  <Text style="-fx-font-size: 18px; -fx-font-weight: bold;" text="X-Report" />
                   <HBox spacing="8.0">
                      <children>
-                        <Label text="Date:" />
-                        <DatePicker fx:id="xReportDate" />
-                        <Button text="Run report" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="6.0">
-                     <children>
-                        <Label text="Quick:" />
-                        <Button text="Today" />
-                        <Button text="Yesterday" />
+                        <Button onAction="#refresh" text="Refresh" />
                      </children>
                   </HBox>
                   <HBox spacing="20.0">
                      <children>
                         <VBox spacing="4.0">
                            <children>
-                              <Label text="Total Sales:" style="-fx-font-weight: bold;" />
-                              <Text text="-" />
+                              <Label style="-fx-font-weight: bold;" text="Total Sales:" />
+                              <Text fx:id="totalSalesText" text="-" />
                            </children>
                         </VBox>
                         <VBox spacing="4.0">
                            <children>
-                              <Label text="Returns:" style="-fx-font-weight: bold;" />
-                              <Text text="-" />
-                           </children>
-                        </VBox>
-                        <VBox spacing="4.0">
-                           <children>
-                              <Label text="Voids:" style="-fx-font-weight: bold;" />
-                              <Text text="-" />
-                           </children>
-                        </VBox>
-                        <VBox spacing="4.0">
-                           <children>
-                              <Label text="Discards:" style="-fx-font-weight: bold;" />
-                              <Text text="-" />
+                              <Label style="-fx-font-weight: bold;" text="Total Transactions" />
+                              <Text fx:id="totalTransactionsText" text="-" />
                            </children>
                         </VBox>
                      </children>
                   </HBox>
-                  <BarChart fx:id="xReportBarChart" prefHeight="200.0" prefWidth="580.0">
-                     <xAxis>
-                        <CategoryAxis label="Hour" />
-                     </xAxis>
-                     <yAxis>
-                        <NumberAxis label="Amount" />
-                     </yAxis>
-                  </BarChart>
-                  <TableView fx:id="xReportTable" prefHeight="180.0" prefWidth="580.0">
+                  <TableView nodeOrientation="LEFT_TO_RIGHT" prefHeight="258.0" prefWidth="589.0" fx:id="xReportTable">
                      <columns>
-                        <TableColumn fx:id="colHour" text="Hour" prefWidth="80.0" />
-                        <TableColumn fx:id="colSales" text="Sales" prefWidth="80.0" />
-                        <TableColumn fx:id="colReturns" text="Returns" prefWidth="80.0" />
-                        <TableColumn fx:id="colVoids" text="Voids" prefWidth="80.0" />
-                        <TableColumn fx:id="colDiscards" text="Discards" prefWidth="80.0" />
-                        <TableColumn fx:id="colCash" text="Cash" prefWidth="80.0" />
-                        <TableColumn fx:id="colCard" text="Card" prefWidth="80.0" />
-                        <TableColumn fx:id="colOther" text="Other" prefWidth="80.0" />
+                        <TableColumn fx:id="colHour" prefWidth="80.0" text="Hour" />
+                        <TableColumn fx:id="colSales" prefWidth="80.0" text="Total" />
+                        <TableColumn fx:id="colSales1" prefWidth="80.0" text="Employee ID" />
+                        <TableColumn fx:id="colSales11" prefWidth="80.0" text="Customer" />
+                        <TableColumn fx:id="colSales111" prefWidth="92.0" text="Transaction ID" />
                      </columns>
                   </TableView>
+                  <!-- Admin Tools (hidden by default). Toggle with Cmd+Shift+A. -->
+                  <VBox fx:id="adminBox" managed="false" spacing="8.0" style="-fx-padding: 8; -fx-border-color: #ccc; -fx-border-radius: 6; -fx-background-color: #fbfbfb; -fx-background-radius: 6;" visible="false">
+                     <children>
+                        <Text style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Admin Tools — Quick Insert" />
+                        <HBox spacing="8.0">
+                           <children>
+                              <Label text="Customer" />
+                              <TextField fx:id="adminCustomerField" promptText="Name (optional)" />
+                              <Label text="Employee" />
+                              <ComboBox fx:id="adminEmployeeCombo" prefWidth="180.0" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="8.0">
+                           <children>
+                              <Label text="Item" />
+                              <ComboBox fx:id="adminItemCombo" prefWidth="220.0" />
+                              <Label text="Qty" />
+                              <Spinner fx:id="adminQtySpinner" editable="true" prefWidth="70.0" />
+                              <Button fx:id="adminAddLineBtn" onAction="#adminAddLine" text="Add" />
+                              <Button fx:id="adminRemoveLineBtn" onAction="#adminRemoveSelected" text="Remove Selected" />
+                           </children>
+                        </HBox>
+                        <ListView fx:id="adminLinesList" prefHeight="100.0" />
+                        <HBox spacing="12.0">
+                           <children>
+                              <Label style="-fx-font-weight: bold;" text="Total" />
+                              <Text fx:id="adminTotalText" text="-" />
+                              <Button fx:id="adminClearBtn" onAction="#adminClear" text="Clear" />
+                              <Button fx:id="adminSaveBtn" onAction="#adminSave" text="Save Transaction" />
+                           </children>
+                        </HBox>
+                        <Label fx:id="adminStatusLabel" textFill="#cc0000" />
+                     </children>
+                  </VBox>
                   <!-- Hidden nodes required by TransactionsHistoryController to avoid NPEs -->
                   <Pane managed="false" visible="false">
                      <children>
@@ -115,7 +120,7 @@
                            </columns>
                         </TableView>
                         <Pagination fx:id="pagination" />
-                        <Text fx:id="status_label" text="" />
+                        <Text fx:id="statusLabel" text="" />
                      </children>
                   </Pane>
                </children>

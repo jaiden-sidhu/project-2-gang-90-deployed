@@ -281,10 +281,10 @@ public class SalesReportController {
     public void go_z_report() 
     { 
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/z_rport.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/z_report.fxml"));
             Stage stage = (Stage) status_label.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Manager - Sale Report");
+            stage.setTitle("Manager - Z Report");
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

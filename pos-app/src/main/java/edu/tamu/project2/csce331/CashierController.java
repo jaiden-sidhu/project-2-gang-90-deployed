@@ -404,4 +404,30 @@ public class CashierController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    public void go_x_report() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/x_report.fxml"));
+            Stage stage = (Stage) totalLabel.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - X Report");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void go_z_report() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/z_report.fxml"));
+            Stage stage = (Stage) totalLabel.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Manager - Z Report");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

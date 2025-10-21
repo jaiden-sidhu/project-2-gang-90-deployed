@@ -180,4 +180,31 @@ public class item_editor_controller {
     {
         ((Stage) name_field.getScene().getWindow()).close();
     }
+
+    // Navigation helpers for sidebar buttons if present in views using this controller
+    @FXML
+    public void go_x_report() {
+        try {
+            javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/x_report.fxml"));
+            javafx.stage.Stage stage = (javafx.stage.Stage) name_field.getScene().getWindow();
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.setTitle("Manager - X Report");
+            stage.show();
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void go_z_report() {
+        try {
+            javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/z_report.fxml"));
+            javafx.stage.Stage stage = (javafx.stage.Stage) name_field.getScene().getWindow();
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.setTitle("Manager - Z Report");
+            stage.show();
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
