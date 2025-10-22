@@ -11,6 +11,8 @@ import java.util.LinkedHashMap;
 // import javafx.beans.property.IntegerProperty;
 
 /**
+ * @author Daniel Zhang
+ * @author Brendan Larson
  * Data-access facade for the POS application.
  *
  * <p>Provides read/write operations over the core schema: {@code personnel}, {@code menu}, {@code
