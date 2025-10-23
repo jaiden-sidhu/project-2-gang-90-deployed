@@ -8,7 +8,11 @@ import javafx.stage.Stage;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-
+/**
+* Controller for the item editor dialog.
+* @author Michael Ramirez
+* @version 4.0
+*/
 public class item_editor_controller {
 
     @FXML private TextField name_field;
@@ -33,11 +37,21 @@ public class item_editor_controller {
     private final ObservableList<Ingredient> all_ingredients = FXCollections.observableArrayList();
     private final ObservableList<Ingredient> item_ingredients = FXCollections.observableArrayList();
 
+    /**
+    * Returns the non-negative id for the current item.
+    * @return absolute product id
+    */
     private int normalizedItemId() 
     {
         return Math.abs(product_ref.get_id());
     }
 
+    /**
+    * Sets the editor context and populates fields/tables.
+    * @param product the product to edit
+    * @param queries queries service reference
+    * @param is_seasonal true if product is seasonal
+    */
     public void set_context(products_controller.Product product, Queries queries, boolean is_seasonal) 
     {
         this.product_ref = product;
@@ -80,6 +94,9 @@ public class item_editor_controller {
         item_ingredients_table.setItems(item_ingredients);
     }
 
+    /**
+    * Adds the selected ingredient to the item.
+    */
     @FXML
     public void handle_add_ingredient() 
     {
@@ -106,6 +123,9 @@ public class item_editor_controller {
         }
     }
 
+    /**
+    * Removes the selected ingredient from the item.
+    */
     @FXML
     public void handle_remove_ingredient() 
     {
@@ -128,6 +148,9 @@ public class item_editor_controller {
         }
     }
 
+    /**
+     * Saves changes to name, price, and quantity, then closes the window.
+     */
     @FXML
     public void handle_save() 
     {
@@ -175,6 +198,9 @@ public class item_editor_controller {
         }
     }
 
+    /**
+     * Cancels editing and closes the window.
+     */
     @FXML
     public void handle_cancel() 
     {
