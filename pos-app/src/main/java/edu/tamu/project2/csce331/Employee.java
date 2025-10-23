@@ -3,10 +3,11 @@ package edu.tamu.project2.csce331;
 import java.util.Set;
 
 /**
- * @author Daniel Zhang
  * Represents an employee with an ID, name, role, pay, and status.
  * Valid roles are "cashier" and "manager".
  * This class provides getters and setters for each field with validation.
+ *  
+ * @author Daniel Zhang
  */
 public class Employee {
   private int id;
