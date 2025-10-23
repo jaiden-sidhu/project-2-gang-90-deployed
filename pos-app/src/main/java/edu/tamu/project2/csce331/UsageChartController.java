@@ -25,7 +25,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
-
+/**
+ * UsageChartController grabs data for the database and formates it for the usage_chart.fxml
+ * This class injects FXML with listeners to recive data form the user
+ * The class will take this information and send it to the database to display the desire usage given a date.
+ * 
+ * @author Brendan Larson
+ *
+ */
 public class UsageChartController{
 
     @FXML private TableView<Transaction> transactionsTable;
@@ -39,7 +46,7 @@ public class UsageChartController{
 
 
     //added
-    @FXML private TableView<IngredientUsage> usageTable; //TODO: add IngredientUsage object
+    @FXML private TableView<IngredientUsage> usageTable; 
     @FXML private TableColumn<IngredientUsage, String> colIngredientUsage;
     @FXML private TableColumn<IngredientUsage, Integer> colUsed;
     @FXML private DatePicker startDate;
@@ -52,6 +59,10 @@ public class UsageChartController{
     private static final int PAGE_SIZE = 20; // fits better visually than 50; adjustable
     private int totalCount = 0;
 
+
+    /**
+     * intializes sets up origainl value facotorys for the table gernation
+     */
     @FXML
     public void initialize() {
         // Configure columns
@@ -81,16 +92,17 @@ public class UsageChartController{
     
 
 
-
+    /**
+     * loadPage is a private helper function which will populate the page with the recived data
+     * loadPage further creats the bar graph to despaly usage data
+     * 
+     * @param begin_timestamp the start time for the query as a timestamp using standared time 
+     * @param end_timestamp the end time for the query as a timestamp using standared time
+     */
     private void loadPage(Timestamp begin_timestamp, Timestamp end_timeStamp) {
         try {
             ArrayList<IngredientUsage> list = queries.get_ingredient_usage(begin_timestamp, end_timeStamp);//insert quiery
             
-            
-            System.out.println(begin_timestamp);
-            System.out.println(end_timeStamp);
-
-            System.out.println("hello does this work");
 
             ObservableList<IngredientUsage> data = FXCollections.observableArrayList(list);
             usageTable.setItems(data);
@@ -115,6 +127,13 @@ public class UsageChartController{
         }
     }
 
+    /** 
+     * 
+     * apply_dates is a listner for the apply button in the javafxml file
+     * this function will call loadPage which will take values form the user given from
+     * endDate and startDate datePicker from the user
+     * 
+     */
     @FXML 
     public void apply_dates(){
         try{
@@ -128,6 +147,13 @@ public class UsageChartController{
         }
     }
 
+    /** 
+     * 
+     * apply_today is a listner for the apply button in the javafxml file
+     * this funciton will triger load page which will grab and display all usage for the today
+     * 
+     * 
+     */
     @FXML
     public void apply_today(){
         try{
@@ -141,7 +167,13 @@ public class UsageChartController{
             status_label.setText("Failed to load page: " + e.getMessage());
         }
     }
-
+    /** 
+     * 
+     * apply_week is a listner for the week short cut button in the javafxml file
+     * apply_week will triger load page which will grab all usage data for a week
+     * 
+     * 
+     */
     @FXML
     public void apply_week(){
         try{
@@ -155,6 +187,12 @@ public class UsageChartController{
         }
     }
 
+    /**
+     * 
+     * apply_30_days allows for the last 30 days to be displayed by the usage_chart.fxml
+     * 
+     * 
+     */
     @FXML
     public void apply_30_days(){
         try{
@@ -168,6 +206,13 @@ public class UsageChartController{
         }
     }
 
+
+    /**
+     * 
+     * apply_month allows for the last month to be displayed by the usage_chart.fxml
+     * 
+     * 
+     */
     @FXML
     public void apply_month(){
         try{
@@ -181,6 +226,12 @@ public class UsageChartController{
         }
     }
 
+    /**
+     * 
+     * go_employees transfers to the employee_list.fxml
+     * 
+     * 
+     */
     @FXML
     public void go_employees() 
     { 
@@ -201,6 +252,12 @@ public class UsageChartController{
         }
     }
 
+     /**
+     * 
+     * go_cashier transfers to the manager_products.fxml
+     * 
+     * 
+     */
     @FXML
     public void go_products() 
     { 
@@ -220,6 +277,13 @@ public class UsageChartController{
             e.printStackTrace();
         }
     }
+
+    /**
+     * 
+     * go_sales transfers to the transactions_history.fxml
+     * 
+     * 
+     */
     @FXML
     public void go_sales() 
     { 
@@ -234,6 +298,12 @@ public class UsageChartController{
         }
     }
 
+     /**
+     * 
+     * go_cashier transfers to the cshier_menu.fxml
+     * 
+     * 
+     */
     @FXML
     public void go_cashier() 
     { 
@@ -254,7 +324,12 @@ public class UsageChartController{
         }
     }
 
-    
+     /**
+     * 
+     * go_x_report transfers to the x_report.fxml
+     * 
+     * 
+     */
      @FXML
     public void go_x_report() 
     { 
@@ -269,6 +344,12 @@ public class UsageChartController{
         }
     }
 
+     /**
+     * 
+     * go_usage_chart() transfers to the usage_chart.fxml
+     * 
+     * 
+     */
     @FXML
     public void go_usage_chart() 
     { 
@@ -284,6 +365,12 @@ public class UsageChartController{
     }
 
 
+    /**
+     * 
+     * go_sales_report transfers to the sales_report.fxml
+     * 
+     * 
+     */
     @FXML
     public void go_sales_report() 
     { 
@@ -298,7 +385,12 @@ public class UsageChartController{
         }
     }
 
-
+    /**
+     * 
+     * go_z_report transfers to the z_report.fxml
+     * 
+     * 
+     */
     @FXML
     public void go_z_report() 
     { 

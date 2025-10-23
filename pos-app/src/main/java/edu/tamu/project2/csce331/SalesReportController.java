@@ -180,8 +180,6 @@ public class SalesReportController {
      * 
      * 
      */
-
-
     @FXML
     public void apply_30_days(){
         try{
@@ -241,6 +239,12 @@ public class SalesReportController {
         }
     }
 
+     /**
+     * 
+     * go_cashier transfers to the manager_products.fxml
+     * 
+     * 
+     */
     @FXML
     public void go_products() 
     { 
