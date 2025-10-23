@@ -8,10 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.cell.PropertyValueFactory;
-// 
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-// 
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -23,9 +21,18 @@ import java.time.ZoneId;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-// 
-import java.util.Objects;
 
+/**
+ * Controller for the X-Report view.
+ * <p>
+ * Displays per-transaction rows for the active report date (hour label, total, employee, customer,
+ * transaction id) and provides a small admin toolset to simulate transactions for testing/demo.
+ * Also honors the Z-Report reset so that X-Report can show data "since last finalize" within the same day.
+ * </p>
+ *
+ * @author Kevin Chen
+ * @version 1.0
+ */
 public class XReportQueries {
 
     @FXML private TableView<TransactionRow> xReportTable;
@@ -38,16 +45,12 @@ public class XReportQueries {
     @FXML private Text totalSalesText;          
     @FXML private Text totalTransactionsText;   
 
-    // Admin UI controls
-    @FXML private VBox adminBox;
-    @FXML private TextField adminCustomerField;
-    @FXML private ComboBox<EmployeeOption> adminEmployeeCombo;
-    @FXML private ComboBox<ItemOption> adminItemCombo;
-    @FXML private Spinner<Integer> adminQtySpinner;
-    @FXML private ListView<LineItem> adminLinesList;
-    @FXML private Text adminTotalText;
-    @FXML private Label adminStatusLabel;
-
+    /**
+     * Initializes table bindings and admin UI, then loads the report for the active date from {@link ReportState}.
+     *
+     * @author Kevin Chen
+     * @version 1.0
+     */
     @FXML
     public void initialize() {
         // table bindings
@@ -57,12 +60,18 @@ public class XReportQueries {
         if (colSales11 != null) colSales11.setCellValueFactory(new PropertyValueFactory<>("customer"));
         if (colSales111 != null) colSales111.setCellValueFactory(new PropertyValueFactory<>("transactionId"));
 
-        // admin init
-        initAdminUi();
-    ReportState.initIfNeeded();
-    loadReportForDate(ReportState.getCurrentDate());
+        ReportState.initIfNeeded();
+        loadReportForDate(ReportState.getCurrentDate());
     }
 
+    /**
+     * Reloads the X-Report for the active date from {@link ReportState}.
+     * Typically invoked by a Refresh button.
+     *
+     * @param e JavaFX action event (not used)
+     * @author Kevin Chen
+     * @version 1.0
+     */
     @FXML
     private void refresh(ActionEvent e) {
         loadReportForDate(ReportState.getCurrentDate());
@@ -70,6 +79,12 @@ public class XReportQueries {
 
     
     @FXML
+    /**
+     * Navigate to the Manage Employee screen.
+     * Loads {@code /edu/tamu/project2/csce331/employee_list.fxml} into the current stage.
+     * @author Kevin Chen
+     * @version 1.0
+     */
     public void go_manage_employee() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/employee_list.fxml"));
@@ -84,6 +99,12 @@ public class XReportQueries {
     }
 
     @FXML
+    /**
+     * Navigate to the Products management screen.
+     * Loads {@code /edu/tamu/project2/csce331/manager_products.fxml}.
+     * @author Kevin Chen
+     * @version 1.0
+     */
     public void go_products() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
@@ -98,6 +119,12 @@ public class XReportQueries {
     }
 
     @FXML
+    /**
+     * Navigate to the Cashier menu screen.
+     * Loads {@code /edu/tamu/project2/csce331/cashier_menu.fxml}.
+     * @author Kevin Chen
+     * @version 1.0
+     */
     public void go_cashier() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/cashier_menu.fxml"));
@@ -112,6 +139,12 @@ public class XReportQueries {
     }
 
     @FXML
+    /**
+     * Navigate to the Transactions history screen.
+     * Loads {@code /edu/tamu/project2/csce331/transactions_history.fxml}.
+     * @author Kevin Chen
+     * @version 1.0
+     */
     public void go_sales() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/transactions_history.fxml"));
@@ -126,6 +159,12 @@ public class XReportQueries {
     }
 
     @FXML
+    /**
+     * Navigate to the Employees list screen.
+     * Loads {@code /edu/tamu/project2/csce331/employee_list.fxml}.
+     * @author Kevin Chen
+     * @version 1.0
+     */
     public void go_employees() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/employee_list.fxml"));
@@ -140,6 +179,12 @@ public class XReportQueries {
     }
 
     @FXML
+    /**
+     * Navigate to the Usage Chart screen.
+     * Loads {@code /edu/tamu/project2/csce331/usage_chart.fxml}.
+     * @author Kevin Chen
+     * @version 1.0
+     */
     public void go_usage_chart() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/usage_chart.fxml"));
@@ -154,6 +199,12 @@ public class XReportQueries {
     }
 
     @FXML
+    /**
+     * Navigate to the Sales Report screen.
+     * Loads {@code /edu/tamu/project2/csce331/sales_report.fxml}.
+     * @author Kevin Chen
+     * @version 1.0
+     */
     public void go_sales_report() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/sales_report.fxml"));
@@ -168,6 +219,12 @@ public class XReportQueries {
     }
 
     @FXML
+    /**
+     * Navigate to the X-Report screen (current view).
+     * Loads {@code /edu/tamu/project2/csce331/x_report.fxml}.
+     * @author Kevin Chen
+     * @version 1.0
+     */
     public void go_x_report() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/x_report.fxml"));
@@ -182,6 +239,12 @@ public class XReportQueries {
     }
 
     @FXML
+    /**
+     * Navigate to the Z-Report screen.
+     * Loads {@code /edu/tamu/project2/csce331/z_report.fxml}.
+     * @author Kevin Chen
+     * @version 1.0
+     */
     public void go_z_report() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/tamu/project2/csce331/z_report.fxml"));
@@ -195,6 +258,15 @@ public class XReportQueries {
         }
     }
 
+    /**
+     * Returns any non-null node from this controller's view to conveniently access the current
+     * {@link Stage} (via node.getScene().getWindow()). Preference order: xReportTable, totalSalesText,
+     * totalTransactionsText.
+     *
+     * @return a non-null node belonging to this scene
+     * @author Kevin Chen
+     * @version 1.0
+     */
     private javafx.scene.Node anyNode() {
         
         if (xReportTable != null) return xReportTable;
@@ -203,6 +275,14 @@ public class XReportQueries {
     }
 
     
+    /**
+     * Loads and displays X-Report data for the given date, respecting any Z-Report reset time recorded
+     * in the {@code report_state} table. Populates the transaction rows and total counters.
+     *
+     * @param date the report date whose [start, end) window is queried; must not be null
+     * @author Kevin Chen
+     * @version 1.0
+     */
     private void loadReportForDate(LocalDate date) {
         LocalDateTime start = date.atStartOfDay();
         LocalDateTime end = date.plusDays(1).atStartOfDay();
@@ -260,7 +340,15 @@ public class XReportQueries {
         }
     }
 
-    // Read reset timestamp recorded by Z-Report finalize
+    /**
+     * Reads the reset timestamp recorded by Z-Report finalize (if any).
+     * Used to start X-Report from that timestamp within the same day.
+     *
+     * @param conn an open JDBC connection
+     * @return the reset timestamp or {@code null} if none is recorded
+     * @author Kevin Chen
+     * @version 1.0
+     */
     private Timestamp getResetAt(Connection conn) {
         String sql = "SELECT value FROM report_state WHERE key = 'x_reset_at'";
         try (PreparedStatement ps = conn.prepareStatement(sql);
@@ -274,12 +362,26 @@ public class XReportQueries {
         return null;
     }
 
+    /**
+     * Displays an error in totals fields.
+     *
+     * @param message error message for the transactions counter; if null, shows "Error".
+     * @author Kevin Chen
+     * @version 1.0
+     */
     private void setTotalsError(String message) {
         if (totalSalesText != null) totalSalesText.setText("Error");
         if (totalTransactionsText != null) totalTransactionsText.setText(message != null ? message : "Error");
     }
 
     
+    /**
+     * Row model used by the X-Report table.
+     * Holds hour label, total, employee id, customer, and transaction id.
+     *
+     * @author Kevin Chen
+     * @version 1.0
+     */
     public static class TransactionRow {
         private final String hourLabel;
         private final double total;
@@ -287,6 +389,14 @@ public class XReportQueries {
         private final String customer;
         private final int transactionId;
 
+        /**
+         * Creates a new row entry.
+         * @param hourLabel hour label (e.g., 13:00)
+         * @param total transaction total amount
+         * @param employeeId employee identifier
+         * @param customer customer name
+         * @param transactionId transaction identifier
+         */
         public TransactionRow(String hourLabel, double total, int employeeId, String customer, int transactionId) {
             this.hourLabel = hourLabel;
             this.total = total;
@@ -295,183 +405,15 @@ public class XReportQueries {
             this.transactionId = transactionId;
         }
 
+        /** @return hour-of-day label */
         public String getHourLabel() { return hourLabel; }
+        /** @return transaction total amount */
         public double getTotal() { return total; }
+        /** @return employee identifier */
         public int getEmployeeId() { return employeeId; }
+        /** @return customer name */
         public String getCustomer() { return customer; }
+        /** @return transaction identifier */
         public int getTransactionId() { return transactionId; }
-    }
-
-    // ===== Admin Tools =====
-    private void initAdminUi() {
-        if (adminBox == null) return; // FXML block not present
-        // keep hidden by default
-        adminBox.setVisible(false);
-        adminBox.setManaged(false);
-
-        // Toggle with Cmd+Shift+A
-        adminBox.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                newScene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, evt -> {
-                    if (evt.isMetaDown() && evt.isShiftDown() && evt.getCode() == javafx.scene.input.KeyCode.A) {
-                        boolean show = !adminBox.isVisible();
-                        adminBox.setVisible(show);
-                        adminBox.setManaged(show);
-                        evt.consume();
-                    }
-                });
-            }
-        });
-
-        // quantity spinner
-        if (adminQtySpinner != null) {
-            adminQtySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1));
-        }
-
-        // load combos
-        loadEmployeesIntoCombo();
-        loadMenuIntoCombo();
-
-        // list placeholder
-        if (adminLinesList != null) {
-            adminLinesList.setPlaceholder(new Label("No items yet"));
-        }
-        updateAdminTotal();
-    }
-
-    private void loadEmployeesIntoCombo() {
-        if (adminEmployeeCombo == null) return;
-        try {
-            Queries q = new Queries();
-            List<Employee> emps = q.get_employee();
-            List<EmployeeOption> options = new ArrayList<>();
-            for (Employee e : emps) {
-                options.add(new EmployeeOption(e.get_id(), e.get_name()));
-            }
-            adminEmployeeCombo.setItems(FXCollections.observableArrayList(options));
-            if (!options.isEmpty()) adminEmployeeCombo.getSelectionModel().select(0);
-        } catch (Exception ex) {
-            setAdminError("Load employees failed: " + ex.getMessage());
-        }
-    }
-
-    private void loadMenuIntoCombo() {
-        if (adminItemCombo == null) return;
-        try {
-            Queries q = new Queries();
-            List<Item> menu = q.get_menu();
-            List<ItemOption> options = new ArrayList<>();
-            for (Item it : menu) {
-                options.add(new ItemOption(it.get_id(), it.get_name(), it.get_price()));
-            }
-            adminItemCombo.setItems(FXCollections.observableArrayList(options));
-            if (!options.isEmpty()) adminItemCombo.getSelectionModel().select(0);
-        } catch (Exception ex) {
-            setAdminError("Load menu failed: " + ex.getMessage());
-        }
-    }
-
-    @FXML
-    private void adminAddLine(ActionEvent e) {
-        if (adminItemCombo == null || adminQtySpinner == null || adminLinesList == null) return;
-        ItemOption opt = adminItemCombo.getSelectionModel().getSelectedItem();
-        if (opt == null) return;
-        int qty = adminQtySpinner.getValue() != null ? adminQtySpinner.getValue() : 1;
-        adminLinesList.getItems().add(new LineItem(opt, qty));
-        updateAdminTotal();
-    }
-
-    @FXML
-    private void adminRemoveSelected(ActionEvent e) {
-        if (adminLinesList == null) return;
-        int idx = adminLinesList.getSelectionModel().getSelectedIndex();
-        if (idx >= 0) {
-            adminLinesList.getItems().remove(idx);
-            updateAdminTotal();
-        }
-    }
-
-    @FXML
-    private void adminClear(ActionEvent e) {
-        if (adminCustomerField != null) adminCustomerField.clear();
-        if (adminLinesList != null) adminLinesList.getItems().clear();
-        updateAdminTotal();
-        setAdminStatus("");
-    }
-
-    @FXML
-    private void adminSave(ActionEvent e) {
-        if (adminEmployeeCombo == null || adminLinesList == null) return;
-        EmployeeOption emp = adminEmployeeCombo.getSelectionModel().getSelectedItem();
-        if (emp == null) { setAdminError("Select employee"); return; }
-        if (adminLinesList.getItems().isEmpty()) { setAdminError("Add at least one item"); return; }
-
-        String customer = adminCustomerField != null ? adminCustomerField.getText() : null;
-        if (customer == null || customer.isBlank()) customer = "Walk-in";
-
-        double total = adminLinesList.getItems().stream()
-                .mapToDouble(li -> li.qty * li.item.price)
-                .sum();
-
-    // Build Transaction and item list with the active report date
-    LocalDate reportDate = ReportState.getCurrentDate();
-    LocalDateTime reportDateTime = reportDate.atTime(LocalTime.now());
-    Timestamp txTimestamp = Timestamp.valueOf(reportDateTime);
-    Transaction tx = new Transaction(0, customer, txTimestamp, emp.id, total);
-
-        ArrayList<Item> items = new ArrayList<>();
-        for (LineItem li : adminLinesList.getItems()) {
-            for (int i = 0; i < li.qty; i++) {
-                items.add(new Item(li.item.id, li.item.name, li.item.price));
-            }
-        }
-
-        try {
-            Queries q = new Queries();
-            q.add_transaction_and_details(tx, items);
-            setAdminStatus("Saved ✔");
-            adminClear(null);
-            // refresh report for the active report date
-            loadReportForDate(ReportState.getCurrentDate());
-        } catch (Exception ex) {
-            setAdminError("Save failed: " + ex.getMessage());
-        }
-    }
-
-    private void updateAdminTotal() {
-        if (adminTotalText == null || adminLinesList == null) return;
-        double total = adminLinesList.getItems().stream()
-                .mapToDouble(li -> li.qty * li.item.price)
-                .sum();
-        adminTotalText.setText(String.format("$%.2f", total));
-    }
-
-    private void setAdminError(String msg) {
-        if (adminStatusLabel != null) {
-            adminStatusLabel.setText(msg);
-            adminStatusLabel.setStyle("-fx-text-fill: #cc0000;");
-        }
-    }
-    private void setAdminStatus(String msg) {
-        if (adminStatusLabel != null) {
-            adminStatusLabel.setText(msg);
-            adminStatusLabel.setStyle("-fx-text-fill: #007700;");
-        }
-    }
-
-    public static class EmployeeOption {
-        final int id; final String name;
-        public EmployeeOption(int id, String name) { this.id = id; this.name = name; }
-        @Override public String toString() { return name + " (" + id + ")"; }
-    }
-    public static class ItemOption {
-        final int id; final String name; final double price;
-        public ItemOption(int id, String name, double price) { this.id = id; this.name = name; this.price = price; }
-        @Override public String toString() { return name + String.format(" - $%.2f", price); }
-    }
-    public static class LineItem {
-        final ItemOption item; final int qty;
-        public LineItem(ItemOption item, int qty) { this.item = item; this.qty = qty; }
-        @Override public String toString() { return item.name + " x" + qty + String.format(" = $%.2f", qty * item.price); }
     }
 }
