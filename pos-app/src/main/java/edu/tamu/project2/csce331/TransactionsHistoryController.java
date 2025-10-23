@@ -18,6 +18,36 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ * Controller for the Transactions History screen.
+ * <p>
+ * This controller wires a paginated {@link TableView} to the backing database via
+ * {@link Queries}, fetching transactions in descending order of time and
+ * presenting them with a {@link Pagination} control. It also exposes navigation
+ * handlers to move between other application screens.
+ * </p>
+ *
+ * <h3>Behavior</h3>
+ * <ul>
+ *   <li>On initialize, configures table columns, retrieves the total row count,
+ *   computes page count, and loads the first page.</li>
+ *   <li>If the database cannot be initialized, the controller disables pagination
+ *   and displays a diagnostic message in {@link #status_label} instead of
+ *   crashing the application.</li>
+ * </ul>
+ *
+ * <h3>Pagination contract</h3>
+ * <ul>
+ *   <li>Page size: {@link #PAGE_SIZE}</li>
+ *   <li>Page index: 0-based</li>
+ *   <li>Failure: a user-friendly error is shown in {@link #status_label}</li>
+ * </ul>
+ *
+ * <p>FXML: See transactions_history.fxml for the associated view.</p>
+ *
+ * @author Kevin Chen
+ * @version 1.0
+ */
 public class TransactionsHistoryController {
 
     @FXML private TableView<Transaction> transactionsTable;
@@ -33,6 +63,16 @@ public class TransactionsHistoryController {
     private static final int PAGE_SIZE = 20; // fits better visually than 50; adjustable
     private int totalCount = 0;
 
+    /**
+     * Initializes the table and pagination and attempts an initial data load.
+     * <p>
+     * Column value factories are bound to {@link Transaction} bean properties.
+     * If counting transactions fails (e.g., database is unavailable), a
+     * diagnostic message is shown and pagination gets disabled.
+     * </p>
+     * @author Kevin Chen
+     * @version 1.0
+     */
     @FXML
     public void initialize() {
         // Configure columns
@@ -65,6 +105,19 @@ public class TransactionsHistoryController {
         loadPage(0);
     }
 
+    /**
+     * Loads a specific page of transactions into the table.
+     *
+     * <p><strong>Inputs</strong>: pageIndex (0-based).</p>
+     * <p><strong>Outputs</strong>: Updates {@link #transactionsTable} items and
+     * {@link #status_label} to reflect the page and total count.</p>
+     * <p><strong>Errors</strong>: Any exception during data access is caught and
+     * reported via {@link #status_label} without throwing.</p>
+     *
+     * @param pageIndex the 0-based page index to display
+     * @author Kevin Chen
+     * @version 1.0
+     */
     private void loadPage(int pageIndex) {
         try {
             List<Transaction> list = queries.get_transactions(pageIndex, PAGE_SIZE);
@@ -76,6 +129,10 @@ public class TransactionsHistoryController {
         }
     }
 
+    /** Navigates to the Manager Products screen. 
+     * @author Kevin Chen
+     * @version 1.0
+    */
     @FXML
     public void go_products() 
     { 
@@ -90,6 +147,10 @@ public class TransactionsHistoryController {
         }
     }
 
+    /** Navigates to the Transactions History screen (current screen). 
+     * @author Kevin Chen
+     * @version 1.0
+    */
     @FXML
     public void go_sales() 
     { 
@@ -104,6 +165,10 @@ public class TransactionsHistoryController {
         }
     }
 
+    /** Navigates to the Cashier Menu screen. 
+     * @author Kevin Chen
+     * @version 1.0
+    */
     @FXML
     public void go_cashier() 
     { 
@@ -118,6 +183,10 @@ public class TransactionsHistoryController {
         }
     }
 
+    /** Navigates to the Employee List screen. 
+     * @author Kevin Chen
+     * @version 1.0
+    */
     @FXML
     public void go_employees() 
     { 
@@ -132,6 +201,10 @@ public class TransactionsHistoryController {
         }
     }
 
+     /** Navigates to the X Report screen. 
+     * @author Kevin Chen
+     * @version 1.0
+     */
      @FXML
     public void go_x_report() 
     { 
@@ -146,6 +219,10 @@ public class TransactionsHistoryController {
         }
     }
 
+    /** Navigates to the Usage Chart screen. 
+     * @author Kevin Chen
+     * @version 1.0
+    */
     @FXML
     public void go_usage_chart() 
     { 
@@ -161,6 +238,10 @@ public class TransactionsHistoryController {
     }
 
 
+    /** Navigates to the Sales Report screen. 
+     * @author Kevin Chen
+     * @version 1.0
+    */
     @FXML
     public void go_sales_report() 
     { 
@@ -176,6 +257,10 @@ public class TransactionsHistoryController {
     }
 
 
+    /** Navigates to the Z Report screen. 
+     * @author Kevin Chen
+     * @version 1.0
+    */
     @FXML
     public void go_z_report() 
     { 
