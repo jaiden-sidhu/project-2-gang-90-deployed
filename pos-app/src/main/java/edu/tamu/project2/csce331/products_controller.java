@@ -14,6 +14,12 @@ import javafx.stage.Stage;
 import edu.tamu.project2.csce331.Item;
 import edu.tamu.project2.csce331.Queries;
 
+/**
+    * Documentation for products_controller class.
+    * @author Michael Ramirez
+    * @version 4.2
+*/
+
 public class products_controller 
 {
 
@@ -32,6 +38,13 @@ public class products_controller
     private final ObservableList<Product> drinks = FXCollections.observableArrayList();
     private boolean season = false;
 
+    /**
+     * Initializes the controller after FXML loading.
+     * <p>Sets up table cell value factories, loads items from the database (regular menu by
+     * default), and wires up the per-row Modify/Remove buttons.</p>
+     * <p><strong>Side effects:</strong> Populates {@link #drinks} and assigns it to
+     * {@link #products_table}.</p>
+     */
     @FXML
     public void initialize() 
     {
@@ -118,6 +131,14 @@ public class products_controller
         products_table.setItems(drinks);
     }
 
+    /**
+     * Adds a new product using the values in the input fields.
+     * <p>Validates non-empty fields and numeric types, writes the item to the appropriate
+     * menu (regular or seasonal), and appends it to the table.</p>
+     * @implNote Quantity is stored only in the table model for display; the database
+     * write uses {@link Item} which does not include quantity.
+     * @see #clear_inputs()
+     */
     @FXML
     public void handle_save() 
     {
@@ -170,12 +191,20 @@ public class products_controller
         clear_inputs();
     }
 
+    /**
+     * Clears all input fields (name, price, quantity).
+     * <p><strong>Side effects:</strong> Mutates text fields; no database I/O.</p>
+     */
     @FXML
     public void handle_clear() 
     { 
         clear_inputs(); 
     }
 
+    /**
+     * Navigates to the Manager → Products scene.
+     * @throws RuntimeException if the FXML fails to load (wrapped {@link IOException}).
+     */
     @FXML
     public void go_products() 
     { 
@@ -190,6 +219,9 @@ public class products_controller
         }
     }
 
+    /**
+    * Navigates to the Sales History scene.
+    */
     @FXML
     public void go_sales() 
     { 
@@ -204,6 +236,9 @@ public class products_controller
         }
     }
 
+    /**
+    * Navigates to the Cashier Menu scene.
+    */
     @FXML
     public void go_cashier() 
     { 
@@ -218,6 +253,9 @@ public class products_controller
         }
     }
 
+    /**
+    * Navigates to the Manager Employees scene.
+    */
     @FXML
     public void go_employees() 
     { 
@@ -232,8 +270,9 @@ public class products_controller
         }
     }
 
-    
-
+    /**
+    * Navigates to the Manager X Report scene.
+    */
     @FXML
     public void go_x_report() 
     { 
@@ -248,6 +287,9 @@ public class products_controller
         }
     }
 
+    /**
+    * Navigates to the Manager Usage Chart scene.
+    */
     @FXML
     public void go_usage_chart() 
     { 
@@ -262,7 +304,9 @@ public class products_controller
         }
     }
 
-
+    /**
+    * Navigates to the Manager Sales Report scene.
+    */
     @FXML
     public void go_sales_report() 
     { 
@@ -277,7 +321,9 @@ public class products_controller
         }
     }
 
-
+    /**
+    * Navigates to the Manager Z Report scene.
+    */
     @FXML
     public void go_z_report() 
     { 
@@ -292,6 +338,12 @@ public class products_controller
         }
     }
 
+    /**
+    * (Deprecated) Previously used to populate the Modify form directly.
+    * @param p the product to mirror into the text fields; no-op if {@code null}
+    * @deprecated this method is kept for reference.
+    */
+    @Deprecated
     private void populate_form(Product p) 
     {
         if (p == null) return;
@@ -300,6 +352,9 @@ public class products_controller
         quantity_field.setText(Integer.toString(p.get_quantity()));
     }
 
+    /**
+    * Clears the name, price, and quantity inputs.
+    */
     private void clear_inputs() 
     {
         name_field.clear();
@@ -307,6 +362,9 @@ public class products_controller
         quantity_field.clear();
     }
 
+    /**
+    * Clears the name, price, and quantity inputs.
+    */
     private static String safe_trim(String s) 
     { 
         return s == null ? "" : s.trim(); 
@@ -317,6 +375,12 @@ public class products_controller
         new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK).showAndWait();
     }
 
+    /**
+    * Immutable table model for products displayed in {@link #products_table}.
+    * <p><strong>Note:</strong> Quantity here represents the display quantity/popularity
+    * used in the UI. Persistence of quantity depends on the backing schema; the {@link Item}
+    * entity used for writes does not include quantity.</p>
+    */
     public static class Product 
     {
         private final javafx.beans.property.SimpleIntegerProperty id;
@@ -369,6 +433,9 @@ public class products_controller
         }
     }
 
+    /**
+    * Handles the seasonal view toggle action.
+    */
     @FXML
     public void do_seasonal_view()
     {

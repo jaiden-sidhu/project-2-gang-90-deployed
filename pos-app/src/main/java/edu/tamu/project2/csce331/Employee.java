@@ -1,8 +1,14 @@
 package edu.tamu.project2.csce331;
 
 import java.util.Set;
-import java.sql.Timestamp;
 
+/**
+ * Represents an employee with an ID, name, role, pay, and status.
+ * Valid roles are "cashier" and "manager".
+ * This class provides getters and setters for each field with validation.
+ *  
+ * @author Daniel Zhang
+ */
 public class Employee {
   private int id;
   private String name;
@@ -11,7 +17,15 @@ public class Employee {
   private boolean status;
   private static final Set<String> VALID_ROLES = Set.of("cashier", "manager");
 
-  // Constructor
+  /**
+   * Constructs an Employee object with the specified id, name, role, pay, and status.
+   * @param id the employee's ID, must be non-negative
+   * @param name the employee's name
+   * @param role the employee's role, must be one of the valid roles
+   * @param pay the employee's pay, must be non-negative
+   * @param state the employee's status (active or inactive)
+   * @throws IllegalArgumentException if id or pay is negative, or if role is invalid
+   */
   public Employee(int id, String name, String role, double pay, boolean state) throws IllegalArgumentException {
     // Quick luh checks
     if (id < 0) {
@@ -32,28 +46,51 @@ public class Employee {
     this.status = state;
   }
 
-  // Getters
+  /**
+   * Returns the employee's ID.
+   * @return the employee's ID
+   */
   public int get_id() {
     return id;
   }
 
+  /**
+   * Returns the employee's name.
+   * @return the employee's name
+   */
   public String get_name() {
     return name;
   }
 
+  /**
+   * Returns the employee's role.
+   * @return the employee's role
+   */
   public String get_role() {
     return role;
   }
 
+  /**
+   * Returns the employee's pay.
+   * @return the employee's pay
+   */
   public double get_pay() {
     return pay;
   }
 
+  /**
+   * Returns the employee's status.
+   * @return the employee's status
+   */
   public boolean get_status() {
     return status;
   }
 
-  // Setters
+  /**
+   * Sets the employee's ID.
+   * @param id the new ID, must be non-negative
+   * @throws IllegalArgumentException if id is negative
+   */
   public void set_id(int id) throws IllegalArgumentException {
     if (id >= 0) {
       this.id = id;
@@ -62,10 +99,19 @@ public class Employee {
     }
   }
 
+  /**
+   * Sets the employee's name.
+   * @param name the new name
+   */
   public void set_name(String name) {
     this.name = name;
   }
 
+  /**
+   * Sets the employee's role.
+   * @param role the new role, must be one of the valid roles
+   * @throws IllegalArgumentException if role is invalid
+   */
   public void set_role(String role) throws IllegalArgumentException {
     if (VALID_ROLES.contains(role)) {
       this.role = role;
@@ -75,6 +121,11 @@ public class Employee {
     }
   }
 
+  /**
+   * Sets the employee's pay.
+   * @param pay the new pay, must be non-negative
+   * @throws IllegalArgumentException if pay is negative
+   */
   public void set_pay(double pay) throws IllegalArgumentException {
     if (pay >= 0) {
       this.pay = pay;

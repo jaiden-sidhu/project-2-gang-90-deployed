@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,19 +12,23 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
-
+/**
+ * SalesReportController grabs data for the database and formates it for the sales_report.fxml
+ * This class injects FXML with listeners to recive data form the user
+ * The class will take this information and send it to the database to display the desire items.
+ * The items are formated in this class.
+ * 
+ * @author Brendan Larson
+ *
+ */
 public class SalesReportController {
 
     @FXML private TableView<Transaction> transactionsTable;
@@ -50,6 +53,13 @@ public class SalesReportController {
     private final Queries queries = new Queries();
     private static final int PAGE_SIZE = 20; // fits better visually than 50; adjustable
     private int totalCount = 0;
+
+    /**
+     * initialize sets up the orignal value facotrys
+     * 
+     * 
+     * 
+     */
 
     @FXML
     public void initialize() {
@@ -79,7 +89,12 @@ public class SalesReportController {
 
     
 
-
+    /**
+     * loadPage is a private helper function which will populate the page with the recived data
+     * 
+     * @param begin_timestamp the start time for the query as a timestamp using standared time 
+     * @param end_timestamp the end time for the query as a timestamp using standared time
+     */
 
     private void loadPage(Timestamp begin_timestamp, Timestamp end_timeStamp) {
         try {
@@ -95,6 +110,13 @@ public class SalesReportController {
         }
     }
 
+    /** 
+     * 
+     * apply_dates is a listner for the apply button in the javafxml file
+     * this function will call loadPage which will take values form the user given from
+     * endDate and startDate datePicker from the user
+     * 
+     */
     @FXML 
     public void apply_dates(){
         try{
@@ -107,6 +129,14 @@ public class SalesReportController {
             status_label.setText("Failed to load page: " + e.getMessage());
         }
     }
+
+    /** 
+     * 
+     * apply_today is a listner for the apply button in the javafxml file
+     * this funciton will triger load page which will grab and display all sales for the today
+     * 
+     * 
+     */
 
     @FXML
     public void apply_today(){
@@ -122,6 +152,15 @@ public class SalesReportController {
         }
     }
 
+
+    /** 
+     * 
+     * apply_week is a listner for the week short cut button in the javafxml file
+     * apply_week will triger load page which will grab all sales data for a week
+     * 
+     * 
+     */
+
     @FXML
     public void apply_week(){
         try{
@@ -135,6 +174,12 @@ public class SalesReportController {
         }
     }
 
+    /**
+     * 
+     * apply_30_days allows for the last 30 days to be displayed by the sales_report.fxml
+     * 
+     * 
+     */
     @FXML
     public void apply_30_days(){
         try{
@@ -148,6 +193,12 @@ public class SalesReportController {
         }
     }
 
+    /**
+     * 
+     * apply_month allows for the last month to be displayed by the sales_report.fxml
+     * 
+     * 
+     */
     @FXML
     public void apply_month(){
         try{
@@ -161,6 +212,13 @@ public class SalesReportController {
         }
     }
 
+
+    /**
+     * 
+     * go_employees transfers to the employee_list.fxml
+     * 
+     * 
+     */
     @FXML
     public void go_employees() 
     { 
@@ -181,6 +239,12 @@ public class SalesReportController {
         }
     }
 
+     /**
+     * 
+     * go_cashier transfers to the manager_products.fxml
+     * 
+     * 
+     */
     @FXML
     public void go_products() 
     { 
@@ -201,6 +265,13 @@ public class SalesReportController {
         }
     }
 
+
+    /**
+     * 
+     * go_cashier transfers to the cshier_menu.fxml
+     * 
+     * 
+     */
     @FXML
     public void go_cashier() 
     { 
@@ -221,6 +292,14 @@ public class SalesReportController {
         }
     }
 
+
+
+    /**
+     * 
+     * go_x_report transfers to the x_report.fxml
+     * 
+     * 
+     */
      @FXML
     public void go_x_report() 
     { 
@@ -235,6 +314,13 @@ public class SalesReportController {
         }
     }
 
+
+    /**
+     * 
+     * go_usage_chart() transfers to the usage_chart.fxml
+     * 
+     * 
+     */
     @FXML
     public void go_usage_chart() 
     { 
@@ -250,6 +336,13 @@ public class SalesReportController {
     }
 
 
+
+    /**
+     * 
+     * go_sales_report transfers to the sales_report.fxml
+     * 
+     * 
+     */
     @FXML
     public void go_sales_report() 
     { 
@@ -264,6 +357,12 @@ public class SalesReportController {
         }
     }
 
+    /**
+     * 
+     * go_sales transfers to the transactions_history.fxml
+     * 
+     * 
+     */
 @FXML
     public void go_sales() 
     { 
@@ -277,6 +376,14 @@ public class SalesReportController {
             e.printStackTrace();
         }
     }
+
+
+    /**
+     * 
+     * go_z_report transfers to the z_report.fxml
+     * 
+     * 
+     */
     @FXML
     public void go_z_report() 
     { 

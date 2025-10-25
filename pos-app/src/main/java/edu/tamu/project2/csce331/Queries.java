@@ -11,8 +11,6 @@ import java.util.LinkedHashMap;
 // import javafx.beans.property.IntegerProperty;
 
 /**
- * @author Daniel Zhang
- * @author Brendan Larson
  * Data-access facade for the POS application.
  *
  * <p>Provides read/write operations over the core schema: {@code personnel}, {@code menu}, {@code
@@ -39,6 +37,9 @@ import java.util.LinkedHashMap;
  *   <li>Return types favor order-preserving collections (e.g., {@link java.util.LinkedHashMap})
  *       when SQL specifies ordering.
  * </ul>
+ * 
+ * @author Daniel Zhang
+ * @author Brendan Larson
  */
 public class Queries {
   /* Index:
