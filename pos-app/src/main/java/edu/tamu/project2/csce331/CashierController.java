@@ -21,6 +21,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Jaiden Sidhu
+ * Controller class for the Cashier View, controls the interactions and logic for the cashier interface.
+ **/
 public class CashierController {
 
     @FXML
@@ -64,12 +68,18 @@ public class CashierController {
     private double[] drinkPrices;
     private int cashierID = 0;
 
+    /**
+     * Initializes the JavaFX controller after FXML injection. Loads menu items from the database and populates the drink grid.
+     */
     @FXML
     public void initialize() {
         loadMenuFromDB();
         populatedrink_grid();
     }
-
+    /**
+     * Loads menu items from the database and populates the drinkNames and drinkPrices arrays.
+     * @throws SQLException if a database access error occurs
+     */
     private void loadMenuFromDB() {
         List<String> namesList = new ArrayList<>();
         List<Double> pricesList = new ArrayList<>();
@@ -90,6 +100,11 @@ public class CashierController {
         drinkPrices = pricesList.stream().mapToDouble(Double::doubleValue).toArray();
     }
 
+    /**
+     * Converts a given string to title case.
+     * @param input the string to convert
+     * @return the converted title case string
+     */
     private String toTitleCase(String input) {
         StringBuilder result = new StringBuilder();
         for (String word : input.split("\\s+")) {
@@ -104,6 +119,9 @@ public class CashierController {
         return result.toString().trim();
     }
 
+    /**
+     * Populates the drink grid with buttons for each drink item.
+     */
     private void populatedrink_grid() {
         if (drinkNames == null || drinkNames.length == 0) return;
 
@@ -129,6 +147,11 @@ public class CashierController {
         }
     }
 
+    /**
+     * Handles the selection of a drink item by displaying the modifications popup.
+     * @param name the name of the selected drink
+     * @param price the price of the selected drink
+     */
     private void handleDrinkSelection(String name, double price) {
         current_drink_name = name;
         current_drink_price = price;
@@ -137,6 +160,10 @@ public class CashierController {
         modifications_popup.setVisible(true);
     }
 
+    /**
+     * Handles the selection of a modification option.
+     * @param event the ActionEvent triggered by the modification button
+     */
     @FXML
     private void selectModification(ActionEvent event) {
         Button btn = (Button) event.getSource();
@@ -188,6 +215,9 @@ public class CashierController {
         }
     }
 
+    /**
+     * Confirms the selected modifications and adds the drink to the order.
+     */
     @FXML
     private void confirmModifications() {
         addDrinkToOrder(current_drink_name, current_drink_price, new ArrayList<>(currentModifications));
@@ -195,6 +225,13 @@ public class CashierController {
         resetModificationButtons();
     }
 
+    /**
+     * Confirms the login credentials entered by the user.
+     * Validates the name and employee ID against the database records.
+     * If valid, sets the cashier ID and updates the UI accordingly.
+     * If invalid, displays an error message.
+     * @throws SQLException if a database access error occurs
+     */
     @FXML
     private void confirmLogin() {
         String enteredName = loginNameField.getText().trim();
@@ -240,6 +277,12 @@ public class CashierController {
         }
     }
 
+    /**
+     * Adds the selected drink with modifications to the order list and recalculates the total.
+     * @param name the name of the drink
+     * @param price the price of the drink
+     * @param mods the list of selected modifications
+     * **/
     private void addDrinkToOrder(String name, double price, List<String> mods) {
         if (orderItems.getChildren().size() == 1 && orderItems.getChildren().get(0) instanceof Label) {
             orderItems.getChildren().clear();
@@ -251,14 +294,18 @@ public class CashierController {
         modsLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #555;");
         itemBox.getChildren().addAll(nameLabel, modsLabel);
 
-    orderItems.getChildren().add(itemBox);
+        orderItems.getChildren().add(itemBox);
 
         recalcTotal();
     }
 
+    /**
+     * Recalculates the subtotal and total amounts based on the current order items.
+     * Updates the subtotal and total labels as well as the charge button text.
+     * **/
     private void recalcTotal() {
         double sum = 0.0;
-    for (javafx.scene.Node n : orderItems.getChildren()) {
+        for (javafx.scene.Node n : orderItems.getChildren()) {
             if (!(n instanceof VBox)) continue;
             VBox itemBox = (VBox) n;
             if (itemBox.getChildren().isEmpty()) continue;
@@ -270,8 +317,8 @@ public class CashierController {
                 String num = text.substring(dollar + 1).replaceAll("[^0-9.\\-]", "");
                 try {
                     sum += Double.parseDouble(num);
-                } catch (NumberFormatException ignored) {
-                }
+                } 
+                catch (NumberFormatException ignored) { }
             }
         }
         this.subtotal = sum;
@@ -280,6 +327,9 @@ public class CashierController {
         chargeButton.setText("Charge " + df.format(subtotal));
     }
 
+    /**
+     * Resets the styles of all modification buttons to their default state.
+     */
     private void resetModificationButtons() {
         if (modifications_popup == null) return;
         for (javafx.scene.Node child : modifications_popup.getChildren()) {
@@ -299,40 +349,65 @@ public class CashierController {
         }
     }
 
+    /**
+     * Opens the modifications popup.
+     */
     @FXML
     private void openPopup() {
         modifications_popup.setVisible(true);
     }
 
+    /**
+     * Closes the modifications popup.
+     */
     @FXML
     private void closePopup() {
         modifications_popup.setVisible(false);
     }
 
+    /**
+     * Opens the charge popup.
+     */
     @FXML
     private void openChargePopup() {
         charge_popup.setVisible(true);
     }
 
+    /**
+     * Closes the charge popup.
+     */
     @FXML
     private void closeChargePopup() {
         charge_popup.setVisible(false);
     }
 
+    /**
+     * Opens the login popup.
+     */
     @FXML
     private void openLoginPopup() {
         loginPopup.setVisible(true);
     }
 
+    /**
+     * Closes the login popup.
+     */
     @FXML
     private void closeLoginPopup() {
         loginPopup.setVisible(false);
     }
 
+    /**
+     * Confirms the charge for the current order.
+     * Retrieves the customer name and order items, creates a transaction, and saves it to the database.
+     * @throws SQLException if a database access error occurs
+     */
     @FXML
     private void confirmCharge() {
         String name = customer_name_field.getText().trim();
-        if (name.isEmpty()) return;
+        if (name.isEmpty()) {
+            return;
+        }
         try {
             edu.tamu.project2.csce331.Queries queries = new edu.tamu.project2.csce331.Queries();
 
@@ -367,15 +442,15 @@ public class CashierController {
                 if (menuItem != null) itemsForTransaction.add(menuItem);
             }
 
-    LocalDate reportDate = ReportState.getCurrentDate();
-    LocalDateTime txDateTime = LocalDateTime.of(reportDate, LocalTime.now());
-    edu.tamu.project2.csce331.Transaction tx = new edu.tamu.project2.csce331.Transaction(
-        0,
-        name,
-        Timestamp.valueOf(txDateTime),
-        cashierID,
-        subtotal
-    );
+        LocalDate reportDate = ReportState.getCurrentDate();
+        LocalDateTime txDateTime = LocalDateTime.of(reportDate, LocalTime.now());
+        edu.tamu.project2.csce331.Transaction tx = new edu.tamu.project2.csce331.Transaction(
+            0,
+            name,
+            Timestamp.valueOf(txDateTime),
+            cashierID,
+            subtotal
+        );
 
             queries.add_transaction_and_details(tx, itemsForTransaction);
 
@@ -396,6 +471,10 @@ public class CashierController {
         }
     }
 
+    /**
+     * Navigates to the manager products view.
+     * @throws IOException if the FXML file cannot be loaded
+     */
     @FXML
     public void go_products() {
         try {
@@ -409,6 +488,10 @@ public class CashierController {
         }
     }
 
+    /**
+     * Navigates to the X Report view.
+     * @throws IOException if the FXML file cannot be loaded
+     * **/
     @FXML
     public void go_x_report() {
         try {
@@ -422,6 +505,10 @@ public class CashierController {
         }
     }
 
+    /**
+     * Navigates to the Z Report view.
+     * @throws IOException if the FXML file cannot be loaded
+     * **/
     @FXML
     public void go_z_report() {
         try {

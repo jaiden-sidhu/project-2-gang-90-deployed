@@ -24,6 +24,11 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 
+
+/**
+ * @author Jaiden Sidhu
+ * Controller class for the Employee List View, controls the interactions and logic for the employee list interface.
+ **/
 public class EmployeeController {
     @FXML private TextField name_field;
     @FXML private TextField pay_field;
@@ -41,6 +46,9 @@ public class EmployeeController {
     private static final int PAGE_SIZE = 20;
     private int totalCount = 0;
 
+    /**
+     * Initializes the JavaFX controller after FXML injection. Loads menu items from the database and populates the drink grid.
+     */
     @FXML
     public void initialize() {
         col_id.setCellValueFactory(cd -> new SimpleIntegerProperty(cd.getValue().get_id()).asObject());
@@ -101,6 +109,9 @@ public class EmployeeController {
         }
     }
 
+    /* 
+     * Loads a page of employees from the database and updates the table view.
+     */
     private void load_page() {
         try {
             List<Employee> list = queries.get_employee();
@@ -113,6 +124,9 @@ public class EmployeeController {
         }
     }
 
+    /*
+     * Handles the action of adding a new employee when the add button is clicked.
+     */
     @FXML
     private void add_employee_button(){
         String name =  name_field.getText().trim();
@@ -135,6 +149,9 @@ public class EmployeeController {
         }
     }
 
+    /* 
+     * Handles the action of deleting an employee when the delete button is clicked.
+     */
     @FXML
     private void delete_employee_button(){
         int id;
@@ -153,16 +170,25 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * Opens the popup for adding a new employee.
+     */
     @FXML
     private void openPopup() {
         addPopup.setVisible(true);
     }
 
+    /**
+     * Closes the popup for adding a new employee.
+     */
     @FXML
     private void closePopup() {
         addPopup.setVisible(false);
     }
 
+    /**
+     * This loads the products view when the products button is clicked.
+     */
     @FXML
     public void go_products() 
     { 
@@ -177,6 +203,9 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * This loads the sales view when the sales button is clicked.
+     */
     @FXML
     public void go_sales() 
     { 
@@ -191,6 +220,9 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * This loads the cashier view when the cashier button is clicked.
+     */
     @FXML
     public void go_cashier() 
     { 
@@ -205,6 +237,9 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * This loads the employees view when the employees button is clicked.
+     */
     @FXML
     public void go_employees() 
     { 
@@ -219,7 +254,9 @@ public class EmployeeController {
         }
     }
 
-
+    /**
+     * This loads the x report view when the x report button is clicked.
+     */
     @FXML
     public void go_x_report() 
     { 
@@ -234,6 +271,9 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * This loads the usage chart view when the usage chart button is clicked.
+     */
     @FXML
     public void go_usage_chart() 
     { 
@@ -249,6 +289,9 @@ public class EmployeeController {
     }
 
 
+    /**
+     * This loads the sales report view when the sales report button is clicked.
+     */
     @FXML
     public void go_sales_report() 
     { 
@@ -263,7 +306,9 @@ public class EmployeeController {
         }
     }
 
-
+    /**
+     * This loads the z report view when the z report button is clicked.
+     */
     @FXML
     public void go_z_report() 
     { 
@@ -277,8 +322,4 @@ public class EmployeeController {
             e.printStackTrace();
         }
     }
-
-
-
-
 }
