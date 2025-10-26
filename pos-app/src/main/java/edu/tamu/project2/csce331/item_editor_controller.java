@@ -15,6 +15,14 @@ import javafx.beans.property.SimpleStringProperty;
 */
 public class item_editor_controller {
 
+    /**
+     * unused item default controller
+     */
+    public item_editor_controller() {
+    }
+
+
+
     @FXML private TextField name_field;
     @FXML private TextField popularity_field;
     @FXML private TextField price_field;
@@ -208,6 +216,9 @@ public class item_editor_controller {
     }
 
     // Navigation helpers for sidebar buttons if present in views using this controller
+    /**
+     * Navigates to x report
+     */
     @FXML
     public void go_x_report() {
         try {
@@ -221,6 +232,9 @@ public class item_editor_controller {
         }
     }
 
+    /**
+     * navigates to z report
+     */
     @FXML
     public void go_z_report() {
         try {
