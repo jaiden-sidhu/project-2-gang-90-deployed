@@ -31,6 +31,14 @@ import javafx.stage.Stage;
  */
 public class SalesReportController {
 
+    /**
+     * deafualt constructor for sales report not used
+     */
+    public  SalesReportController (){
+
+    }
+
+
     @FXML private TableView<Transaction> transactionsTable;
     @FXML private TableColumn<Transaction, Timestamp> colTime;
     @FXML private TableColumn<Transaction, Integer> colId;

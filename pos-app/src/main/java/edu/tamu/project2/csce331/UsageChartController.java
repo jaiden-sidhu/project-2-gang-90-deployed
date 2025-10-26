@@ -35,6 +35,13 @@ import javafx.stage.Stage;
  */
 public class UsageChartController{
 
+    /**
+     * default constructor not used
+     */
+    public UsageChartController(){
+
+    }
+
     @FXML private TableView<Transaction> transactionsTable;
     @FXML private TableColumn<Transaction, Timestamp> colTime;
     @FXML private TableColumn<Transaction, Integer> colId;
