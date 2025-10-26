@@ -78,7 +78,7 @@ public class CashierController {
     }
     /**
      * Loads menu items from the database and populates the drinkNames and drinkPrices arrays.
-     * @throws SQLException if a database access error occurs
+     * 
      */
     private void loadMenuFromDB() {
         List<String> namesList = new ArrayList<>();
@@ -230,7 +230,6 @@ public class CashierController {
      * Validates the name and employee ID against the database records.
      * If valid, sets the cashier ID and updates the UI accordingly.
      * If invalid, displays an error message.
-     * @throws SQLException if a database access error occurs
      */
     @FXML
     private void confirmLogin() {
@@ -473,7 +472,6 @@ public class CashierController {
 
     /**
      * Navigates to the manager products view.
-     * @throws IOException if the FXML file cannot be loaded
      */
     @FXML
     public void go_products() {
@@ -490,7 +488,6 @@ public class CashierController {
 
     /**
      * Navigates to the X Report view.
-     * @throws IOException if the FXML file cannot be loaded
      * **/
     @FXML
     public void go_x_report() {
@@ -507,7 +504,6 @@ public class CashierController {
 
     /**
      * Navigates to the Z Report view.
-     * @throws IOException if the FXML file cannot be loaded
      * **/
     @FXML
     public void go_z_report() {
