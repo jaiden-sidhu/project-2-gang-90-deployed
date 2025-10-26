@@ -22,7 +22,7 @@ import java.util.LinkedHashMap;
  *
  * <ul>
  *   <li><em>EMPLOYEES</em> – get/add/update/delete/count employees
- *   <li><em>MENU & ITEMS</em> – menu fetch, item lookups, item–ingredient mapping, CRUD
+ *   <li><em>MENU and ITEMS</em> – menu fetch, item lookups, item–ingredient mapping, CRUD
  *   <li><em>SEASONAL MENU</em> – seasonal menu fetch/add/delete
  *   <li><em>INGREDIENTS</em> – ingredient CRUD, inventory adjustments, lookups
  *   <li><em>TRANSACTIONS</em> – list/count/get transactions, add with details
