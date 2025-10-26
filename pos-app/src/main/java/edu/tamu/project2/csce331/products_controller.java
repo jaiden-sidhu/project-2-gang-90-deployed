@@ -203,7 +203,7 @@ public class products_controller
 
     /**
      * Navigates to the Manager → Products scene.
-     * @throws RuntimeException if the FXML fails to load (wrapped {@link IOException}).
+     * 
      */
     @FXML
     public void go_products() 
@@ -364,12 +364,19 @@ public class products_controller
 
     /**
     * Clears the name, price, and quantity inputs.
+    * @param s string to be trimed
     */
     private static String safe_trim(String s) 
     { 
         return s == null ? "" : s.trim(); 
     }
 
+    /**
+     * shows mesage on screen
+     * 
+     * 
+     * @param msg the string to be shown
+     */
     private void show_info(String msg) 
     {
         new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK).showAndWait();
@@ -388,6 +395,16 @@ public class products_controller
         private final javafx.beans.property.SimpleDoubleProperty price;
         private final javafx.beans.property.SimpleIntegerProperty quantity;
 
+
+        /**
+         * creates product using name price quantity and id
+         * name is the name of the product. Quantity is the amount of the product. price is the cost of the product and id is a unque id.
+         * @param name 
+         * @param price
+         * @param quantity
+         * @param id
+         * 
+         */
         public Product(String name, double price, int quantity, int id) 
         {
             this.name = new javafx.beans.property.SimpleStringProperty(name);
@@ -396,37 +413,88 @@ public class products_controller
             this.id = new javafx.beans.property.SimpleIntegerProperty(id);
         }
 
+
+        /**
+         *  wraper of id which is unique idnetinfier for the procucts
+         * 
+         * 
+         * @return id
+         */
         public int get_id() 
         { 
             return id.get(); 
         }
+
+        /**
+         * wraper of id which is unique idnetinfier for the procucts
+         * 
+         * 
+         * @return id
+         */
         public javafx.beans.property.IntegerProperty id_property() 
         { 
             return id; 
         }
 
+
+        /**
+         * wraper of name to get it in bean formate
+         * 
+         * 
+         * @return name
+         */
         public String get_name() 
         { 
             return name.get(); 
         }
+
+        /**
+         * wraper of name property to get it in bean formate
+         * 
+         * @return name
+         */
         public javafx.beans.property.StringProperty name_property() 
         { 
             return name; 
         }
 
+        /**
+         * wraper of price to get in bean formate
+         * 
+         * @return price
+         */
         public double get_price() 
         { 
             return price.get(); 
         }
+
+        /**
+         * 
+         *  wraper of price to get in bean formate
+         * 
+         * @return price
+         */
         public javafx.beans.property.DoubleProperty price_property() 
         { 
             return price; 
         }
 
+        /**
+         * 
+         * extrior wraper of quanitys
+         * 
+         * @return quanity
+         */
         public int get_quantity() 
         { 
             return quantity.get(); 
         }
+        /**
+         * 
+         * wraper of quanity_property
+         * 
+         * @return quantity
+         */
         public javafx.beans.property.IntegerProperty quantity_property() 
         { 
             return quantity; 
