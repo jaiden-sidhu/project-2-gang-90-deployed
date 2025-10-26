@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="app-root" stylesheets="@cashier.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.tamu.project2.csce331.TransactionsHistoryController">
+   <children>
+      <Pane layoutY="-1.0" prefHeight="64.0" prefWidth="1280.0" styleClass="top-bar">
+         <children>
+            <Text fill="WHITE" layoutX="14.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="top-title" text="Transactions" />
+            <Text fill="WHITE" layoutX="1151.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="top-time" text="Time" />
+         </children>
+      </Pane>
+       <Pane layoutY="49.0" prefHeight="765.0" prefWidth="180.0" style="-fx-background-color: #D9D9D9;">
+         <children>
+            <Button layoutX="12.0" layoutY="14.0" mnemonicParsing="false" onAction="#go_cashier" prefHeight="32.0" styleClass="sidebar-button" text="Cashier View" />
+            <Button layoutX="12.0" layoutY="54.0" mnemonicParsing="false" onAction="#go_sales" prefHeight="32.0" styleClass="sidebar-button" text="Recent Transactions" />
+            <Button layoutX="12.0" layoutY="94.0" mnemonicParsing="false" onAction="#go_products" prefHeight="32.0" styleClass="sidebar-button" text="Products" />
+            <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_employees" prefHeight="32.0" styleClass="sidebar-button" text="Employees" />
+            <Button layoutX="12.0" layoutY="174.0" mnemonicParsing="false" onAction="#go_x_report" prefHeight="32.0" styleClass="sidebar-button" text="X Report" />
+            <Button layoutX="12.0" layoutY="214.0" mnemonicParsing="false" onAction="#go_usage_chart" prefHeight="32.0" styleClass="sidebar-button" text="Usage Chart" />
+            <Button layoutX="12.0" layoutY="254.0" mnemonicParsing="false" onAction="#go_sales_report" prefHeight="32.0" styleClass="sidebar-button" text="Sales Report" />
+            <Button layoutX="12.0" layoutY="294.0" mnemonicParsing="false" onAction="#go_z_report" prefHeight="32.0" styleClass="sidebar-button" text="Z Report" />
+         </children>
+      </Pane>
+      <Pane layoutX="240.0" layoutY="64.0" prefHeight="736.0" prefWidth="1040.0">
+        <children>
+          <TableView fx:id="transactionsTable" layoutX="12.0" layoutY="12.0" prefHeight="647.0" prefWidth="904.0" styleClass="data-table">
+            <columns>
+              <TableColumn fx:id="colTime" prefWidth="172.0" text="Time" />
+              <TableColumn fx:id="colId" prefWidth="169.0" text="Order ID" />
+              <TableColumn fx:id="colCustomer" prefWidth="255.0" text="Customer" />
+              <TableColumn fx:id="colEmployee" prefWidth="161.0" text="Employee" />
+              <TableColumn fx:id="colCost" prefWidth="145.0" text="Cost" />
+            </columns>
+          </TableView>
+          <Pagination fx:id="pagination" layoutX="12.0" layoutY="664.0" prefHeight="40.0" prefWidth="1016.0" />
+          <Text fx:id="status_label" layoutX="12.0" layoutY="681.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Loading..." />
+        </children>
+      </Pane>
+   </children>
+</Pane>

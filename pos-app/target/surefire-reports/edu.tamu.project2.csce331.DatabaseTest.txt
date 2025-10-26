@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: edu.tamu.project2.csce331.DatabaseTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.415 s -- in edu.tamu.project2.csce331.DatabaseTest
