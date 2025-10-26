@@ -8,7 +8,13 @@ package edu.tamu.project2.csce331;
  * @author Brendan Larson
  */
 public class IngredientUsage {
+    /**
+     * this is the name of the ingreits
+     */
     public String name;
+    /**
+     * This Intetger repersents how much of the ingredits was used
+     */
     public Integer amount;
 
     /**

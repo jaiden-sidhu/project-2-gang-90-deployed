@@ -19,10 +19,16 @@ import edu.tamu.project2.csce331.Queries;
     * @author Michael Ramirez
     * @version 4.2
 */
-
 public class products_controller 
 {
 
+    /**
+     * deafualt constructor not used
+     */
+    public products_controller() {
+    }
+
+    
     private final Queries queries = new Queries();
 
     @FXML private TableView<Product> products_table;
@@ -135,7 +141,7 @@ public class products_controller
      * Adds a new product using the values in the input fields.
      * <p>Validates non-empty fields and numeric types, writes the item to the appropriate
      * menu (regular or seasonal), and appends it to the table.</p>
-     * @implNote Quantity is stored only in the table model for display; the database
+     * Quantity is stored only in the table model for display; the database
      * write uses {@link Item} which does not include quantity.
      * @see #clear_inputs()
      */
@@ -399,10 +405,10 @@ public class products_controller
         /**
          * creates product using name price quantity and id
          * name is the name of the product. Quantity is the amount of the product. price is the cost of the product and id is a unque id.
-         * @param name 
-         * @param price
-         * @param quantity
-         * @param id
+         * @param name name is the name of the product
+         * @param price price is how much it cost
+         * @param quantity quanity is the amount of the product
+         * @param id unique id to help track
          * 
          */
         public Product(String name, double price, int quantity, int id) 
