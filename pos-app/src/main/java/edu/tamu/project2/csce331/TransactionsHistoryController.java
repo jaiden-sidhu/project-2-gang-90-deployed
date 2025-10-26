@@ -27,7 +27,7 @@ import java.util.List;
  * handlers to move between other application screens.
  * </p>
  *
- * <h3>Behavior</h3>
+ * Behavior
  * <ul>
  *   <li>On initialize, configures table columns, retrieves the total row count,
  *   computes page count, and loads the first page.</li>
@@ -36,7 +36,7 @@ import java.util.List;
  *   crashing the application.</li>
  * </ul>
  *
- * <h3>Pagination contract</h3>
+ * Pagination contract
  * <ul>
  *   <li>Page size: {@link #PAGE_SIZE}</li>
  *   <li>Page index: 0-based</li>

@@ -11,14 +11,14 @@ import java.time.LocalDate;
  * {@code synchronized} methods.
  * </p>
  *
- * <h3>Thread-safety</h3>
+ * Thread-safety
  * <ul>
  *   <li>All public methods are {@code synchronized}, making access safe across
  *   JavaFX and background threads.</li>
  *   <li>State is process-local only; it is not persisted.</li>
  * </ul>
  *
- * <h3>Usage</h3>
+ * Usage
  * <ul>
  *   <li>Call {@link #getCurrentDate()} to retrieve the current logical date.</li>
  *   <li>Use {@link #setCurrentDate(LocalDate)} to override for testing or to
