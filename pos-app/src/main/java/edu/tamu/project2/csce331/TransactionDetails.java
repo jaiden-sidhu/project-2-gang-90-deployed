@@ -6,9 +6,9 @@ package edu.tamu.project2.csce331;
  * Repersents details of the transaction for POS sytem
  * The trasactions details are repersented as:
  * <ul>
- * <li> transaction_id is unique indintification for each transaction<li>
- * <li> item_id is unique indintification for item on the menu<li>
- * <ul>
+ * <li> transaction_id is unique indintification for each transaction</li>
+ * <li> item_id is unique indintification for item on the menu</li>
+ * </ul>
  * @author Brendan Larson
  *
  */

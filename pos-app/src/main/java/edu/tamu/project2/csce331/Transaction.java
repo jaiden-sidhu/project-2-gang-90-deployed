@@ -8,12 +8,12 @@ import java.sql.Timestamp;
  * Repersents Transaction in the POS system 
  * The trasactions are repersented as:
  * <ul>
- * <li> transaction_id is uniqe indintification for each transaction<li>
- * <li> customer_name is the name of the customer as string <li>
- * <li> trasaction_time is the time of each trasaction as time stamp<li>
- * <li> employee_id the id of the employee who completed the transaction<li>
- * <li> total_price the entire price of the tracastion <li>
- * <ul>
+ * <li> transaction_id is uniqe indintification for each transaction</li>
+ * <li> customer_name is the name of the customer as string </li>
+ * <li> trasaction_time is the time of each trasaction as time stamp</li>
+ * <li> employee_id the id of the employee who completed the transaction</li>
+ * <li> total_price the entire price of the tracastion </li>
+ * </ul>
  * @author Brendan Larson
  *
  */
