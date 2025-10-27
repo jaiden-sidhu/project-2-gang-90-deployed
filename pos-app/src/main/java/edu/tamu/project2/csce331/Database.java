@@ -19,7 +19,7 @@ import io.github.cdimascio.dotenv.Dotenv;
  */
 public class Database {
   private static final String CONFIG_PATH = "edu/tamu/project2/csce331/application.properties";
-  private static volatile HikariDataSource data_source;
+  private static volatile HikariDataSource dataSource;
   private static volatile RuntimeException initFailure;
 
   /**
@@ -28,7 +28,7 @@ public class Database {
    * @throws RuntimeException if the configuration file cannot be found or initialization fails
    */
   private static synchronized void initIfNeeded() {
-    if (data_source != null || initFailure != null) return; 
+    if (dataSource != null || initFailure != null) return; 
     try (InputStream input = locateConfigStream()) {
       if (input == null) {
         throw new RuntimeException("Cannot find application.properties in resources (tried: " + CONFIG_PATH + ").");
@@ -50,7 +50,7 @@ public class Database {
       config.setConnectionTimeout(
           Long.parseLong(props.getProperty("db.hikari.connection-timeout", "10000")));
 
-      data_source = new HikariDataSource(config);
+      dataSource = new HikariDataSource(config);
       System.out.println("HikariCP connection pool initialized successfully.");
 
     } catch (Exception e) {
@@ -69,13 +69,13 @@ public class Database {
    * @throws SQLException if the connection pool failed to initialize or a database access error occurs
    */
   public static Connection getConnection() throws SQLException {
-    if (data_source == null && initFailure == null) {
+    if (dataSource == null && initFailure == null) {
       initIfNeeded();
     }
     if (initFailure != null) {
       throw new SQLException(initFailure.getMessage(), initFailure);
     }
-    return data_source.getConnection();
+    return dataSource.getConnection();
   }
 
   /**
@@ -93,10 +93,10 @@ public class Database {
    * This allows for reinitialization of the pool on subsequent connection requests.
    */
   public static synchronized void reset() {
-    if (data_source != null) {
-      try { data_source.close(); } catch (Exception ignored) {}
+    if (dataSource != null) {
+      try { dataSource.close(); } catch (Exception ignored) {}
     }
-    data_source = null;
+    dataSource = null;
     initFailure = null;
   }
 

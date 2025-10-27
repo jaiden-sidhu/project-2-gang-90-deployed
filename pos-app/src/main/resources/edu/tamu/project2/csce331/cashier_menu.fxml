@@ -36,7 +36,7 @@
               <VBox prefWidth="332.0" styleClass="sidebar" BorderPane.alignment="CENTER">
                 <padding><Insets bottom="15" left="15" right="15" top="15" /></padding>
                 <children>
-                  <Button fx:id="managerViewButton" mnemonicParsing="false" onAction="#go_products" text="Manager View" visible="false">
+                  <Button fx:id="managerViewButton" mnemonicParsing="false" onAction="#goProducts" text="Manager View" visible="false">
                               <VBox.margin>
                                  <Insets bottom="5.0" />
                               </VBox.margin></Button>

@@ -22,14 +22,14 @@
          </Pane>
          <Pane layoutY="49.0" prefHeight="765.0" prefWidth="180.0" style="-fx-background-color: #D9D9D9;">
          <children>
-            <Button layoutX="12.0" layoutY="14.0" mnemonicParsing="false" onAction="#go_cashier" prefHeight="32.0" styleClass="sidebar-button" text="Cashier View" />
-            <Button layoutX="12.0" layoutY="54.0" mnemonicParsing="false" onAction="#go_sales" prefHeight="32.0" styleClass="sidebar-button" text="Recent Transactions" />
-            <Button layoutX="12.0" layoutY="94.0" mnemonicParsing="false" onAction="#go_products" prefHeight="32.0" styleClass="sidebar-button" text="Products" />
-            <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#go_employees" prefHeight="32.0" styleClass="sidebar-button" text="Employees" />
-            <Button layoutX="12.0" layoutY="174.0" mnemonicParsing="false" onAction="#go_x_report" prefHeight="32.0" styleClass="sidebar-button" text="X Report" />
-            <Button layoutX="12.0" layoutY="214.0" mnemonicParsing="false" onAction="#go_usage_chart" prefHeight="32.0" styleClass="sidebar-button" text="Usage Chart" />
-            <Button layoutX="12.0" layoutY="254.0" mnemonicParsing="false" onAction="#go_sales_report" prefHeight="32.0" styleClass="sidebar-button" text="Sales Report" />
-            <Button layoutX="12.0" layoutY="294.0" mnemonicParsing="false" onAction="#go_z_report" prefHeight="32.0" styleClass="sidebar-button" text="Z Report" />
+            <Button layoutX="12.0" layoutY="14.0" mnemonicParsing="false" onAction="#goCashier" prefHeight="32.0" styleClass="sidebar-button" text="Cashier View" />
+            <Button layoutX="12.0" layoutY="54.0" mnemonicParsing="false" onAction="#goSales" prefHeight="32.0" styleClass="sidebar-button" text="Recent Transactions" />
+            <Button layoutX="12.0" layoutY="94.0" mnemonicParsing="false" onAction="#goProducts" prefHeight="32.0" styleClass="sidebar-button" text="Products" />
+            <Button layoutX="12.0" layoutY="134.0" mnemonicParsing="false" onAction="#goEmployees" prefHeight="32.0" styleClass="sidebar-button" text="Employees" />
+            <Button layoutX="12.0" layoutY="174.0" mnemonicParsing="false" onAction="#goXReport" prefHeight="32.0" styleClass="sidebar-button" text="X Report" />
+            <Button layoutX="12.0" layoutY="214.0" mnemonicParsing="false" onAction="#goUsageChart" prefHeight="32.0" styleClass="sidebar-button" text="Usage Chart" />
+            <Button layoutX="12.0" layoutY="254.0" mnemonicParsing="false" onAction="#goSalesReport" prefHeight="32.0" styleClass="sidebar-button" text="Sales Report" />
+            <Button layoutX="12.0" layoutY="294.0" mnemonicParsing="false" onAction="#goZReport" prefHeight="32.0" styleClass="sidebar-button" text="Z Report" />
          </children>
       </Pane>
          <Pane layoutX="240.0" layoutY="64.0" prefHeight="736.0" prefWidth="1040.0">
@@ -59,7 +59,7 @@
                <TextField fx:id="role_field" />
                <Label text="Enter Employee Pay:" />
                <TextField fx:id="pay_field" />
-               <Button onAction="#add_employee_button" styleClass="primary-button" text="Confirm Add" />
+               <Button onAction="#addEmployeeButton" styleClass="primary-button" text="Confirm Add" />
                <Button onAction="#closePopup" text="Cancel" />
             </children>
          </VBox>

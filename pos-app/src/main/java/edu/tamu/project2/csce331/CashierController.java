@@ -38,19 +38,19 @@ public class CashierController {
     @FXML
     private VBox orderItems;
     @FXML
-    private AnchorPane modifications_popup;
+    private AnchorPane modificationsPopup;
     @FXML
     private AnchorPane loginPopup;
     @FXML
-    private AnchorPane charge_popup;
+    private AnchorPane chargePopup;
     @FXML
-    private TextField customer_name_field;
+    private TextField customerNameField;
     @FXML
     private TextField loginNameField;
     @FXML
     private TextField loginIDField;
     @FXML
-    private GridPane drink_grid;
+    private GridPane drinkGrid;
     @FXML
     private Label errorLogin;
     @FXML
@@ -58,8 +58,8 @@ public class CashierController {
 
     private DecimalFormat df = new DecimalFormat("#0.00");
 
-    private String current_drink_name;
-    private double current_drink_price;
+    private String currentDrinkName;
+    private double currentDrinkPrice;
     private List<String> currentModifications = new ArrayList<>();
 
     private double subtotal = 0;
@@ -74,7 +74,7 @@ public class CashierController {
     @FXML
     public void initialize() {
         loadMenuFromDB();
-        populatedrink_grid();
+        populateDrinkGrid();
     }
     /**
      * Loads menu items from the database and populates the drinkNames and drinkPrices arrays.
@@ -86,10 +86,10 @@ public class CashierController {
         // Use Queries.get_menu() to load menu items (uses Database.getConnection internally)
         try {
             edu.tamu.project2.csce331.Queries queries = new edu.tamu.project2.csce331.Queries();
-            java.util.ArrayList<edu.tamu.project2.csce331.Item> menu = queries.get_menu();
+            java.util.ArrayList<edu.tamu.project2.csce331.Item> menu = queries.getMenu();
             for (edu.tamu.project2.csce331.Item it : menu) {
-                namesList.add(toTitleCase(it.get_name()));
-                pricesList.add(it.get_price());
+                namesList.add(toTitleCase(it.getName()));
+                pricesList.add(it.getPrice());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -122,7 +122,7 @@ public class CashierController {
     /**
      * Populates the drink grid with buttons for each drink item.
      */
-    private void populatedrink_grid() {
+    private void populateDrinkGrid() {
         if (drinkNames == null || drinkNames.length == 0) return;
 
         int col = 0, row = 0;
@@ -138,7 +138,7 @@ public class CashierController {
             btn.setAlignment(Pos.CENTER);
             btn.setOnAction(e -> handleDrinkSelection(name, price));
 
-            drink_grid.add(btn, col, row);
+            drinkGrid.add(btn, col, row);
             col++;
             if (col == 5) {
                 col = 0;
@@ -153,11 +153,11 @@ public class CashierController {
      * @param price the price of the selected drink
      */
     private void handleDrinkSelection(String name, double price) {
-        current_drink_name = name;
-        current_drink_price = price;
+        currentDrinkName = name;
+        currentDrinkPrice = price;
         currentModifications.clear();
         resetModificationButtons();
-        modifications_popup.setVisible(true);
+        modificationsPopup.setVisible(true);
     }
 
     /**
@@ -220,8 +220,8 @@ public class CashierController {
      */
     @FXML
     private void confirmModifications() {
-        addDrinkToOrder(current_drink_name, current_drink_price, new ArrayList<>(currentModifications));
-        modifications_popup.setVisible(false);
+        addDrinkToOrder(currentDrinkName, currentDrinkPrice, new ArrayList<>(currentModifications));
+        modificationsPopup.setVisible(false);
         resetModificationButtons();
     }
 
@@ -249,14 +249,14 @@ public class CashierController {
             boolean matchFound = false;
 
             for (Employee emp : employees) {
-                if (emp.get_name().equalsIgnoreCase(enteredName) &&
-                    String.valueOf(emp.get_id()).equals(enteredID)) {
+                if (emp.getName().equalsIgnoreCase(enteredName) &&
+                    String.valueOf(emp.getId()).equals(enteredID)) {
 
-                    cashierID = emp.get_id();
+                    cashierID = emp.getId();
                     loginPopup.setVisible(false);
                     matchFound = true;
-                    employeeName.setText("Hello, " + emp.get_name());
-                    if (emp.get_role().equals("manager")) {
+                    employeeName.setText("Hello, " + emp.getName());
+                    if (emp.getRole().equals("manager")) {
                         managerViewButton.setVisible(true);
                     }
                     else {
@@ -330,8 +330,8 @@ public class CashierController {
      * Resets the styles of all modification buttons to their default state.
      */
     private void resetModificationButtons() {
-        if (modifications_popup == null) return;
-        for (javafx.scene.Node child : modifications_popup.getChildren()) {
+        if (modificationsPopup == null) return;
+        for (javafx.scene.Node child : modificationsPopup.getChildren()) {
             if (child instanceof VBox) {
                 VBox v = (VBox) child;
                 for (javafx.scene.Node row : v.getChildren()) {
@@ -353,7 +353,7 @@ public class CashierController {
      */
     @FXML
     private void openPopup() {
-        modifications_popup.setVisible(true);
+        modificationsPopup.setVisible(true);
     }
 
     /**
@@ -361,7 +361,7 @@ public class CashierController {
      */
     @FXML
     private void closePopup() {
-        modifications_popup.setVisible(false);
+        modificationsPopup.setVisible(false);
     }
 
     /**
@@ -369,7 +369,7 @@ public class CashierController {
      */
     @FXML
     private void openChargePopup() {
-        charge_popup.setVisible(true);
+        chargePopup.setVisible(true);
     }
 
     /**
@@ -377,7 +377,7 @@ public class CashierController {
      */
     @FXML
     private void closeChargePopup() {
-        charge_popup.setVisible(false);
+        chargePopup.setVisible(false);
     }
 
     /**
@@ -403,7 +403,7 @@ public class CashierController {
      */
     @FXML
     private void confirmCharge() {
-        String name = customer_name_field.getText().trim();
+        String name = customerNameField.getText().trim();
         if (name.isEmpty()) {
             return;
         }
@@ -413,7 +413,7 @@ public class CashierController {
             java.util.ArrayList<edu.tamu.project2.csce331.Item> menu = queries.get_menu();
             java.util.Map<String, edu.tamu.project2.csce331.Item> menuByName = new java.util.HashMap<>();
             for (edu.tamu.project2.csce331.Item it : menu) {
-                menuByName.put(toTitleCase(it.get_name()), it);
+                menuByName.put(toTitleCase(it.getName()), it);
             }
 
             java.util.ArrayList<edu.tamu.project2.csce331.Item> itemsForTransaction = new java.util.ArrayList<>();
@@ -427,9 +427,9 @@ public class CashierController {
                 edu.tamu.project2.csce331.Item menuItem = menuByName.get(drinkName);
                 if (menuItem == null) {
                     try {
-                        int id = queries.get_item_id(drinkName);
+                        int id = queries.getItemId(drinkName);
                         for (edu.tamu.project2.csce331.Item it : menu) {
-                            if (it.get_id() == id) {
+                            if (it.getId() == id) {
                                 menuItem = it;
                                 break;
                             }
@@ -451,7 +451,7 @@ public class CashierController {
             subtotal
         );
 
-            queries.add_transaction_and_details(tx, itemsForTransaction);
+            queries.addTransactionAndDetails(tx, itemsForTransaction);
 
             orderItems.getChildren().clear();
             orderItems.getChildren().add(new Label("No items yet."));
@@ -460,8 +460,8 @@ public class CashierController {
             totalLabel.setText("0.00");
             chargeButton.setText("Charge 0.00");
 
-            customer_name_field.clear();
-            charge_popup.setVisible(false);
+            customerNameField.clear();
+            chargePopup.setVisible(false);
 
             System.out.println("Charged order for " + name);
 
@@ -474,7 +474,7 @@ public class CashierController {
      * Navigates to the manager products view.
      */
     @FXML
-    public void go_products() {
+    public void goProducts() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
             Stage stage = (Stage) totalLabel.getScene().getWindow();
@@ -490,7 +490,7 @@ public class CashierController {
      * Navigates to the X Report view.
      * **/
     @FXML
-    public void go_x_report() {
+    public void goXReport() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/x_report.fxml"));
             Stage stage = (Stage) totalLabel.getScene().getWindow();
@@ -506,7 +506,7 @@ public class CashierController {
      * Navigates to the Z Report view.
      * **/
     @FXML
-    public void go_z_report() {
+    public void goZReport() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/z_report.fxml"));
             Stage stage = (Stage) totalLabel.getScene().getWindow();

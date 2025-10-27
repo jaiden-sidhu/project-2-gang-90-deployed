@@ -50,7 +50,7 @@ public class Employee {
    * Returns the employee's ID.
    * @return the employee's ID
    */
-  public int get_id() {
+  public int getId() {
     return id;
   }
 
@@ -58,7 +58,7 @@ public class Employee {
    * Returns the employee's name.
    * @return the employee's name
    */
-  public String get_name() {
+  public String getName() {
     return name;
   }
 
@@ -66,7 +66,7 @@ public class Employee {
    * Returns the employee's role.
    * @return the employee's role
    */
-  public String get_role() {
+  public String getRole() {
     return role;
   }
 
@@ -74,7 +74,7 @@ public class Employee {
    * Returns the employee's pay.
    * @return the employee's pay
    */
-  public double get_pay() {
+  public double getPay() {
     return pay;
   }
 
@@ -82,7 +82,7 @@ public class Employee {
    * Returns the employee's status.
    * @return the employee's status
    */
-  public boolean get_status() {
+  public boolean getStatus() {
     return status;
   }
 
@@ -91,7 +91,7 @@ public class Employee {
    * @param id the new ID, must be non-negative
    * @throws IllegalArgumentException if id is negative
    */
-  public void set_id(int id) throws IllegalArgumentException {
+  public void setId(int id) throws IllegalArgumentException {
     if (id >= 0) {
       this.id = id;
     } else {
@@ -103,7 +103,7 @@ public class Employee {
    * Sets the employee's name.
    * @param name the new name
    */
-  public void set_name(String name) {
+  public void setName(String name) {
     this.name = name;
   }
 
@@ -112,7 +112,7 @@ public class Employee {
    * @param role the new role, must be one of the valid roles
    * @throws IllegalArgumentException if role is invalid
    */
-  public void set_role(String role) throws IllegalArgumentException {
+  public void setRole(String role) throws IllegalArgumentException {
     if (VALID_ROLES.contains(role)) {
       this.role = role;
     } else {
@@ -126,7 +126,7 @@ public class Employee {
    * @param pay the new pay, must be non-negative
    * @throws IllegalArgumentException if pay is negative
    */
-  public void set_pay(double pay) throws IllegalArgumentException {
+  public void setPay(double pay) throws IllegalArgumentException {
     if (pay >= 0) {
       this.pay = pay;
     } else {

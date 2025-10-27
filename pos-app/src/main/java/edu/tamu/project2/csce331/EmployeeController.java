@@ -30,16 +30,16 @@ import java.util.List;
  * Controller class for the Employee List View, controls the interactions and logic for the employee list interface.
  **/
 public class EmployeeController {
-    @FXML private TextField name_field;
-    @FXML private TextField pay_field;
-    @FXML private TextField role_field;
-    @FXML private TextField id_field;
-    @FXML private Text status_label;
-    @FXML private TableView<Employee> employee_table;
-    @FXML private TableColumn<Employee, String> col_role;
-    @FXML private TableColumn<Employee, Integer> col_id;
-    @FXML private TableColumn<Employee, String> col_employee;
-    @FXML private TableColumn<Employee, Double> col_pay;
+    @FXML private TextField nameField;
+    @FXML private TextField payField;
+    @FXML private TextField roleField;
+    @FXML private TextField idField;
+    @FXML private Text statusLabel;
+    @FXML private TableView<Employee> employeeTable;
+    @FXML private TableColumn<Employee, String> colRole;
+    @FXML private TableColumn<Employee, Integer> colId;
+    @FXML private TableColumn<Employee, String> colEmployee;
+    @FXML private TableColumn<Employee, Double> colPay;
     @FXML private AnchorPane addPopup;
 
     private final Queries queries = new Queries();
@@ -51,23 +51,23 @@ public class EmployeeController {
      */
     @FXML
     public void initialize() {
-        col_id.setCellValueFactory(cd -> new SimpleIntegerProperty(cd.getValue().get_id()).asObject());
-        col_employee.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().get_name()));
-        col_role.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().get_role()));
-        col_pay.setCellValueFactory(cd -> new SimpleDoubleProperty(cd.getValue().get_pay()).asObject());
+        colId.setCellValueFactory(cd -> new SimpleIntegerProperty(cd.getValue().getId()).asObject());
+        colEmployee.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().getName()));
+        colRole.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().getRole()));
+        colPay.setCellValueFactory(cd -> new SimpleDoubleProperty(cd.getValue().getPay()).asObject());
 
-        TableColumn<Employee, Void> col_delete = new TableColumn<>("Delete");
-        col_delete.setCellFactory(param -> new javafx.scene.control.TableCell<>() {
+        TableColumn<Employee, Void> colDelete = new TableColumn<>("Delete");
+        colDelete.setCellFactory(param -> new javafx.scene.control.TableCell<>() {
             private final javafx.scene.control.Button btn = new javafx.scene.control.Button("Delete");
 
             {
                 btn.setOnAction(event -> {
                     Employee employee = getTableView().getItems().get(getIndex());
                     try {
-                        queries.delete_employee(employee.get_id());
-                        totalCount = queries.count_employees();
+                        queries.deleteEmployee(employee.getId());
+                        totalCount = queries.countEmployees();
                         // status_label.setText("Employee deleted");
-                        load_page();
+                        loadPage();
                     } catch (Exception ex) {
                         // status_label.setText("Failed to delete employee: " + ex.getMessage());
                     }
@@ -84,15 +84,15 @@ public class EmployeeController {
                 }
             }
         });
-        employee_table.getColumns().add(col_delete);
+        employeeTable.getColumns().add(colDelete);
 
         try {
-            java.util.List<Employee> list = queries.get_employee();
+            java.util.List<Employee> list = queries.getEmployee();
             ObservableList<Employee> data = FXCollections.observableArrayList(list);
-            employee_table.setItems(data);
+            employeeTable.setItems(data);
 
             try {
-                totalCount = queries.count_employees();
+                totalCount = queries.countEmployees();
             } catch (Exception ignored) {
                 totalCount = data.size();
             }
@@ -112,11 +112,11 @@ public class EmployeeController {
     /* 
      * Loads a page of employees from the database and updates the table view.
      */
-    private void load_page() {
+    private void loadPage() {
         try {
-            List<Employee> list = queries.get_employee();
+            List<Employee> list = queries.getEmployee();
             ObservableList<Employee> data = FXCollections.observableArrayList(list);
-            employee_table.setItems(data);
+            employeeTable.setItems(data);
             // status_label.setText(String.format("Showing %d of %d total", data.size(), totalCount));
 
         } catch (Exception e) {
@@ -128,20 +128,20 @@ public class EmployeeController {
      * Handles the action of adding a new employee when the add button is clicked.
      */
     @FXML
-    private void add_employee_button(){
-        String name =  name_field.getText().trim();
-        String role = role_field.getText().trim();
+    private void addEmployeeButton(){
+        String name =  nameField.getText().trim();
+        String role = roleField.getText().trim();
         double pay;
         try {
-            pay = Double.parseDouble(pay_field.getText().trim());
+            pay = Double.parseDouble(payField.getText().trim());
         } catch (NumberFormatException nfe) {
             // status_label.setText("Invalid pay value");
             return;
         }
         try {
-            queries.add_employee(name, role, pay, true);
-            totalCount = queries.count_employees();
-            load_page();
+            queries.addEmployee(name, role, pay, true);
+            totalCount = queries.countEmployees();
+            loadPage();
             // status_label.setText("Employee added");
             closePopup();
         } catch (Exception e) {
@@ -153,17 +153,17 @@ public class EmployeeController {
      * Handles the action of deleting an employee when the delete button is clicked.
      */
     @FXML
-    private void delete_employee_button(){
+    private void deleteEmployeeButton(){
         int id;
         try {
-            id = Integer.parseInt(id_field.getText().trim());
+            id = Integer.parseInt(idField.getText().trim());
         } catch (NumberFormatException nfe) {
             // status_label.setText("Invalid ID");
             return;
         }
         try {
-            queries.fire_employee(id);
-            totalCount = queries.count_employees();
+            queries.fireEmployee(id);
+            totalCount = queries.countEmployees();
             // status_label.setText("Employee deleted");
         } catch (Exception e) {
             // status_label.setText("Failed to delete employee: " + e.getMessage());
@@ -190,11 +190,11 @@ public class EmployeeController {
      * This loads the products view when the products button is clicked.
      */
     @FXML
-    public void go_products() 
+    public void goProducts() 
     { 
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
-            Stage stage = (Stage) status_label.getScene().getWindow();
+            Stage stage = (Stage) statusLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Products");
             stage.show();
@@ -207,11 +207,11 @@ public class EmployeeController {
      * This loads the sales view when the sales button is clicked.
      */
     @FXML
-    public void go_sales() 
+    public void goSales() 
     { 
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/transactions_history.fxml"));
-            Stage stage = (Stage) status_label.getScene().getWindow();
+            Stage stage = (Stage) statusLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Transactions");
             stage.show();
@@ -224,11 +224,11 @@ public class EmployeeController {
      * This loads the cashier view when the cashier button is clicked.
      */
     @FXML
-    public void go_cashier() 
+    public void goCashier() 
     { 
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/cashier_menu.fxml"));
-            Stage stage = (Stage) status_label.getScene().getWindow();
+            Stage stage = (Stage) statusLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Cashier - Menu");
             stage.show();
@@ -241,11 +241,11 @@ public class EmployeeController {
      * This loads the employees view when the employees button is clicked.
      */
     @FXML
-    public void go_employees() 
+    public void goEmployees() 
     { 
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/employee_list.fxml"));
-            Stage stage = (Stage) status_label.getScene().getWindow();
+            Stage stage = (Stage) statusLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Employees");
             stage.show();
@@ -258,11 +258,11 @@ public class EmployeeController {
      * This loads the x report view when the x report button is clicked.
      */
     @FXML
-    public void go_x_report() 
+    public void goXReport() 
     { 
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/x_report.fxml"));
-            Stage stage = (Stage) status_label.getScene().getWindow();
+            Stage stage = (Stage) statusLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - X Report");
             stage.show();
@@ -275,11 +275,11 @@ public class EmployeeController {
      * This loads the usage chart view when the usage chart button is clicked.
      */
     @FXML
-    public void go_usage_chart() 
+    public void goUsageChart() 
     { 
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/usage_chart.fxml"));
-            Stage stage = (Stage) status_label.getScene().getWindow();
+            Stage stage = (Stage) statusLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Usage Chart");
             stage.show();
@@ -293,11 +293,11 @@ public class EmployeeController {
      * This loads the sales report view when the sales report button is clicked.
      */
     @FXML
-    public void go_sales_report() 
+    public void goSalesReport() 
     { 
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/sales_report.fxml"));
-            Stage stage = (Stage) status_label.getScene().getWindow();
+            Stage stage = (Stage) statusLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Sale Report");
             stage.show();
@@ -310,11 +310,11 @@ public class EmployeeController {
      * This loads the z report view when the z report button is clicked.
      */
     @FXML
-    public void go_z_report() 
+    public void goZReport() 
     { 
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/z_report.fxml"));
-            Stage stage = (Stage) status_label.getScene().getWindow();
+            Stage stage = (Stage) statusLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Z Report");
             stage.show();
