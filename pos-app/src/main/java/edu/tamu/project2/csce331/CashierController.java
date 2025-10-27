@@ -476,7 +476,7 @@ public class CashierController {
     @FXML
     public void goProducts() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/manager_products.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/ManagerProducts.fxml"));
             Stage stage = (Stage) totalLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Products");
@@ -492,7 +492,7 @@ public class CashierController {
     @FXML
     public void goXReport() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/x_report.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/XReport.fxml"));
             Stage stage = (Stage) totalLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - X Report");
@@ -508,7 +508,7 @@ public class CashierController {
     @FXML
     public void goZReport() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/z_report.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/tamu/project2/csce331/ZReport.fxml"));
             Stage stage = (Stage) totalLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Manager - Z Report");
